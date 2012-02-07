@@ -1,9 +1,34 @@
 require 'spec_helper'
 
 describe 'WithFilters::ActiveRecordModelExtention' do
-  describe '#with_filters(params)' do
+  describe '#with_filters(params = nil)' do
+    context 'filters using fields' do
+      it 'accepts a field with a single value' do
+        npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {first_name: 'Albert'}}})
+        npw.length.should == 1
+        npw.first.first_name.should == 'Albert'
+      end
+
+      it 'accepts a field with an array of values' do
+        npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {first_name: ['Albert', 'Marie']}}}).order('first_name ASC')
+        npw.length.should == 2
+        npw.first.first_name.should == 'Albert'
+        npw.last.first_name.should == 'Marie'
+      end
+
+      it 'accepts a field with a :start and :stop range' do
+        np = NobelPrize.with_filters({nobel_prizes: {filter: {year: {start: 1900, stop: 1930}}}})
+        np.length.should == 4
+      end
+
+      it 'accepts more than one field' do
+        np = NobelPrize.with_filters({nobel_prizes: {filter: {year: {start: 1900, stop: 1930}, category: 'Physics'}}})
+        np.length.should == 3
+      end
+    end
+
     it 'does not break the chain' do
-      npw = NobelPrizeWinner.with_filters({}).limit(1)
+      npw = NobelPrizeWinner.with_filters.limit(1)
       npw.length.should == 1
     end
   end
