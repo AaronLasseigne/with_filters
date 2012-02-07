@@ -14,14 +14,21 @@
 ActiveRecord::Schema.define(:version => 20120203212237) do
 
   create_table "nobel_prize_winners", :force => true do |t|
-    t.string "first_name"
-    t.string "last_name"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.date     "birthdate"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.time     "meaningless_time"
   end
 
   create_table "nobel_prizes", :force => true do |t|
     t.integer "nobel_prize_winner_id"
     t.string  "category"
     t.integer "year"
+    t.boolean "shared"
+    t.decimal "meaningless_decimal"
+    t.float   "meaningless_float"
   end
 
 end

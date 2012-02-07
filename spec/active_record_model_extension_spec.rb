@@ -25,6 +25,14 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         np = NobelPrize.with_filters({nobel_prizes: {filter: {year: {start: 1900, stop: 1930}, category: 'Physics'}}})
         np.length.should == 3
       end
+
+      it 'works on boolean fields when "true" and "false" are passed' do
+        np = NobelPrize.with_filters({nobel_prizes: {filter: {shared: 'true'}}})
+        np.length.should == 7
+
+        np = NobelPrize.with_filters({nobel_prizes: {filter: {shared: 'false'}}})
+        np.length.should == 9
+      end
     end
 
     it 'does not break the chain' do

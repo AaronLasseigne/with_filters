@@ -134,3 +134,128 @@ Migrating to CreateNobelPrizes (20120203212237)
   [1m[35m (0.0ms)[0m  PRAGMA index_list("nobel_prize_winners")
   [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("nobel_prizes")[0m
   [1m[36mNobelPrizeWinner Load (0.2ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Migrating to AdditionalColumns (20111227224959)
+  [1m[35m (0.0ms)[0m  select sqlite_version(*)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.4ms)[0m  ALTER TABLE "nobel_prize_winners" ADD "birthdate" date
+  [1m[36m (0.1ms)[0m  [1mALTER TABLE "nobel_prize_winners" ADD "created_at" datetime[0m
+  [1m[35m (0.1ms)[0m  ALTER TABLE "nobel_prize_winners" ADD "updated_at" datetime
+  [1m[36m (0.2ms)[0m  [1mALTER TABLE "nobel_prize_winners" ADD "meaningless_time" time[0m
+  [1m[35m (0.1ms)[0m  ALTER TABLE "nobel_prizes" ADD "shared" boolean
+  [1m[36m (0.1ms)[0m  [1mALTER TABLE "nobel_prizes" ADD "meaningless_decimal" decimal[0m
+  [1m[35m (0.1ms)[0m  ALTER TABLE "nobel_prizes" ADD "meaningless_float" float
+  [1m[36mNobelPrizeWinner Load (7.3ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 1]]
+  [1m[35m (0.3ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1914-03-25', "created_at" = '2012-02-07 23:09:05.657171', "updated_at" = '2012-02-07 23:09:05.657173', "meaningless_time" = '2000-01-01 01:01:01.000000' WHERE "nobel_prize_winners"."id" = 1
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 2]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1910-06-19', "created_at" = '2012-02-07 23:09:05.713966', "updated_at" = '2012-02-07 23:09:05.713967', "meaningless_time" = '2000-01-01 02:02:02.000000' WHERE "nobel_prize_winners"."id" = 2
+  [1m[36mNobelPrizeWinner Load (0.0ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 3]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1879-03-14', "created_at" = '2012-02-07 23:09:05.717238', "updated_at" = '2012-02-07 23:09:05.717239', "meaningless_time" = '2000-01-01 03:03:03.000000' WHERE "nobel_prize_winners"."id" = 3
+  [1m[36mNobelPrizeWinner Load (0.0ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 4]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1906-04-13', "created_at" = '2012-02-07 23:09:05.719488', "updated_at" = '2012-02-07 23:09:05.719488', "meaningless_time" = '2000-01-01 04:04:04.000000' WHERE "nobel_prize_winners"."id" = 4
+  [1m[36mNobelPrizeWinner Load (0.0ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 5]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1885-10-07', "created_at" = '2012-02-07 23:09:05.721573', "updated_at" = '2012-02-07 23:09:05.721574', "meaningless_time" = '2000-01-01 05:05:05.000000' WHERE "nobel_prize_winners"."id" = 5
+  [1m[36mNobelPrizeWinner Load (0.0ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 6]]
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1887-08-12', "created_at" = '2012-02-07 23:09:05.723369', "updated_at" = '2012-02-07 23:09:05.723369', "meaningless_time" = '2000-01-01 06:06:06.000000' WHERE "nobel_prize_winners"."id" = 6
+  [1m[36mNobelPrizeWinner Load (0.0ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 7]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1902-08-08', "created_at" = '2012-02-07 23:09:05.724852', "updated_at" = '2012-02-07 23:09:05.724852', "meaningless_time" = '2000-01-01 07:07:07.000000' WHERE "nobel_prize_winners"."id" = 7
+  [1m[36mNobelPrizeWinner Load (0.0ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 8]]
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1901-09-29', "created_at" = '2012-02-07 23:09:05.726399', "updated_at" = '2012-02-07 23:09:05.726399', "meaningless_time" = '2000-01-01 08:08:08.000000' WHERE "nobel_prize_winners"."id" = 8
+  [1m[36mNobelPrizeWinner Load (0.0ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 9]]
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1918-05-11', "created_at" = '2012-02-07 23:09:05.727907', "updated_at" = '2012-02-07 23:09:05.727907', "meaningless_time" = '2000-01-01 09:09:09.000000' WHERE "nobel_prize_winners"."id" = 9
+  [1m[36mNobelPrizeWinner Load (0.0ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 10]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1867-11-07', "created_at" = '2012-02-07 23:09:05.729436', "updated_at" = '2012-02-07 23:09:05.729436', "meaningless_time" = '2000-01-01 10:10:10.000000' WHERE "nobel_prize_winners"."id" = 10
+  [1m[36mNobelPrizeWinner Load (0.0ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 11]]
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1928-04-06', "created_at" = '2012-02-07 23:09:05.730851', "updated_at" = '2012-02-07 23:09:05.730851', "meaningless_time" = '2000-01-01 11:11:11.000000' WHERE "nobel_prize_winners"."id" = 11
+  [1m[36mNobelPrizeWinner Load (0.0ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 12]]
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1872-05-18', "created_at" = '2012-02-07 23:09:05.732137', "updated_at" = '2012-02-07 23:09:05.732137', "meaningless_time" = '2000-01-01 12:12:12.000000' WHERE "nobel_prize_winners"."id" = 12
+  [1m[36mNobelPrizeWinner Load (0.0ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 13]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1902-02-27', "created_at" = '2012-02-07 23:09:05.733381', "updated_at" = '2012-02-07 23:09:05.733381', "meaningless_time" = '2000-01-01 13:13:13.000000' WHERE "nobel_prize_winners"."id" = 13
+  [1m[36mNobelPrizeWinner Load (0.0ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 14]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1918-07-18', "created_at" = '2012-02-07 23:09:05.734779', "updated_at" = '2012-02-07 23:09:05.734779', "meaningless_time" = '2000-01-01 14:14:14.000000' WHERE "nobel_prize_winners"."id" = 14
+  [1m[36mNobelPrizeWinner Load (0.0ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."id" = ? LIMIT 1[0m  [["id", 15]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "birthdate" = '1910-02-09', "created_at" = '2012-02-07 23:09:05.736079', "updated_at" = '2012-02-07 23:09:05.736079', "meaningless_time" = '2000-01-01 15:15:15.000000' WHERE "nobel_prize_winners"."id" = 15
+  [1m[36mNobelPrize Load (0.1ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 1]]
+  [1m[35m (0.3ms)[0m  UPDATE "nobel_prizes" SET "shared" = 'f', "meaningless_decimal" = 1.1, "meaningless_float" = 1.1 WHERE "nobel_prizes"."id" = 1
+  [1m[36mNobelPrize Load (0.1ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 2]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prizes" SET "shared" = 'f', "meaningless_decimal" = 2.2, "meaningless_float" = 2.2 WHERE "nobel_prizes"."id" = 2
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 3]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prizes" SET "shared" = 'f', "meaningless_decimal" = 3.3, "meaningless_float" = 3.3 WHERE "nobel_prizes"."id" = 3
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 4]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prizes" SET "shared" = 'f', "meaningless_decimal" = 4.4, "meaningless_float" = 4.4 WHERE "nobel_prizes"."id" = 4
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 5]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prizes" SET "shared" = 'f', "meaningless_decimal" = 5.5, "meaningless_float" = 5.5 WHERE "nobel_prizes"."id" = 5
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 6]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prizes" SET "shared" = 't', "meaningless_decimal" = 6.6, "meaningless_float" = 6.6 WHERE "nobel_prizes"."id" = 6
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 7]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prizes" SET "shared" = 't', "meaningless_decimal" = 7.7, "meaningless_float" = 7.7 WHERE "nobel_prizes"."id" = 7
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 8]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prizes" SET "shared" = 'f', "meaningless_decimal" = 8.8, "meaningless_float" = 8.8 WHERE "nobel_prizes"."id" = 8
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 9]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prizes" SET "shared" = 't', "meaningless_decimal" = 9.9, "meaningless_float" = 9.9 WHERE "nobel_prizes"."id" = 9
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 10]]
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prizes" SET "shared" = 't', "meaningless_decimal" = 10.1, "meaningless_float" = 10.1 WHERE "nobel_prizes"."id" = 10
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 16]]
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prizes" SET "shared" = 'f', "meaningless_decimal" = 16.16, "meaningless_float" = 16.16 WHERE "nobel_prizes"."id" = 16
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 11]]
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prizes" SET "shared" = 't', "meaningless_decimal" = 11.11, "meaningless_float" = 11.11 WHERE "nobel_prizes"."id" = 11
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 12]]
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prizes" SET "shared" = 'f', "meaningless_decimal" = 12.12, "meaningless_float" = 12.12 WHERE "nobel_prizes"."id" = 12
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 13]]
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prizes" SET "shared" = 'f', "meaningless_decimal" = 13.13, "meaningless_float" = 13.13 WHERE "nobel_prizes"."id" = 13
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 14]]
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prizes" SET "shared" = 't', "meaningless_decimal" = 14.14, "meaningless_float" = 14.14 WHERE "nobel_prizes"."id" = 14
+  [1m[36mNobelPrize Load (0.0ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE "nobel_prizes"."id" = ? LIMIT 1[0m  [["id", 15]]
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prizes" SET "shared" = 't', "meaningless_decimal" = 15.15, "meaningless_float" = 15.15 WHERE "nobel_prizes"."id" = 15
+  [1m[36m (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20111227224959')[0m
+  [1m[35m (1.9ms)[0m  commit transaction
+Migrating to CreateNobelPrizeWinners (20120127203225)
+Migrating to CreateNobelPrizes (20120203212237)
+  [1m[36m (0.4ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations" 
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("nobel_prize_winners")[0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_list("nobel_prizes")
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
+  [1m[35mNobelPrizeWinner Load (0.2ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("first_name" LIKE 'Albert')
+  [1m[36mNobelPrizeWinner Load (0.3ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("first_name" IN('Albert','Marie')) ORDER BY first_name ASC[0m
+  [1m[35mNobelPrize Load (0.1ms)[0m  SELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("year" BETWEEN 1900 AND 1930)
+  [1m[36mNobelPrize Load (0.2ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("year" BETWEEN 1900 AND 1930) AND ("category" LIKE 'Physics')[0m
+  [1m[35mNobelPrize Load (0.2ms)[0m  SELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("shared" LIKE 'true')
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
+  [1m[35mNobelPrizeWinner Load (0.2ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("first_name" LIKE 'Albert')
+  [1m[36mNobelPrizeWinner Load (0.2ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("first_name" IN('Albert','Marie')) ORDER BY first_name ASC[0m
+  [1m[35mNobelPrize Load (0.2ms)[0m  SELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("year" BETWEEN 1900 AND 1930)
+  [1m[36mNobelPrize Load (0.2ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("year" BETWEEN 1900 AND 1930) AND ("category" LIKE 'Physics')[0m
+  [1m[35mNobelPrize Load (0.1ms)[0m  SELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("shared" LIKE 'true')
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
+  [1m[35mNobelPrizeWinner Load (0.2ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("first_name" LIKE 'Albert')
+  [1m[36mNobelPrizeWinner Load (0.3ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("first_name" IN('Albert','Marie')) ORDER BY first_name ASC[0m
+  [1m[35mNobelPrize Load (0.2ms)[0m  SELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("year" BETWEEN 1900 AND 1930)
+  [1m[36mNobelPrize Load (0.3ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("year" BETWEEN 1900 AND 1930) AND ("category" LIKE 'Physics')[0m
+  [1m[35mNobelPrize Load (0.2ms)[0m  SELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("shared" LIKE 'true')
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
+  [1m[35mNobelPrizeWinner Load (0.2ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("first_name" LIKE 'Albert')
+  [1m[36mNobelPrizeWinner Load (0.2ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("first_name" IN('Albert','Marie')) ORDER BY first_name ASC[0m
+  [1m[35mNobelPrize Load (0.3ms)[0m  SELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("year" BETWEEN 1900 AND 1930)
+  [1m[36mNobelPrize Load (0.2ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("year" BETWEEN 1900 AND 1930) AND ("category" LIKE 'Physics')[0m
+  [1m[35mNobelPrize Load (0.1ms)[0m  SELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("shared" LIKE 'true')
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
+  [1m[35mNobelPrizeWinner Load (0.2ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("first_name" LIKE 'Albert')
+  [1m[36mNobelPrizeWinner Load (0.2ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("first_name" IN('Albert','Marie')) ORDER BY first_name ASC[0m
+  [1m[35mNobelPrize Load (0.2ms)[0m  SELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("year" BETWEEN 1900 AND 1930)
+  [1m[36mNobelPrize Load (0.2ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("year" BETWEEN 1900 AND 1930) AND ("category" LIKE 'Physics')[0m
+  [1m[35mNobelPrize Load (0.2ms)[0m  SELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("shared" LIKE 't')
+  [1m[36mNobelPrize Load (0.1ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("shared" LIKE 'f')[0m
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
+  [1m[35mNobelPrizeWinner Load (0.2ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("first_name" LIKE 'Albert')
+  [1m[36mNobelPrizeWinner Load (0.3ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("first_name" IN('Albert','Marie')) ORDER BY first_name ASC[0m
+  [1m[35mNobelPrize Load (0.2ms)[0m  SELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("year" BETWEEN 1900 AND 1930)
+  [1m[36mNobelPrize Load (0.2ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("year" BETWEEN 1900 AND 1930) AND ("category" LIKE 'Physics')[0m
+  [1m[35mNobelPrize Load (0.2ms)[0m  SELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("shared" LIKE 't')
+  [1m[36mNobelPrize Load (0.2ms)[0m  [1mSELECT "nobel_prizes".* FROM "nobel_prizes" WHERE ("shared" LIKE 'f')[0m
