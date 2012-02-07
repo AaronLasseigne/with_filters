@@ -1,0 +1,136 @@
+  [1m[36m (0.1ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (2.5ms)[0m  CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL) 
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("schema_migrations")[0m
+  [1m[35m (1.3ms)[0m  CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Migrating to CreateNobelPrizeWinners (20120127203225)
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.4ms)[0m  [1mCREATE TABLE "nobel_prize_winners" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "first_name" varchar(255), "last_name" varchar(255), "category" varchar(255), "year" integer) [0m
+  [1m[35mSQL (39.1ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Peace"], ["first_name", "Norman"], ["last_name", "Borlaug"], ["year", 1970]]
+  [1m[36mSQL (0.1ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Chemistry"], ["first_name", "Paul"], ["last_name", "Flory"], ["year", 1974]]
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Physics"], ["first_name", "Albert"], ["last_name", "Eintein"], ["year", 1921]]
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Literature"], ["first_name", "Samuel"], ["last_name", "Beckett"], ["year", 1969]]
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Physics"], ["first_name", "Niels"], ["last_name", "Bohr"], ["year", 1922]]
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Physics"], ["first_name", "Erwin"], ["last_name", "Schrodinger"], ["year", 1933]]
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Physics"], ["first_name", "Paul"], ["last_name", "Dirac"], ["year", 1933]]
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Physics"], ["first_name", "Enrico"], ["last_name", "Fermi"], ["year", 1938]]
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Physics"], ["first_name", "Richard"], ["last_name", "Feynman"], ["year", 1965]]
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Chemistry"], ["first_name", "Marie"], ["last_name", "Curie"], ["year", 1911]]
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Physiology or Medicine"], ["first_name", "James"], ["last_name", "Watson"], ["year", 1962]]
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Literature"], ["first_name", "Bertrand"], ["last_name", "Russell"], ["year", 1950]]
+  [1m[35mSQL (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Literature"], ["first_name", "John"], ["last_name", "Steinbeck"], ["year", 1962]]
+  [1m[36mSQL (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)[0m  [["category", "Peace"], ["first_name", "Nelson"], ["last_name", "Mandela"], ["year", 1993]]
+  [1m[35mSQL (0.1ms)[0m  INSERT INTO "nobel_prize_winners" ("category", "first_name", "last_name", "year") VALUES (?, ?, ?, ?)  [["category", "Physiology or Medicine"], ["first_name", "Jacques"], ["last_name", "Monod"], ["year", 1965]]
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20120127203225')[0m
+  [1m[35m (1.3ms)[0m  commit transaction
+  [1m[36m (0.2ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations" 
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("nobel_prize_winners")[0m
+  [1m[36mNobelPrizeWinner Load (0.2ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" ORDER BY first_name ASC[0m
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" [0m
+  [1m[35mNobelPrizeWinner Load (0.2ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" 
+  [1m[36mNobelPrizeWinner Load (0.2ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" [0m
+  [1m[35mNobelPrizeWinner Load (0.2ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" 
+  [1m[36mNobelPrizeWinner Load (0.2ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" [0m
+  [1m[35mNobelPrizeWinner Load (0.1ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" 
+  [1m[36mNobelPrizeWinner Load (0.2ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" [0m
+  [1m[35mNobelPrizeWinner Load (0.1ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" 
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" [0m
+  [1m[35mNobelPrizeWinner Load (0.1ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" 
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" [0m
+  [1m[35mNobelPrizeWinner Load (0.1ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" 
+  [1m[36mNobelPrizeWinner Load (0.2ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" [0m
+  [1m[35mNobelPrizeWinner Load (0.1ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" 
+  [1m[36mNobelPrizeWinner Load (0.1ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" [0m
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Migrating to CreateNobelPrizeWinners (20120127203225)
+Migrating to CreateNobelPrizes (20120203212237)
+  [1m[35m (0.0ms)[0m  select sqlite_version(*)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35m (0.4ms)[0m  CREATE TABLE "nobel_prizes" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "nobel_prize_winner_id" integer, "category" varchar(255), "year" integer) 
+  [1m[36m (0.1ms)[0m  [1mINSERT INTO nobel_prizes("nobel_prize_winner_id", "category", "year") SELECT id, category, year FROM nobel_prize_winners[0m
+  [1m[35mNobelPrizeWinner Load (0.1ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE "nobel_prize_winners"."first_name" = 'Marie' AND "nobel_prize_winners"."last_name" = 'Curie' LIMIT 1
+  [1m[36mSQL (13.1ms)[0m  [1mINSERT INTO "nobel_prizes" ("category", "nobel_prize_winner_id", "year") VALUES (?, ?, ?)[0m  [["category", "Physics"], ["nobel_prize_winner_id", 10], ["year", 1903]]
+  [1m[35m (0.4ms)[0m  CREATE TEMPORARY TABLE "altered_nobel_prize_winners" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "first_name" varchar(255), "last_name" varchar(255), "category" varchar(255), "year" integer) 
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("nobel_prize_winners")[0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "nobel_prize_winners"
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (1, 'Norman', 'Borlaug', 'Peace', 1970)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (2, 'Paul', 'Flory', 'Chemistry', 1974)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (3, 'Albert', 'Eintein', 'Physics', 1921)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (4, 'Samuel', 'Beckett', 'Literature', 1969)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (5, 'Niels', 'Bohr', 'Physics', 1922)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (6, 'Erwin', 'Schrodinger', 'Physics', 1933)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (7, 'Paul', 'Dirac', 'Physics', 1933)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (8, 'Enrico', 'Fermi', 'Physics', 1938)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (9, 'Richard', 'Feynman', 'Physics', 1965)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (10, 'Marie', 'Curie', 'Chemistry', 1911)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (11, 'James', 'Watson', 'Physiology or Medicine', 1962)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (12, 'Bertrand', 'Russell', 'Literature', 1950)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (13, 'John', 'Steinbeck', 'Literature', 1962)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (14, 'Nelson', 'Mandela', 'Peace', 1993)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","category","year") VALUES (15, 'Jacques', 'Monod', 'Physiology or Medicine', 1965)[0m
+  [1m[35m (0.3ms)[0m  DROP TABLE "nobel_prize_winners"
+  [1m[36m (0.1ms)[0m  [1mCREATE TABLE "nobel_prize_winners" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "first_name" varchar(255), "last_name" varchar(255), "year" integer) [0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_list("altered_nobel_prize_winners")
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "altered_nobel_prize_winners"[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (1, 'Norman', 'Borlaug', 1970)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (2, 'Paul', 'Flory', 1974)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (3, 'Albert', 'Eintein', 1921)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (4, 'Samuel', 'Beckett', 1969)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (5, 'Niels', 'Bohr', 1922)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (6, 'Erwin', 'Schrodinger', 1933)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (7, 'Paul', 'Dirac', 1933)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (8, 'Enrico', 'Fermi', 1938)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (9, 'Richard', 'Feynman', 1965)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (10, 'Marie', 'Curie', 1911)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (11, 'James', 'Watson', 1962)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (12, 'Bertrand', 'Russell', 1950)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (13, 'John', 'Steinbeck', 1962)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (14, 'Nelson', 'Mandela', 1993)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name","year") VALUES (15, 'Jacques', 'Monod', 1965)
+  [1m[36m (0.3ms)[0m  [1mDROP TABLE "altered_nobel_prize_winners"[0m
+  [1m[35m (0.1ms)[0m  CREATE TEMPORARY TABLE "altered_nobel_prize_winners" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "first_name" varchar(255), "last_name" varchar(255), "year" integer) 
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("nobel_prize_winners")[0m
+  [1m[35m (0.1ms)[0m  SELECT * FROM "nobel_prize_winners"
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (1, 'Norman', 'Borlaug', 1970)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (2, 'Paul', 'Flory', 1974)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (3, 'Albert', 'Eintein', 1921)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (4, 'Samuel', 'Beckett', 1969)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (5, 'Niels', 'Bohr', 1922)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (6, 'Erwin', 'Schrodinger', 1933)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (7, 'Paul', 'Dirac', 1933)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (8, 'Enrico', 'Fermi', 1938)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (9, 'Richard', 'Feynman', 1965)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (10, 'Marie', 'Curie', 1911)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (11, 'James', 'Watson', 1962)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (12, 'Bertrand', 'Russell', 1950)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (13, 'John', 'Steinbeck', 1962)[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (14, 'Nelson', 'Mandela', 1993)
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "altered_nobel_prize_winners" ("id","first_name","last_name","year") VALUES (15, 'Jacques', 'Monod', 1965)[0m
+  [1m[35m (0.1ms)[0m  DROP TABLE "nobel_prize_winners"
+  [1m[36m (0.1ms)[0m  [1mCREATE TABLE "nobel_prize_winners" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "first_name" varchar(255), "last_name" varchar(255)) [0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_list("altered_nobel_prize_winners")
+  [1m[36m (0.1ms)[0m  [1mSELECT * FROM "altered_nobel_prize_winners"[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (1, 'Norman', 'Borlaug')
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (2, 'Paul', 'Flory')[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (3, 'Albert', 'Eintein')
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (4, 'Samuel', 'Beckett')[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (5, 'Niels', 'Bohr')
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (6, 'Erwin', 'Schrodinger')[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (7, 'Paul', 'Dirac')
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (8, 'Enrico', 'Fermi')[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (9, 'Richard', 'Feynman')
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (10, 'Marie', 'Curie')[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (11, 'James', 'Watson')
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (12, 'Bertrand', 'Russell')[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (13, 'John', 'Steinbeck')
+  [1m[36m (0.0ms)[0m  [1mINSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (14, 'Nelson', 'Mandela')[0m
+  [1m[35m (0.0ms)[0m  INSERT INTO "nobel_prize_winners" ("id","first_name","last_name") VALUES (15, 'Jacques', 'Monod')
+  [1m[36m (0.1ms)[0m  [1mDROP TABLE "altered_nobel_prize_winners"[0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120203212237')
+  [1m[36m (228.9ms)[0m  [1mcommit transaction[0m
+  [1m[35m (0.2ms)[0m  select sqlite_version(*)
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_list("nobel_prize_winners")
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("nobel_prizes")[0m
+  [1m[36mNobelPrizeWinner Load (0.2ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" LIMIT 1[0m
