@@ -9,6 +9,13 @@ module WithFilters
 
         if scoped_params and scoped_params[:filter]
           scoped_params[:filter].each do |name, value|
+            value = value.reject{|v| v.blank?} if value.is_a?(Array)
+            if (value.is_a?(String) and value.blank?) or
+               (value.is_a?(Array) and value.empty?) or
+               (value.is_a?(Hash) and not (value[:start].present? and value[:stop].present?))
+              next
+            end
+
             quoted_name = scope.connection.quote_column_name(name)
 
             # prep values
