@@ -25,13 +25,13 @@ module WithFilters
             end
 
             # attach filter
-            case value.class.to_s
-              when 'Array'
+            case value.class.name.to_sym
+              when :Array
                 scope = scope.where(["#{quoted_name} IN(?)", value])
-              when 'Hash'
+              when :Hash
                 scope = scope.where(["#{quoted_name} BETWEEN :start AND :stop", value])
-              else
-                scope = scope.where(["#{quoted_name} LIKE ?", value])
+              when :String, :FalseClass, :TrueClass
+                scope = scope.where(["#{quoted_name} LIKE ?", value.respond_to?(:strip) ? value.strip : value])
             end
           end
         end
