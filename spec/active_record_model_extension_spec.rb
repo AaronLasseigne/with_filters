@@ -31,7 +31,7 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         end
 
         it 'skips blank array values' do
-          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {first_name: ['Albert', '']}}}).order('first_name ASC')
+          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {first_name: ['Albert', '']}}})
           npw.length.should == 1
           npw.first.first_name.should == 'Albert'
           npw.where_values.should == ["\"first_name\" IN('Albert')"]
@@ -58,17 +58,38 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         end
       end
 
+      context 'field value is a boolean (and the column on the table is a :boolean)' do
+        it 'filters when "true" and "false" are passed' do
+          np = NobelPrize.with_filters({nobel_prizes: {filter: {shared: 'true'}}})
+          np.length.should == 7
+
+          np = NobelPrize.with_filters({nobel_prizes: {filter: {shared: 'false'}}})
+          np.length.should == 9
+        end
+      end
+
+      context 'field value is a date (and the column on the table is a :date)' do
+        it 'filters on the date value' do
+          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {birthdate: '19140325'}}})
+          npw.length.should == 1
+          npw.first.birthdate.should == '19140325'.to_date
+        end
+      end
+
+      context 'field value is a date range (and the column on the table is a :date)' do
+        it 'filters between :start and :stop' do
+          npw = NobelPrizeWinner.
+            with_filters({nobel_prize_winners: {filter: {birthdate: {start: '19140325', stop: '19280406'}}}}).
+            order('birthdate ASC')
+          npw.length.should == 4
+          npw.first.birthdate.should == '19140325'.to_date
+          npw.last.birthdate.should == '19280406'.to_date
+        end
+      end
+
       it 'accepts more than one field' do
         np = NobelPrize.with_filters({nobel_prizes: {filter: {year: {start: 1900, stop: 1930}, category: 'Physics'}}})
         np.length.should == 3
-      end
-
-      it 'works on boolean fields when "true" and "false" are passed' do
-        np = NobelPrize.with_filters({nobel_prizes: {filter: {shared: 'true'}}})
-        np.length.should == 7
-
-        np = NobelPrize.with_filters({nobel_prizes: {filter: {shared: 'false'}}})
-        np.length.should == 9
       end
     end
 

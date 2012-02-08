@@ -19,9 +19,13 @@ module WithFilters
             quoted_name = scope.connection.quote_column_name(name)
 
             # prep values
-            case find_column_type(scope, name)
+            value = case find_column_type(scope, name)
               when :boolean
-                value = (value == 'true')
+                (value == 'true')
+              when :date
+                value.is_a?(Hash) ? {start: value[:start].to_date, stop: value[:stop].to_date} : value.to_date
+              else
+                value
             end
 
             # attach filter
@@ -30,7 +34,7 @@ module WithFilters
                 scope = scope.where(["#{quoted_name} IN(?)", value])
               when :Hash
                 scope = scope.where(["#{quoted_name} BETWEEN :start AND :stop", value])
-              when :String, :FalseClass, :TrueClass
+              when :String, :FalseClass, :TrueClass, :Date
                 scope = scope.where(["#{quoted_name} LIKE ?", value.respond_to?(:strip) ? value.strip : value])
             end
           end
