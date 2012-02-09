@@ -112,6 +112,11 @@ describe 'WithFilters::ActiveRecordModelExtention' do
       end
     end
 
+    it 'quotes column names' do
+      npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {birthdate: '19140325'}}})
+      npw.where_values.first.should =~ /^#{npw.connection.quote_column_name('birthdate')}/
+    end
+
     it 'does not break the chain' do
       npw = NobelPrizeWinner.with_filters.limit(1)
       npw.length.should == 1
