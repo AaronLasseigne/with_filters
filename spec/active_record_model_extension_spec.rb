@@ -87,6 +87,25 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         end
       end
 
+      context 'field value is a datetime (and the column on the table is a :datetime or :timestamp)' do
+        it 'filters on the datetime value' do
+          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {updated_at: '20120207170905'}}})
+          npw.length.should == 1
+          npw.first.updated_at.to_s.should == Time.parse('20120207170905').to_s
+        end
+      end
+
+      context 'field value is a datetime range (and the column on the table is a :datetime or :timestamp)' do
+        it 'filters between :start and :stop' do
+          npw = NobelPrizeWinner.
+            with_filters({nobel_prize_winners: {filter: {updated_at: {start: '20120207170905', stop: '20120207170908'}}}}).
+            order('updated_at ASC')
+          npw.length.should == 4
+          npw.first.updated_at.to_s.should == Time.parse('20120207170905').to_s
+          npw.last.updated_at.to_s.should == Time.parse('20120207170908').to_s
+        end
+      end
+
       it 'accepts more than one field' do
         np = NobelPrize.with_filters({nobel_prizes: {filter: {year: {start: 1900, stop: 1930}, category: 'Physics'}}})
         np.length.should == 3
