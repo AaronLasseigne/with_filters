@@ -34,7 +34,7 @@ describe 'WithFilters::ActiveRecordModelExtention' do
           npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {first_name: ['Albert', '']}}})
           npw.length.should == 1
           npw.first.first_name.should == 'Albert'
-          npw.where_values.should == ["\"first_name\" IN('Albert')"]
+          npw.where_values.should == ["nobel_prize_winners.\"first_name\" IN('Albert')"]
         end
 
         it 'skips empty arrays' do
@@ -112,9 +112,21 @@ describe 'WithFilters::ActiveRecordModelExtention' do
       end
     end
 
+    context 'limit the need for specifying table names to resolve ambiguity' do
+      it 'prepends the table name to the field if the field is in the primary table' do
+        npw = NobelPrizeWinner.joins(:nobel_prizes).with_filters({nobel_prize_winners: {filter: {birthdate: '19140325'}}})
+        npw.where_values.first.should =~ /^#{npw.table_name}\./
+      end 
+
+      it 'does not affect non-primary fields' do
+        npw = NobelPrizeWinner.joins(:nobel_prizes).with_filters({nobel_prize_winners: {filter: {year: '1903'}}})
+        npw.where_values.first.should =~ /^#{npw.connection.quote_column_name('year')}/
+      end 
+    end
+
     it 'quotes column names' do
-      npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {birthdate: '19140325'}}})
-      npw.where_values.first.should =~ /^#{npw.connection.quote_column_name('birthdate')}/
+      npw = NobelPrizeWinner.joins(:nobel_prizes).with_filters({nobel_prize_winners: {filter: {year: '1903'}}})
+      npw.where_values.first.should =~ /^#{npw.connection.quote_column_name('year')}/
     end
 
     it 'does not break the chain' do

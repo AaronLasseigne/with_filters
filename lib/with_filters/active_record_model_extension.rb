@@ -3,12 +3,14 @@ module WithFilters
     extend ActiveSupport::Concern
 
     included do
-      self.scope :with_filters, ->(params = nil) {
-        scope = self.scoped
-        scoped_params = params.try(:[], scope.table_name.to_sym)
+      # switch from scope to class method because of a bug in Rails 3.2.1 where
+      # joins_values aren't available in scopes
+      def self.with_filters(params = nil)
+        relation = self.scoped
+        scoped_params = params.try(:[], relation.table_name.to_sym)
 
         if scoped_params and scoped_params[:filter]
-          scoped_params[:filter].each do |name, value|
+          scoped_params[:filter].each do |field, value|
             # skip blank entries
             value = value.reject{|v| v.blank?} if value.is_a?(Array)
             if (value.is_a?(String) and value.blank?) or
@@ -17,9 +19,9 @@ module WithFilters
               next
             end
 
-            quoted_name = scope.connection.quote_column_name(name)
+            quoted_field = relation.connection.quote_column_name(field)
 
-            db_column = find_column(scope, name)
+            db_column = find_column(relation, field)
 
             # prep values
             value = case db_column.type
@@ -43,32 +45,33 @@ module WithFilters
             end
 
             # attach filter
-            scope = case value.class.name.to_sym
+            quoted_field = relation.column_names.include?(field.to_s) ? "#{self.table_name}.#{quoted_field}" : quoted_field
+            relation = case value.class.name.to_sym
               when :Array
-                scope.where(["#{quoted_name} IN(?)", value])
+                relation.where(["#{quoted_field} IN(?)", value])
               when :Hash
-                scope.where(["#{quoted_name} BETWEEN :start AND :stop", value])
+                relation.where(["#{quoted_field} BETWEEN :start AND :stop", value])
               when :String, :FalseClass, :TrueClass, :Date, :Time
                 value.strip! if value.respond_to?(:strip!)
                 value = value.to_s(:db) + '%' if has_decimal_seconds?(value, db_column)
-                scope.where(["#{quoted_name} LIKE ?", value])
+                relation.where(["#{quoted_field} LIKE ?", value])
               else
-                scope
+                relation
             end
           end
         end
 
-        scope
-      }
+        relation
+      end
     end
 
     module ClassMethods
-      def find_column(scope, field)
+      def find_column(relation, field)
         field = field.to_s
-        scope.columns.detect{|column| column.name == field} ||
+        relation.columns.detect{|column| column.name == field} ||
           (   
-           (scope.respond_to?(:joins_values) ? scope.joins_values : []) +
-           (scope.respond_to?(:includes_values) ? scope.includes_values : []) 
+           (relation.respond_to?(:joins_values) ? relation.joins_values : []) +
+           (relation.respond_to?(:includes_values) ? relation.includes_values : []) 
           ).uniq.map{|join|
             # convert string joins to table names
             if join.is_a?(String)
@@ -84,7 +87,7 @@ module WithFilters
       end
 
       def has_decimal_seconds?(value, column)
-        !!ActiveRecord::Base.connection.type_cast(value, column).index(/\.\d+$/)
+        !!(ActiveRecord::Base.connection.type_cast(value, column).to_s =~ /\.\d+$/)
       end
     end
   end
