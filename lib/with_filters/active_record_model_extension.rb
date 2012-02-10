@@ -5,9 +5,10 @@ module WithFilters
     included do
       # switch from scope to class method because of a bug in Rails 3.2.1 where
       # joins_values aren't available in scopes
-      def self.with_filters(params = nil)
+      def self.with_filters(params = nil, options = {})
         relation = self.scoped
-        scoped_params = params.try(:[], relation.table_name.to_sym)
+        param_namespace = options[:param_namespace] || relation.table_name.to_sym
+        scoped_params = params.try(:[], param_namespace)
 
         if scoped_params and scoped_params[:filter]
           scoped_params[:filter].each do |field, value|

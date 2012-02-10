@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'WithFilters::ActiveRecordModelExtention' do
-  describe '#with_filters(params = nil)' do
+  describe '#with_filters(params = nil, options = {})' do
     context 'filters using fields' do
       context 'field value is a string' do
         it 'filters based on the string value' do
@@ -132,6 +132,18 @@ describe 'WithFilters::ActiveRecordModelExtention' do
     it 'does not break the chain' do
       npw = NobelPrizeWinner.with_filters.limit(1)
       npw.length.should == 1
+    end
+
+    context 'the :param_namespace option is passed' do
+      it 'finds the :order param from the hash using the namespace' do
+        npw = NobelPrizeWinner.with_filters({foo: {filter: {first_name: 'Albert'}}}, {param_namespace: :foo})
+        npw.where_values.should == ["nobel_prize_winners.\"first_name\" LIKE 'Albert'"]
+      end 
+
+      it 'skips order if it cannot find :order in the namespace' do
+        npw = NobelPrizeWinner.with_filters({bar: {filter: {first_name: 'Albert'}}}, {param_namespace: :foo})
+        npw.where_values.should == []
+      end 
     end
   end
 end
