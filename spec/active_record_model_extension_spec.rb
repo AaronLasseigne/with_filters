@@ -89,20 +89,23 @@ describe 'WithFilters::ActiveRecordModelExtention' do
 
       context 'field value is a datetime (and the column on the table is a :datetime or :timestamp)' do
         it 'filters on the datetime value' do
-          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {updated_at: '20120207170905'}}})
+          time = '20120101120101'
+          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {created_at: time}}})
           npw.length.should == 1
-          npw.first.updated_at.to_s.should == Time.parse('20120207170905').to_s
+          npw.first.created_at.to_s.should == Time.parse(time).to_s
         end
       end
 
       context 'field value is a datetime range (and the column on the table is a :datetime or :timestamp)' do
         it 'filters between :start and :stop' do
+          start_time = '20120101120101'
+          stop_time  = '20120101120104'
           npw = NobelPrizeWinner.
-            with_filters({nobel_prize_winners: {filter: {updated_at: {start: '20120207170905', stop: '20120207170908'}}}}).
-            order('updated_at ASC')
+            with_filters({nobel_prize_winners: {filter: {created_at: {start: start_time, stop: stop_time}}}}).
+            order('created_at ASC')
           npw.length.should == 4
-          npw.first.updated_at.to_s.should == Time.parse('20120207170905').to_s
-          npw.last.updated_at.to_s.should == Time.parse('20120207170908').to_s
+          npw.first.created_at.to_s.should == Time.parse(start_time).to_s
+          npw.last.created_at.to_s.should == Time.parse(stop_time).to_s
         end
       end
 

@@ -326,3 +326,74 @@ Migrating to ModifyUpdatedAt (20120209051208)
   [1m[36mNobelPrizeWinner Load (0.3ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("birthdate" BETWEEN '1914-03-25' AND '1928-04-06') ORDER BY birthdate ASC[0m
   [1m[35mNobelPrizeWinner Load (0.3ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("updated_at" LIKE '2012-02-07 23:09:05%')
   [1m[36mNobelPrizeWinner Load (0.3ms)[0m  [1mSELECT "nobel_prize_winners".* FROM "nobel_prize_winners" WHERE ("updated_at" BETWEEN '2012-02-07 23:09:05' AND '2012-02-07 23:09:09') ORDER BY updated_at ASC[0m
+  [1m[36m (16.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Migrating to AdditionalColumns (20111227224959)
+Migrating to CreateNobelPrizeWinners (20120127203225)
+Migrating to CreateNobelPrizes (20120203212237)
+Migrating to ModifyUpdatedAt (20120209051208)
+Migrating to ChangeCreatedAt (20120210163052)
+  [1m[35m (0.1ms)[0m  select sqlite_version(*)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35mNobelPrizeWinner Load (0.2ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" 
+  [1m[36m (0.3ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-01 18:01:01.000000', "updated_at" = '2012-02-10 16:41:04.176299' WHERE "nobel_prize_winners"."id" = 1[0m
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-01 18:01:01.000000', "updated_at" = '2012-02-10 16:41:04.186304' WHERE "nobel_prize_winners"."id" = 2
+  [1m[36m (0.0ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-01 18:01:01.000000', "updated_at" = '2012-02-10 16:41:04.188025' WHERE "nobel_prize_winners"."id" = 3[0m
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-01 18:01:01.000000', "updated_at" = '2012-02-10 16:41:04.189538' WHERE "nobel_prize_winners"."id" = 4
+  [1m[36m (0.0ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-01 18:01:01.000000', "updated_at" = '2012-02-10 16:41:04.191089' WHERE "nobel_prize_winners"."id" = 5[0m
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-02 18:01:02.000000', "updated_at" = '2012-02-10 16:41:04.192600' WHERE "nobel_prize_winners"."id" = 6
+  [1m[36m (0.0ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-02 18:01:02.000000', "updated_at" = '2012-02-10 16:41:04.194168' WHERE "nobel_prize_winners"."id" = 7[0m
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-02 18:01:02.000000', "updated_at" = '2012-02-10 16:41:04.196749' WHERE "nobel_prize_winners"."id" = 8
+  [1m[36m (0.1ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-02 18:01:02.000000', "updated_at" = '2012-02-10 16:41:04.199818' WHERE "nobel_prize_winners"."id" = 9[0m
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-02 18:01:02.000000', "updated_at" = '2012-02-10 16:41:04.202676' WHERE "nobel_prize_winners"."id" = 10
+  [1m[36m (0.1ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-03 18:01:03.000000', "updated_at" = '2012-02-10 16:41:04.205380' WHERE "nobel_prize_winners"."id" = 11[0m
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-03 18:01:03.000000', "updated_at" = '2012-02-10 16:41:04.207253' WHERE "nobel_prize_winners"."id" = 12
+  [1m[36m (0.0ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-03 18:01:03.000000', "updated_at" = '2012-02-10 16:41:04.208878' WHERE "nobel_prize_winners"."id" = 13[0m
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-03 18:01:03.000000', "updated_at" = '2012-02-10 16:41:04.210470' WHERE "nobel_prize_winners"."id" = 14
+  [1m[36m (0.0ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-03 18:01:03.000000', "updated_at" = '2012-02-10 16:41:04.212004' WHERE "nobel_prize_winners"."id" = 15[0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120210163052')
+  [1m[36m (2.1ms)[0m  [1mcommit transaction[0m
+  [1m[35m (0.3ms)[0m  select sqlite_version(*)
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_list("nobel_prize_winners")
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("nobel_prizes")[0m
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.1ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations" 
+Migrating to ChangeCreatedAt (20120210163052)
+  [1m[36m (0.1ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (0.0ms)[0m  begin transaction
+  [1m[36m (0.4ms)[0m  [1mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = '20120210163052'[0m
+  [1m[35m (2.1ms)[0m  commit transaction
+  [1m[36m (0.3ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations" 
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("nobel_prize_winners")[0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_list("nobel_prizes")
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Migrating to AdditionalColumns (20111227224959)
+Migrating to CreateNobelPrizeWinners (20120127203225)
+Migrating to CreateNobelPrizes (20120203212237)
+Migrating to ModifyUpdatedAt (20120209051208)
+Migrating to ChangeCreatedAt (20120210163052)
+  [1m[35m (0.0ms)[0m  select sqlite_version(*)
+  [1m[36m (0.0ms)[0m  [1mbegin transaction[0m
+  [1m[35mNobelPrizeWinner Load (0.1ms)[0m  SELECT "nobel_prize_winners".* FROM "nobel_prize_winners" 
+  [1m[36m (0.3ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-01 18:01:01.000000', "updated_at" = '2012-02-10 16:45:38.092478' WHERE "nobel_prize_winners"."id" = 1[0m
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-01 18:01:02.000000', "updated_at" = '2012-02-10 16:45:38.102816' WHERE "nobel_prize_winners"."id" = 2
+  [1m[36m (0.1ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-01 18:01:03.000000', "updated_at" = '2012-02-10 16:45:38.104648' WHERE "nobel_prize_winners"."id" = 3[0m
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-01 18:01:04.000000', "updated_at" = '2012-02-10 16:45:38.106327' WHERE "nobel_prize_winners"."id" = 4
+  [1m[36m (0.0ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-01 18:01:05.000000', "updated_at" = '2012-02-10 16:45:38.107889' WHERE "nobel_prize_winners"."id" = 5[0m
+  [1m[35m (0.0ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-02 18:01:01.000000', "updated_at" = '2012-02-10 16:45:38.109462' WHERE "nobel_prize_winners"."id" = 6
+  [1m[36m (0.0ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-02 18:01:02.000000', "updated_at" = '2012-02-10 16:45:38.110960' WHERE "nobel_prize_winners"."id" = 7[0m
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-02 18:01:03.000000', "updated_at" = '2012-02-10 16:45:38.113678' WHERE "nobel_prize_winners"."id" = 8
+  [1m[36m (0.1ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-02 18:01:04.000000', "updated_at" = '2012-02-10 16:45:38.116943' WHERE "nobel_prize_winners"."id" = 9[0m
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-02 18:01:05.000000', "updated_at" = '2012-02-10 16:45:38.119557' WHERE "nobel_prize_winners"."id" = 10
+  [1m[36m (0.1ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-03 18:01:01.000000', "updated_at" = '2012-02-10 16:45:38.122037' WHERE "nobel_prize_winners"."id" = 11[0m
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-03 18:01:02.000000', "updated_at" = '2012-02-10 16:45:38.124453' WHERE "nobel_prize_winners"."id" = 12
+  [1m[36m (0.1ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-03 18:01:03.000000', "updated_at" = '2012-02-10 16:45:38.126671' WHERE "nobel_prize_winners"."id" = 13[0m
+  [1m[35m (0.1ms)[0m  UPDATE "nobel_prize_winners" SET "created_at" = '2012-01-03 18:01:04.000000', "updated_at" = '2012-02-10 16:45:38.128589' WHERE "nobel_prize_winners"."id" = 14
+  [1m[36m (0.1ms)[0m  [1mUPDATE "nobel_prize_winners" SET "created_at" = '2012-01-03 18:01:05.000000', "updated_at" = '2012-02-10 16:45:38.130259' WHERE "nobel_prize_winners"."id" = 15[0m
+  [1m[35m (0.1ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ('20120210163052')
+  [1m[36m (2.5ms)[0m  [1mcommit transaction[0m
+  [1m[35m (0.3ms)[0m  select sqlite_version(*)
+  [1m[36m (0.1ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_list("nobel_prize_winners")
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_list("nobel_prizes")[0m
