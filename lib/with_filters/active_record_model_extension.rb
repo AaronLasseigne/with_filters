@@ -80,7 +80,7 @@ module WithFilters
               join
             end 
           }.flatten.map{|table_name|
-            ActiveRecord::Base::connection_pool.columns[table_name.to_s.tableize]
+            ActiveRecord::Base::connection.columns(table_name.to_s.tableize)
           }.flatten.detect{|column|
             column.name == field
           }   
