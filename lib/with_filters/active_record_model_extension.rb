@@ -20,8 +20,6 @@ module WithFilters
               next
             end
 
-            quoted_field = relation.connection.quote_column_name(field)
-
             db_column = find_column(relation, field)
 
             # prep values
@@ -43,7 +41,7 @@ module WithFilters
                   stop_date_info  = Date._parse(value[:stop])
                   unless start_date_info.has_key?(:hour) and stop_date_info.has_key?(:hour)
                     start_date = '%<year>d%02<mon>d%02<mday>d' % start_date_info
-                    stop_date = '%<year>d%02<mon>d%02<mday>d' % stop_date_info
+                    stop_date  = '%<year>d%02<mon>d%02<mday>d' % stop_date_info
                     value = {start: "#{start_date}000000", stop: "#{stop_date}235959"}
                   end
                 end
@@ -56,13 +54,21 @@ module WithFilters
 
                   {start: start_time.to_s(:db), stop: stop_time.to_s(:db)}
                 else
-                  Time.zone.parse(value)
+                  parsed_value = Time.zone.parse(value)
+                  parsed_value += '%' if has_decimal_seconds?(value, db_column)
+                  parsed_value
                 end
               else
-                value
+                if value.respond_to?(:strip)
+                  value.strip
+                else
+                  value
+                end
             end
 
+
             # attach filter
+            quoted_field = relation.connection.quote_column_name(field)
             quoted_field = relation.column_names.include?(field.to_s) ? "#{self.table_name}.#{quoted_field}" : quoted_field
             relation = case value.class.name.to_sym
               when :Array
@@ -70,8 +76,6 @@ module WithFilters
               when :Hash
                 relation.where(["#{quoted_field} BETWEEN :start AND :stop", value])
               when :String, :FalseClass, :TrueClass, :Date, :Time
-                value.strip! if value.respond_to?(:strip!)
-                value = value.to_s(:db) + '%' if has_decimal_seconds?(value, db_column)
                 relation.where(["#{quoted_field} LIKE ?", value])
               else
                 relation
