@@ -14,12 +14,6 @@ describe 'WithFilters::ActiveRecordModelExtention' do
           npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {first_name: ''}}})
           npw.where_values.should == []
         end
-
-        it 'trims whitespace' do
-          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {first_name: ' Albert '}}})
-          npw.length.should == 1
-          npw.first.first_name.should == 'Albert'
-        end
       end
 
       context 'field value is an array' do
