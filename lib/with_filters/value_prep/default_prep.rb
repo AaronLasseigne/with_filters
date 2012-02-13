@@ -8,26 +8,27 @@ module WithFilters
       end
 
       def value
-        @prepared_value ||= prepared_value
-      end
-
-      def prepared_value
-        if @value.is_a?(Array)
-          @value.map do |v|
-            v.strip if v.respond_to?(:strip)
-          end
-        elsif @value.is_a?(Hash)
-          start_value = @value[:start]
-          stop_value  = @value[:stop]
-          @value = {
-            start: start_value.respond_to?(:strip) ? start_value.strip : start_value,
-            stop:  stop_value.respond_to?(:strip) ? stop_value.strip : stop_value
-          }
+        @prepared_value ||= if @value.is_a?(Hash)
+          {start: self.prepare_start_value(@value[:start]), stop: self.prepare_stop_value(@value[:stop])}
         else
-          @value.respond_to?(:strip) ? @value.strip : @value
+          temp = Array.wrap(@value).map do |value|
+            self.prepare_value(value)
+          end
+          temp.length == 1 ? temp.first : temp
         end
       end
-      private :prepared_value
+
+      def prepare_value(value)
+        value.respond_to?(:strip) ? value.strip : value
+      end
+
+      def prepare_start_value(value)
+        self.prepare_value(value)
+      end
+
+      def prepare_stop_value(value)
+        self.prepare_value(value)
+      end
     end
   end
 end

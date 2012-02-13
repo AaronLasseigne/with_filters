@@ -5,7 +5,6 @@ require 'with_filters/value_prep/default_prep'
 require 'with_filters/value_prep/boolean_prep'
 require 'with_filters/value_prep/date_prep'
 require 'with_filters/value_prep/date_time_prep'
-require 'with_filters/value_prep/string_prep'
 require 'with_filters/value_prep/value_prep'
 require 'with_filters/version'
 

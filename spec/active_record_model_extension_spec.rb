@@ -25,10 +25,11 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         end
 
         it 'skips blank array values' do
-          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {first_name: ['Albert', '']}}})
-          npw.length.should == 1
+          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {first_name: ['Albert', 'Marie', '']}}}).order('first_name ASC')
+          npw.length.should == 2
           npw.first.first_name.should == 'Albert'
-          npw.where_values.should == ["nobel_prize_winners.\"first_name\" IN('Albert')"]
+          npw.last.first_name.should == 'Marie'
+          npw.where_values.should == ["nobel_prize_winners.\"first_name\" IN('Albert','Marie')"]
         end
 
         it 'skips empty arrays' do

@@ -4,9 +4,7 @@ module WithFilters
       boolean:   BooleanPrep,
       date:      DatePrep,
       datetime:  DateTimePrep,
-      timestamp: DateTimePrep,
-      string:    StringPrep,
-      text:      StringPrep
+      timestamp: DateTimePrep
     }
 
     def self.prepare(column, value, options = {})

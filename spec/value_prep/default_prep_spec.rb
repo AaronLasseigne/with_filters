@@ -16,6 +16,10 @@ describe 'WithFilters::ValuePrep::DefaultPrep' do
       it 'trims whitespace' do
         WithFilters::ValuePrep::DefaultPrep.new(@column, [' Albert ', ' Marie ']).value.should == ['Albert', 'Marie']
       end
+
+      it 'returns a string if only one value exists' do
+        WithFilters::ValuePrep::DefaultPrep.new(@column, ['Albert']).value.should == 'Albert'
+      end
     end
 
     context 'value is a Hash' do

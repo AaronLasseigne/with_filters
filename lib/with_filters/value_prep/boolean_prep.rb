@@ -1,7 +1,7 @@
 module WithFilters
   module ValuePrep
     class BooleanPrep < DefaultPrep
-      def prepared_value
+      def prepare_value(value)
         (super == 'true')
       end
     end
