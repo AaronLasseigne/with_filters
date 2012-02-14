@@ -20,14 +20,21 @@ module WithFilters
               next
             end
 
-            db_column = find_column(relation, field)
-
             field_options = {}
             field_options = options[:fields][field] if options[:fields] and options[:fields][field]
-            value = WithFilters::ValuePrep.prepare(db_column, value, field_options)
 
-            quoted_field = relation.connection.quote_column_name(field)
-            quoted_field = relation.column_names.include?(field.to_s) ? "#{self.table_name}.#{quoted_field}" : quoted_field
+            db_column_table_name, db_column_name = (field_options.delete(:column) || field).to_s.split('.')
+            if db_column_name.nil?
+              db_column_name = db_column_table_name
+              db_column_table_name = relation.column_names.include?(db_column_name) ? self.table_name : nil
+            end
+
+            db_column = find_column(relation, db_column_name)
+
+            quoted_field = relation.connection.quote_column_name(db_column_name)
+            quoted_field = "#{db_column_table_name}.#{quoted_field}" if db_column_table_name
+
+            value = WithFilters::ValuePrep.prepare(db_column, value, field_options)
 
             # attach filter
             relation = case value.class.name.to_sym

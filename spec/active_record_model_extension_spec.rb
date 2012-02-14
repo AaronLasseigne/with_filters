@@ -168,6 +168,26 @@ describe 'WithFilters::ActiveRecordModelExtention' do
     end
 
     context 'the :fields option is passed' do
+      context 'the :column option is passed' do
+        it 'uses the passed field name' do
+          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {fname: 'Albert'}}}, {
+            fields: {
+              fname: {column: :first_name}
+            }
+          })
+          npw.length.should == 1
+          npw.first.first_name.should == 'Albert'
+
+          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {filter: {fname: 'Albert'}}}, {
+            fields: {
+              fname: {column: 'nobel_prize_winners.first_name'}
+            }
+          })
+          npw.length.should == 1
+          npw.first.first_name.should == 'Albert'
+        end
+      end
+
       context 'the :match option is passed' do
         context ':exact' do
           it 'handles matches for a single entry' do
