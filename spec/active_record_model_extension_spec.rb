@@ -299,6 +299,28 @@ describe 'WithFilters::ActiveRecordModelExtention' do
           end
         end
       end
+
+      context 'a Proc is passed' do
+        it 'returns the value from the proc' do
+          npw = NobelPrizeWinner.with_filters(
+            {nobel_prize_winners: {filter: {full_name: 'Albert Einstein'}}},
+            {fields: {
+              full_name: ->(value, scope) {
+                first_word, second_word = value.strip.split(/\s+/)
+
+                if second_word
+                  scope.where(['first_name LIKE ? OR last_name LIKE ?', first_word, first_word])
+                else
+                  scope.where(['first_name LIKE ? AND last_name LIKE ?', first_word, second_word])
+                end
+              }
+            }}
+          )
+          npw.length.should == 1
+          npw.first.first_name.should == 'Albert'
+          npw.first.last_name.should == 'Einstein'
+        end
+      end
     end
   end
 end

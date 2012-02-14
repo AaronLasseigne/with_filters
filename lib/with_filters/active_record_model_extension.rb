@@ -23,29 +23,33 @@ module WithFilters
             field_options = {}
             field_options = options[:fields][field] if options[:fields] and options[:fields][field]
 
-            db_column_table_name, db_column_name = (field_options.delete(:column) || field).to_s.split('.')
-            if db_column_name.nil?
-              db_column_name = db_column_table_name
-              db_column_table_name = relation.column_names.include?(db_column_name) ? self.table_name : nil
-            end
+            if field_options.is_a?(Proc)
+              relation = field_options.call(value, relation)
+            else
+              db_column_table_name, db_column_name = (field_options.delete(:column) || field).to_s.split('.')
+              if db_column_name.nil?
+                db_column_name = db_column_table_name
+                db_column_table_name = relation.column_names.include?(db_column_name) ? self.table_name : nil
+              end
 
-            db_column = find_column(relation, db_column_name)
+              db_column = find_column(relation, db_column_name)
 
-            quoted_field = relation.connection.quote_column_name(db_column_name)
-            quoted_field = "#{db_column_table_name}.#{quoted_field}" if db_column_table_name
+              quoted_field = relation.connection.quote_column_name(db_column_name)
+              quoted_field = "#{db_column_table_name}.#{quoted_field}" if db_column_table_name
 
-            value = WithFilters::ValuePrep.prepare(db_column, value, field_options)
+              value = WithFilters::ValuePrep.prepare(db_column, value, field_options)
 
-            # attach filter
-            relation = case value.class.name.to_sym
-              when :Array
-                relation.where([Array.new(value.size, "#{quoted_field} LIKE ?").join(' OR '), *value])
-              when :Hash
-                relation.where(["#{quoted_field} BETWEEN :start AND :stop", value])
-              when :String, :FalseClass, :TrueClass, :Date, :Time
-                relation.where(["#{quoted_field} LIKE ?", value])
-              else
-                relation
+              # attach filter
+              relation = case value.class.name.to_sym
+                when :Array
+                  relation.where([Array.new(value.size, "#{quoted_field} LIKE ?").join(' OR '), *value])
+                when :Hash
+                  relation.where(["#{quoted_field} BETWEEN :start AND :stop", value])
+                when :String, :FalseClass, :TrueClass, :Date, :Time
+                  relation.where(["#{quoted_field} LIKE ?", value])
+                else
+                  relation
+              end
             end
           end
         end
