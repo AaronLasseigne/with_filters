@@ -7,7 +7,7 @@ module WithFilters
       # joins_values aren't available in scopes
       def self.with_filters(params = nil, options = {})
         relation = self.scoped
-        param_namespace = options[:param_namespace] || relation.table_name.to_sym
+        param_namespace = options.delete(:param_namespace) || relation.table_name.to_sym
         scoped_params = params.try(:[], param_namespace)
 
         if scoped_params and scoped_params[:filter]
@@ -22,7 +22,9 @@ module WithFilters
 
             db_column = find_column(relation, field)
 
-            value = WithFilters::ValuePrep.prepare(db_column, value, options)
+            field_options = {}
+            field_options = options[:fields][field] if options[:fields] and options[:fields][field]
+            value = WithFilters::ValuePrep.prepare(db_column, value, field_options)
 
             quoted_field = relation.connection.quote_column_name(field)
             quoted_field = relation.column_names.include?(field.to_s) ? "#{self.table_name}.#{quoted_field}" : quoted_field
@@ -30,7 +32,7 @@ module WithFilters
             # attach filter
             relation = case value.class.name.to_sym
               when :Array
-                relation.where(["#{quoted_field} IN(?)", value])
+                relation.where([Array.new(value.size, "#{quoted_field} LIKE ?").join(' OR '), *value])
               when :Hash
                 relation.where(["#{quoted_field} BETWEEN :start AND :stop", value])
               when :String, :FalseClass, :TrueClass, :Date, :Time

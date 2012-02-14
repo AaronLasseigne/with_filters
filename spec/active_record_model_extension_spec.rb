@@ -29,7 +29,7 @@ describe 'WithFilters::ActiveRecordModelExtention' do
           npw.length.should == 2
           npw.first.first_name.should == 'Albert'
           npw.last.first_name.should == 'Marie'
-          npw.where_values.should == ["nobel_prize_winners.\"first_name\" IN('Albert','Marie')"]
+          npw.where_values.should == ["nobel_prize_winners.\"first_name\" LIKE 'Albert' OR nobel_prize_winners.\"first_name\" LIKE 'Marie'"]
         end
 
         it 'skips empty arrays' do
@@ -165,6 +165,120 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         npw = NobelPrizeWinner.with_filters({bar: {filter: {first_name: 'Albert'}}}, {param_namespace: :foo})
         npw.where_values.should == []
       end 
+    end
+
+    context 'the :fields option is passed' do
+      context 'the :match option is passed' do
+        context ':exact' do
+          it 'handles matches for a single entry' do
+            npw = NobelPrizeWinner.with_filters(
+              {nobel_prize_winners: {filter: {first_name: 'Paul'}}},
+              {fields: {
+                first_name: {match: :exact}
+              }}
+            ).order('first_name ASC')
+            npw.length.should == 2
+            npw.each do |n|
+              n.first_name.should == 'Paul'
+            end
+          end
+
+          it 'handles matches for a multiple entries' do
+            npw = NobelPrizeWinner.with_filters(
+              {nobel_prize_winners: {filter: {first_name: ['Paul', 'Erwin']}}},
+              {fields: {
+                first_name: {match: :exact}
+              }}
+            ).order('first_name ASC')
+            npw.length.should == 3
+            npw.first.first_name.should == 'Erwin'
+            npw.second.first_name.should == 'Paul'
+            npw.last.first_name.should == 'Paul'
+          end
+        end
+
+        context ':contains' do
+          it 'handles matches for a single entry' do
+            npw = NobelPrizeWinner.with_filters(
+              {nobel_prize_winners: {filter: {first_name: 'el'}}},
+              {fields: {
+                first_name: {match: :contains}
+              }}
+            ).order('first_name ASC')
+            npw.length.should == 3
+            npw.first.first_name.should == 'Nelson'
+            npw.second.first_name.should == 'Niels'
+            npw.last.first_name.should == 'Samuel'
+          end
+
+          it 'handles matches for a multiple entries' do
+            npw = NobelPrizeWinner.with_filters(
+              {nobel_prize_winners: {filter: {first_name: ['ert', 'mu'] }}},
+              {fields: {
+                first_name: {match: :contains}
+              }}
+            ).order('first_name ASC')
+            npw.length.should == 3
+            npw.first.first_name.should == 'Albert'
+            npw.second.first_name.should == 'Bertrand'
+            npw.last.first_name.should == 'Samuel'
+          end
+        end
+
+        context ':begins_with' do
+          it 'handles matches for a single entry' do
+            npw = NobelPrizeWinner.with_filters(
+              {nobel_prize_winners: {filter: {first_name: 'ja'}}},
+              {fields: {
+                first_name: {match: :begins_with}
+              }}
+            ).order('first_name ASC')
+            npw.length.should == 2
+            npw.first.first_name.should == 'Jacques'
+            npw.last.first_name.should == 'James'
+          end
+
+          it 'handles matches for a multiple entries' do
+            npw = NobelPrizeWinner.with_filters(
+              {nobel_prize_winners: {filter: {first_name: ['ja', 'ri']}}},
+              {fields: {
+                first_name: {match: :begins_with}
+              }}
+            ).order('first_name ASC')
+            npw.length.should == 3
+            npw.first.first_name.should == 'Jacques'
+            npw.second.first_name.should == 'James'
+            npw.last.first_name.should == 'Richard'
+          end
+        end
+
+        context ':ends_with' do
+          it 'handles matches for a single entry' do
+            npw = NobelPrizeWinner.with_filters(
+              {nobel_prize_winners: {filter: {first_name: 'es'}}},
+              {fields: {
+                first_name: {match: :ends_with}
+              }}
+            ).order('first_name ASC')
+            npw.length.should == 2
+            npw.first.first_name.should == 'Jacques'
+            npw.last.first_name.should == 'James'
+          end
+
+          it 'handles matches for a multiple entries' do
+            npw = NobelPrizeWinner.with_filters(
+              {nobel_prize_winners: {filter: {first_name: ['es', 'ie']}}},
+              {fields: {
+                first_name: {match: :ends_with}
+              }}
+            ).order('first_name ASC')
+            npw.length.should == 3
+            npw.first.first_name.should == 'Jacques'
+            npw.second.first_name.should == 'James'
+            npw.last.first_name.should == 'Marie'
+          end
+        end
+      end
     end
   end
 end
