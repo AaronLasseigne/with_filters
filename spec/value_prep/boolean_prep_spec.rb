@@ -1,17 +1,15 @@
 require 'spec_helper'
 
-describe 'WithFilters::ValuePrep::BooleanPrep' do
+describe WithFilters::ValuePrep::BooleanPrep do
   describe '#value' do
-    before do
-      @column = NobelPrize.columns.detect{|c| c.name == 'shared'}
+    let(:column) {NobelPrize.columns.detect{|c| c.name == 'shared'}}
+
+    it 'turns "true" into `true`' do
+      described_class.new(column, 'true').value.should be true
     end
 
-    it 'turns "true" into a TrueClass boolean' do
-      WithFilters::ValuePrep::BooleanPrep.new(@column, 'true').value.should == true
-    end
-
-    it 'turns "false" into a FalseClass boolean' do
-      WithFilters::ValuePrep::BooleanPrep.new(@column, 'false').value.should == false
+    it 'turns "false" into `false`' do
+      described_class.new(column, 'false').value.should be false
     end
   end
 end
