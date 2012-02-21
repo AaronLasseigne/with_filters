@@ -11,11 +11,13 @@ describe WithFilters::FilterForm do
 
   context 'adding a filter' do
     it 'should have a filter' do
+      label = 'Given Name'
       ff = described_class.new(NobelPrizeWinner.with_filters.all)
-      ff.input(:first_name)
+      ff.input(:first_name, label: label)
 
       ff.filters.length.should == 1
       ff.filters.first.should be_an_instance_of(WithFilters::Filter)
+      ff.filters.first.label.should == label
     end
   end
 end

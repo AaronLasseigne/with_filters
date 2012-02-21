@@ -10,8 +10,8 @@ module WithFilters
       @filters         = []
     end
 
-    def input(name)
-      @filters.push(WithFilters::Filter.new(name, @records.with_filters_data[:param_namespace]))
+    def input(name, options = {})
+      @filters.push(WithFilters::Filter.new(name, @records.with_filters_data[:param_namespace], options))
     end
   end
 end
