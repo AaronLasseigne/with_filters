@@ -1,5 +1,5 @@
 <%= form_tag(nil, filter_form.attrs) do %>
   <% filter_form.filters.each do |filter| %>
-    <%= render(partial: filter.partial_path, locals: {filter: filter}) %>
+    <%= render(partial: filter.to_partial_path, locals: {filter: filter}) %>
   <% end %>
 <% end %>

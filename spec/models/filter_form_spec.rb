@@ -4,9 +4,9 @@ describe WithFilters::FilterForm do
   context 'defaults' do
     subject {described_class.new(NobelPrizeWinner.all)}
 
-    its(:attrs)        {should == {novalidate: 'novalidate'}}
-    its(:partial_path) {should == 'with_filters/filter_form'}
-    its(:filters)      {should be_empty}
+    its(:attrs)           {should == {novalidate: 'novalidate'}}
+    its(:to_partial_path) {should == 'with_filters/filter_form'}
+    its(:filters)         {should be_empty}
   end
 
   context 'adding a filter' do

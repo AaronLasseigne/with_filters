@@ -4,7 +4,7 @@ module WithFilters
       f = WithFilters::FilterForm.new(records)
       yield(f)
 
-      self.render(partial: f.partial_path, locals: {filter_form: f})
+      self.render(partial: f.to_partial_path, locals: {filter_form: f})
     end
   end
 end

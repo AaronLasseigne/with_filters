@@ -1,13 +1,13 @@
 module WithFilters
   class FilterForm
-    attr_reader :attrs, :partial_path, :filters
+    attr_reader :attrs, :to_partial_path, :filters
 
     def initialize(records)
       @records = records
 
-      @attrs        = {novalidate: 'novalidate'}
-      @partial_path = self.class.name.underscore
-      @filters      = []
+      @attrs           = {novalidate: 'novalidate'}
+      @to_partial_path = self.class.name.underscore
+      @filters         = []
     end
 
     def input(name)
