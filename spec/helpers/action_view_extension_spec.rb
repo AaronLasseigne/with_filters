@@ -8,13 +8,27 @@ describe WithFilters::ActionViewExtension do
       subject.should have_selector('form[@novalidate="novalidate"]')
     end
 
-    it 'can add a filter' do
-      output = helper.filter_form_for(NobelPrizeWinner.with_filters.all) do |f|
-        f.input :first_name
-      end
+    describe '#input' do
+      it 'default case' do
+        output = helper.filter_form_for(NobelPrizeWinner.with_filters.all) do |f|
+          f.input :first_name
+        end
 
-      output.should have_selector('label[text()="First Name"]')
-      output.should have_selector('input[@name="nobel_prize_winners[first_name]"]')
+        output.should have_selector('label[text()="First Name"]')
+        output.should have_selector('input[@name="nobel_prize_winners[first_name]"]')
+      end
+      
+      context 'options' do
+        context ':label_options' do
+          it 'adds options to the label_tag' do
+            output = helper.filter_form_for(NobelPrizeWinner.with_filters.all) do |f|
+              f.input :first_name, label_options: {class: 'label_class'}
+            end
+
+            output.should have_selector('label.label_class')
+          end
+        end
+      end
     end
   end
 end

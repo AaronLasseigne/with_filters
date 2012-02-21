@@ -6,6 +6,7 @@ describe WithFilters::Filter do
 
     its(:to_partial_path) {should == 'with_filters/filter'}
     its(:label)           {should == 'First Name'}
+    its(:label_options)   {should == {}}
     its(:field_name)      {should == 'foo[first_name]'}
   end
 
@@ -14,6 +15,15 @@ describe WithFilters::Filter do
       it 'uses the provided label' do
         label = 'Given Name'
         described_class.new(:first_name, :foo, label: label).label.should == label
+      end
+    end
+
+    context ':label_options' do
+      it 'uses the provided label' do
+        label_options = {
+          class: 'label_class'
+        }
+        described_class.new(:first_name, :foo, label_options: label_options).label_options.should == label_options
       end
     end
   end
