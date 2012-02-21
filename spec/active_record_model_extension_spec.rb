@@ -321,6 +321,18 @@ describe 'WithFilters::ActiveRecordModelExtention' do
           npw.first.last_name.should == 'Einstein'
         end
       end
+
+      context 'provides with_filters_data attr' do
+        it 'has :param_namespace' do
+          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {first_name: 'Albert'}})
+          npw.with_filters_data[:param_namespace].should == :nobel_prize_winners
+        end
+
+        it 'stays when converted to an array' do
+          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {first_name: 'Albert'}}).to_a
+          npw.with_filters_data[:param_namespace].should == :nobel_prize_winners
+        end
+      end
     end
   end
 end

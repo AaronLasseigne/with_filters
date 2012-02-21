@@ -2,13 +2,24 @@ module WithFilters
   module ActiveRecordModelExtension
     extend ActiveSupport::Concern
 
+    module AddData
+      attr_accessor :with_filters_data
+    end
+
     included do
       # switch from scope to class method because of a bug in Rails 3.2.1 where
       # joins_values aren't available in scopes
       def self.with_filters(params = nil, options = {})
-        relation = self.scoped
+        relation = self.scoped.extend(AddData).extending do
+          def to_a
+            a = super.extend(AddData)
+            a.with_filters_data = self.with_filters_data
+            a
+          end
+        end
         param_namespace = options.delete(:param_namespace) || relation.table_name.to_sym
         scoped_params = params.try(:[], param_namespace) || {}
+        relation.with_filters_data = {param_namespace: param_namespace}
 
         scoped_params.each do |field, value|
           # skip blank entries
