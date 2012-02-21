@@ -1,16 +1,26 @@
 require 'spec_helper'
 
 describe WithFilters::FilterForm do
-  context 'defaults' do
-    subject {described_class.new(NobelPrizeWinner.all)}
+  describe '#initialize(records, options = {})' do
+    context 'defaults' do
+      subject {described_class.new(NobelPrizeWinner.all)}
 
-    its(:attrs)           {should == {novalidate: 'novalidate', method: 'get'}}
-    its(:to_partial_path) {should == 'with_filters/filter_form'}
-    its(:filters)         {should be_empty}
+      its(:attrs)           {should == {novalidate: 'novalidate', method: 'get'}}
+      its(:to_partial_path) {should == 'with_filters/filter_form'}
+      its(:filters)         {should be_empty}
+    end
+
+    context 'options' do
+      context ':attrs' do
+        it 'attrs should override the defaults' do
+          described_class.new(NobelPrizeWinner.all, {method: 'post'}).attrs.should == {novalidate: 'novalidate', method: 'post'}
+        end
+      end
+    end
   end
 
-  context 'adding a filter' do
-    it 'should have a filter' do
+  describe '#input(name, options = {})' do
+    it 'adds a filter' do
       label = 'Given Name'
       ff = described_class.new(NobelPrizeWinner.with_filters.all)
       ff.input(:first_name, label: label)
