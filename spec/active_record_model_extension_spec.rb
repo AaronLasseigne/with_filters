@@ -44,7 +44,7 @@ describe 'WithFilters::ActiveRecordModelExtention' do
           np.length.should == 4
         end
 
-        it 'discards the range if :start or :stop are emtpy' do
+        it 'discards the range if :start or :stop are empty' do
           np = NobelPrize.with_filters({nobel_prizes: {year: {start: 1900, stop: ''}}})
           np.where_values.should == []
 
@@ -63,22 +63,49 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         end
       end
 
-      context 'field value is a date (and the column on the table is a :date)' do
-        it 'filters on the date value' do
-          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {birthdate: '19140325'}})
-          npw.length.should == 1
-          npw.first.birthdate.should == '19140325'.to_date
+      context 'field value is a date' do
+        context 'and the column on the table is a :date' do
+          it 'filters on the date value' do
+            npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {birthdate: '19140325'}})
+            npw.length.should == 1
+            npw.first.birthdate.should == '19140325'.to_date
+          end
+        end
+
+        context 'and the column on the table is a :datetime or :timestamp' do
+          it 'filters on the date value' do
+            date = '2012-01-01'
+            npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {created_at: date}})
+            npw.length.should == 5
+            npw.first.created_at.to_s.should =~ /^#{date}/
+            npw.last.created_at.to_s.should =~ /^#{date}/
+          end
         end
       end
 
-      context 'field value is a date range (and the column on the table is a :date)' do
-        it 'filters between :start and :stop' do
-          npw = NobelPrizeWinner.
-            with_filters({nobel_prize_winners: {birthdate: {start: '19140325', stop: '19280406'}}}).
-            order('birthdate ASC')
-          npw.length.should == 4
-          npw.first.birthdate.should == '19140325'.to_date
-          npw.last.birthdate.should == '19280406'.to_date
+      context 'field value is a date range' do
+        context 'and the column on the table is a :date' do
+          it 'filters between :start and :stop' do
+            npw = NobelPrizeWinner.
+              with_filters({nobel_prize_winners: {birthdate: {start: '19140325', stop: '19280406'}}}).
+              order('birthdate ASC')
+            npw.length.should == 4
+            npw.first.birthdate.should == '19140325'.to_date
+            npw.last.birthdate.should == '19280406'.to_date
+          end
+        end
+
+        context 'and the column on the table is a :datetime or :timestamp' do
+          it 'filters between :start and :stop' do
+            start_date = '2012-01-01'
+            stop_date  = '2012-01-02'
+            npw = NobelPrizeWinner.
+              with_filters({nobel_prize_winners: {created_at: {start: start_date, stop: stop_date}}}).
+              order('created_at ASC')
+            npw.length.should == 10
+            npw.first.created_at.to_s.should =~ /^#{start_date}/
+            npw.last.created_at.to_s.should =~ /^#{stop_date}/
+          end
         end
       end
 
@@ -104,32 +131,194 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         end
       end
 
-      context 'field value is a date (and the column on the table is a :datetime or :timestamp)' do
-        it 'filters on the date value' do
-          date = '2012-01-01'
-          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {created_at: date}})
-          npw.length.should == 5
-          npw.first.created_at.to_s.should =~ /^#{date}/
-          npw.last.created_at.to_s.should =~ /^#{date}/
-        end
-      end
-
-      context 'field value is a date range (and the column on the table is a :datetime or :timestamp)' do
-        it 'filters between :start and :stop' do
-          start_date = '2012-01-01'
-          stop_date  = '2012-01-02'
-          npw = NobelPrizeWinner.
-            with_filters({nobel_prize_winners: {created_at: {start: start_date, stop: stop_date}}}).
-            order('created_at ASC')
-          npw.length.should == 10
-          npw.first.created_at.to_s.should =~ /^#{start_date}/
-          npw.last.created_at.to_s.should =~ /^#{stop_date}/
-        end
-      end
-
       it 'accepts more than one field' do
         np = NobelPrize.with_filters({nobel_prizes: {year: {start: 1900, stop: 1930}, category: 'Physics'}})
         np.length.should == 3
+      end
+    end
+
+    context 'options are passed' do
+      context ':param_namespace' do
+        it 'finds the params from the hash using the namespace' do
+          npw = NobelPrizeWinner.with_filters({foo: {first_name: 'Albert'}}, {param_namespace: :foo})
+          npw.with_filters_data[:param_namespace].should == :foo
+        end 
+      end
+      context 'no :param_namespace' do
+        it 'defaults to the primary table name' do
+          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {first_name: 'Albert'}})
+          npw.with_filters_data[:param_namespace].should == :nobel_prize_winners
+        end 
+      end
+
+      context ':fields' do
+        context 'value is a hash of options' do
+          context ':column' do
+            it 'uses the passed column name' do
+              npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {fname: 'Albert'}}, {
+                fields: {
+                  fname: {column: :first_name}
+                }
+              })
+              npw.length.should == 1
+              npw.first.first_name.should == 'Albert'
+
+              npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {fname: 'Albert'}}, {
+                fields: {
+                  fname: {column: 'nobel_prize_winners.first_name'}
+                }
+              })
+              npw.length.should == 1
+              npw.first.first_name.should == 'Albert'
+            end
+          end
+
+          context ':match' do
+            context ':exact' do
+              it 'handles matches for a single entry' do
+                npw = NobelPrizeWinner.with_filters(
+                  {nobel_prize_winners: {first_name: 'Paul'}},
+                  {fields: {
+                    first_name: {match: :exact}
+                  }}
+                ).order('first_name ASC')
+                npw.length.should == 2
+                npw.each do |n|
+                  n.first_name.should == 'Paul'
+                end
+              end
+
+              it 'handles matches for a multiple entries' do
+                npw = NobelPrizeWinner.with_filters(
+                  {nobel_prize_winners: {first_name: ['Paul', 'Erwin']}},
+                  {fields: {
+                    first_name: {match: :exact}
+                  }}
+                ).order('first_name ASC')
+                npw.length.should == 3
+                npw.first.first_name.should == 'Erwin'
+                npw.second.first_name.should == 'Paul'
+                npw.last.first_name.should == 'Paul'
+              end
+            end
+
+            context ':contains' do
+              it 'handles matches for a single entry' do
+                npw = NobelPrizeWinner.with_filters(
+                  {nobel_prize_winners: {first_name: 'el'}},
+                  {fields: {
+                    first_name: {match: :contains}
+                  }}
+                ).order('first_name ASC')
+                npw.length.should == 3
+                npw.first.first_name.should == 'Nelson'
+                npw.second.first_name.should == 'Niels'
+                npw.last.first_name.should == 'Samuel'
+              end
+
+              it 'handles matches for a multiple entries' do
+                npw = NobelPrizeWinner.with_filters(
+                  {nobel_prize_winners: {first_name: ['ert', 'mu'] }},
+                  {fields: {
+                    first_name: {match: :contains}
+                  }}
+                ).order('first_name ASC')
+                npw.length.should == 3
+                npw.first.first_name.should == 'Albert'
+                npw.second.first_name.should == 'Bertrand'
+                npw.last.first_name.should == 'Samuel'
+              end
+            end
+
+            context ':begins_with' do
+              it 'handles matches for a single entry' do
+                npw = NobelPrizeWinner.with_filters(
+                  {nobel_prize_winners: {first_name: 'ja'}},
+                  {fields: {
+                    first_name: {match: :begins_with}
+                  }}
+                ).order('first_name ASC')
+                npw.length.should == 2
+                npw.first.first_name.should == 'Jacques'
+                npw.last.first_name.should == 'James'
+              end
+
+              it 'handles matches for a multiple entries' do
+                npw = NobelPrizeWinner.with_filters(
+                  {nobel_prize_winners: {first_name: ['ja', 'ri']}},
+                  {fields: {
+                    first_name: {match: :begins_with}
+                  }}
+                ).order('first_name ASC')
+                npw.length.should == 3
+                npw.first.first_name.should == 'Jacques'
+                npw.second.first_name.should == 'James'
+                npw.last.first_name.should == 'Richard'
+              end
+            end
+
+            context ':ends_with' do
+              it 'handles matches for a single entry' do
+                npw = NobelPrizeWinner.with_filters(
+                  {nobel_prize_winners: {first_name: 'es'}},
+                  {fields: {
+                    first_name: {match: :ends_with}
+                  }}
+                ).order('first_name ASC')
+                npw.length.should == 2
+                npw.first.first_name.should == 'Jacques'
+                npw.last.first_name.should == 'James'
+              end
+
+              it 'handles matches for a multiple entries' do
+                npw = NobelPrizeWinner.with_filters(
+                  {nobel_prize_winners: {first_name: ['es', 'ie']}},
+                  {fields: {
+                    first_name: {match: :ends_with}
+                  }}
+                ).order('first_name ASC')
+                npw.length.should == 3
+                npw.first.first_name.should == 'Jacques'
+                npw.second.first_name.should == 'James'
+                npw.last.first_name.should == 'Marie'
+              end
+            end
+          end
+        end
+
+        context 'value is a Proc' do
+          it 'returns the value from the proc' do
+            npw = NobelPrizeWinner.with_filters(
+              {nobel_prize_winners: {full_name: 'Albert Einstein'}},
+              {fields: {
+                full_name: ->(value, scope) {
+                  first_word, second_word = value.strip.split(/\s+/)
+
+                  if second_word
+                    scope.where(['first_name LIKE ? OR last_name LIKE ?', first_word, first_word])
+                  else
+                    scope.where(['first_name LIKE ? AND last_name LIKE ?', first_word, second_word])
+                  end
+                }
+              }}
+            )
+            npw.length.should == 1
+            npw.first.first_name.should == 'Albert'
+            npw.first.last_name.should == 'Einstein'
+          end
+        end
+      end
+    end
+
+    context 'provides with_filters_data attr' do
+      it 'has :param_namespace' do
+        npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {first_name: 'Albert'}})
+        npw.with_filters_data[:param_namespace].should == :nobel_prize_winners
+      end
+
+      it 'stays when converted to an array' do
+        npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {first_name: 'Albert'}}).to_a
+        npw.with_filters_data[:param_namespace].should == :nobel_prize_winners
       end
     end
 
@@ -153,187 +342,6 @@ describe 'WithFilters::ActiveRecordModelExtention' do
     it 'does not break the chain' do
       npw = NobelPrizeWinner.with_filters.limit(1)
       npw.length.should == 1
-    end
-
-    context 'the :param_namespace option is passed' do
-      it 'finds the params from the hash using the namespace' do
-        npw = NobelPrizeWinner.with_filters({foo: {first_name: 'Albert'}}, {param_namespace: :foo})
-        npw.with_filters_data[:param_namespace].should == :foo
-      end 
-    end
-    context 'the :param_namespace option is not passed' do
-      it 'defaults to the primary table name' do
-        npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {first_name: 'Albert'}})
-        npw.with_filters_data[:param_namespace].should == :nobel_prize_winners
-      end 
-    end
-
-    context 'the :fields option is passed' do
-      context 'the :column option is passed' do
-        it 'uses the passed field name' do
-          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {fname: 'Albert'}}, {
-            fields: {
-              fname: {column: :first_name}
-            }
-          })
-          npw.length.should == 1
-          npw.first.first_name.should == 'Albert'
-
-          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {fname: 'Albert'}}, {
-            fields: {
-              fname: {column: 'nobel_prize_winners.first_name'}
-            }
-          })
-          npw.length.should == 1
-          npw.first.first_name.should == 'Albert'
-        end
-      end
-
-      context 'the :match option is passed' do
-        context ':exact' do
-          it 'handles matches for a single entry' do
-            npw = NobelPrizeWinner.with_filters(
-              {nobel_prize_winners: {first_name: 'Paul'}},
-              {fields: {
-                first_name: {match: :exact}
-              }}
-            ).order('first_name ASC')
-            npw.length.should == 2
-            npw.each do |n|
-              n.first_name.should == 'Paul'
-            end
-          end
-
-          it 'handles matches for a multiple entries' do
-            npw = NobelPrizeWinner.with_filters(
-              {nobel_prize_winners: {first_name: ['Paul', 'Erwin']}},
-              {fields: {
-                first_name: {match: :exact}
-              }}
-            ).order('first_name ASC')
-            npw.length.should == 3
-            npw.first.first_name.should == 'Erwin'
-            npw.second.first_name.should == 'Paul'
-            npw.last.first_name.should == 'Paul'
-          end
-        end
-
-        context ':contains' do
-          it 'handles matches for a single entry' do
-            npw = NobelPrizeWinner.with_filters(
-              {nobel_prize_winners: {first_name: 'el'}},
-              {fields: {
-                first_name: {match: :contains}
-              }}
-            ).order('first_name ASC')
-            npw.length.should == 3
-            npw.first.first_name.should == 'Nelson'
-            npw.second.first_name.should == 'Niels'
-            npw.last.first_name.should == 'Samuel'
-          end
-
-          it 'handles matches for a multiple entries' do
-            npw = NobelPrizeWinner.with_filters(
-              {nobel_prize_winners: {first_name: ['ert', 'mu'] }},
-              {fields: {
-                first_name: {match: :contains}
-              }}
-            ).order('first_name ASC')
-            npw.length.should == 3
-            npw.first.first_name.should == 'Albert'
-            npw.second.first_name.should == 'Bertrand'
-            npw.last.first_name.should == 'Samuel'
-          end
-        end
-
-        context ':begins_with' do
-          it 'handles matches for a single entry' do
-            npw = NobelPrizeWinner.with_filters(
-              {nobel_prize_winners: {first_name: 'ja'}},
-              {fields: {
-                first_name: {match: :begins_with}
-              }}
-            ).order('first_name ASC')
-            npw.length.should == 2
-            npw.first.first_name.should == 'Jacques'
-            npw.last.first_name.should == 'James'
-          end
-
-          it 'handles matches for a multiple entries' do
-            npw = NobelPrizeWinner.with_filters(
-              {nobel_prize_winners: {first_name: ['ja', 'ri']}},
-              {fields: {
-                first_name: {match: :begins_with}
-              }}
-            ).order('first_name ASC')
-            npw.length.should == 3
-            npw.first.first_name.should == 'Jacques'
-            npw.second.first_name.should == 'James'
-            npw.last.first_name.should == 'Richard'
-          end
-        end
-
-        context ':ends_with' do
-          it 'handles matches for a single entry' do
-            npw = NobelPrizeWinner.with_filters(
-              {nobel_prize_winners: {first_name: 'es'}},
-              {fields: {
-                first_name: {match: :ends_with}
-              }}
-            ).order('first_name ASC')
-            npw.length.should == 2
-            npw.first.first_name.should == 'Jacques'
-            npw.last.first_name.should == 'James'
-          end
-
-          it 'handles matches for a multiple entries' do
-            npw = NobelPrizeWinner.with_filters(
-              {nobel_prize_winners: {first_name: ['es', 'ie']}},
-              {fields: {
-                first_name: {match: :ends_with}
-              }}
-            ).order('first_name ASC')
-            npw.length.should == 3
-            npw.first.first_name.should == 'Jacques'
-            npw.second.first_name.should == 'James'
-            npw.last.first_name.should == 'Marie'
-          end
-        end
-      end
-
-      context 'a Proc is passed' do
-        it 'returns the value from the proc' do
-          npw = NobelPrizeWinner.with_filters(
-            {nobel_prize_winners: {full_name: 'Albert Einstein'}},
-            {fields: {
-              full_name: ->(value, scope) {
-                first_word, second_word = value.strip.split(/\s+/)
-
-                if second_word
-                  scope.where(['first_name LIKE ? OR last_name LIKE ?', first_word, first_word])
-                else
-                  scope.where(['first_name LIKE ? AND last_name LIKE ?', first_word, second_word])
-                end
-              }
-            }}
-          )
-          npw.length.should == 1
-          npw.first.first_name.should == 'Albert'
-          npw.first.last_name.should == 'Einstein'
-        end
-      end
-
-      context 'provides with_filters_data attr' do
-        it 'has :param_namespace' do
-          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {first_name: 'Albert'}})
-          npw.with_filters_data[:param_namespace].should == :nobel_prize_winners
-        end
-
-        it 'stays when converted to an array' do
-          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {first_name: 'Albert'}}).to_a
-          npw.with_filters_data[:param_namespace].should == :nobel_prize_winners
-        end
-      end
     end
   end
 end
