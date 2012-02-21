@@ -18,11 +18,11 @@ describe WithFilters::ValuePrep::DefaultPrep do
       described_class.new(column, 'a', {match: :contains}).add_match('a').should == '%a%'
     end
 
-    it 'returns a :contains match' do
+    it 'returns a :begins_with match' do
       described_class.new(column, 'a', {match: :begins_with}).add_match('a').should == 'a%'
     end
 
-    it 'returns a :contains match' do
+    it 'returns a :ends_with match' do
       described_class.new(column, 'a', {match: :ends_with}).add_match('a').should == '%a'
     end
 

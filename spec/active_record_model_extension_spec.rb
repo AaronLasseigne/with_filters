@@ -156,14 +156,15 @@ describe 'WithFilters::ActiveRecordModelExtention' do
     end
 
     context 'the :param_namespace option is passed' do
-      it 'finds the :order param from the hash using the namespace' do
+      it 'finds the params from the hash using the namespace' do
         npw = NobelPrizeWinner.with_filters({foo: {first_name: 'Albert'}}, {param_namespace: :foo})
-        npw.where_values.should == ["nobel_prize_winners.\"first_name\" LIKE 'Albert'"]
+        npw.with_filters_data[:param_namespace].should == :foo
       end 
-
-      it 'skips order if it cannot find :order in the namespace' do
-        npw = NobelPrizeWinner.with_filters({bar: {first_name: 'Albert'}}, {param_namespace: :foo})
-        npw.where_values.should == []
+    end
+    context 'the :param_namespace option is not passed' do
+      it 'defaults to the primary table name' do
+        npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {first_name: 'Albert'}})
+        npw.with_filters_data[:param_namespace].should == :nobel_prize_winners
       end 
     end
 
