@@ -20,12 +20,22 @@ describe WithFilters::ActionViewExtension do
       
       context 'options' do
         context ':label_attrs' do
-          it 'adds options to the label_tag' do
+          it 'adds attrs to the label_tag' do
             output = helper.filter_form_for(NobelPrizeWinner.with_filters.all) do |f|
               f.input :first_name, label_attrs: {class: 'label_class'}
             end
 
             output.should have_selector('label.label_class')
+          end
+        end
+
+        context 'everything else' do
+          it 'adds attrs to the input' do
+            output = helper.filter_form_for(NobelPrizeWinner.with_filters.all) do |f|
+              f.input :first_name, class: 'input_class'
+            end
+
+            output.should have_selector('input.input_class')
           end
         end
       end

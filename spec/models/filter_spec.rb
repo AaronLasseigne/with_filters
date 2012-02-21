@@ -26,5 +26,11 @@ describe WithFilters::Filter do
         described_class.new(:first_name, :foo, label_attrs: label_attrs).label_attrs.should == label_attrs
       end
     end
+
+    context 'everything else' do
+      it 'gets put in attrs' do
+        described_class.new(:first_name, :foo, {label: 'Given Name', class: 'input_class'}).attrs.should == {class: 'input_class'}
+      end
+    end
   end
 end
