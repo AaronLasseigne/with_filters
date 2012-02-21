@@ -5,7 +5,7 @@ module WithFilters
     def initialize(records)
       @records = records
 
-      @attrs           = {novalidate: 'novalidate'}
+      @attrs           = {novalidate: 'novalidate', method: 'get'}
       @to_partial_path = self.class.name.underscore
       @filters         = []
     end
