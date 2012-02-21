@@ -26,7 +26,7 @@ describe WithFilters::FilterForm do
       ff.input(:first_name, label: label)
 
       ff.filters.length.should == 1
-      ff.filters.first.should be_an_instance_of(WithFilters::Filter)
+      ff.filters.first.should be_a_kind_of(WithFilters::Filter::Base)
       ff.filters.first.label.should == label
     end
   end

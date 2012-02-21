@@ -11,7 +11,7 @@ module WithFilters
     end
 
     def input(name, options = {})
-      @filters.push(WithFilters::Filter.new(name, @records.with_filters_data[:param_namespace], options))
+      @filters.push(WithFilters::Filter.create(name, @records.with_filters_data[:param_namespace], options))
     end
   end
 end
