@@ -137,7 +137,7 @@ describe 'WithFilters::ActiveRecordModelExtention' do
       end
     end
 
-    context 'options are passed' do
+    context 'options' do
       context ':param_namespace' do
         it 'finds the params from the hash using the namespace' do
           npw = NobelPrizeWinner.with_filters({foo: {first_name: 'Albert'}}, {param_namespace: :foo})
