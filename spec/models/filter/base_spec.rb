@@ -10,6 +10,10 @@ describe WithFilters::Filter::Base do
       its(:label_attrs)     {should == {}}
       its(:field_name)      {should == 'foo[first_name]'}
       its(:value)           {should == 'Aaron'}
+      it 'has no choices' do
+        subject.choices.should be_an_instance_of(WithFilters::Filter::Choices)
+        subject.choices.length.should == 0
+      end
     end
 
     context 'options' do
@@ -27,6 +31,12 @@ describe WithFilters::Filter::Base do
           }
           described_class.new(:first_name, :foo, 'Aaron', label_attrs: label_attrs).label_attrs.should == label_attrs
         end
+      end
+
+      context ':choices' do
+        choices = described_class.new(:gender, :foo, 'Male', choices: ['Male', 'Female']).choices
+        choices.first.label.should == 'Male'
+        choices.last.label.should  == 'Female'
       end
 
       context 'everything else' do

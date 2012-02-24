@@ -3,10 +3,20 @@ require 'spec_helper'
 describe WithFilters::Filter do
   describe '#create(name, namespace, value, options = {})' do
     context 'defaults' do
-      subject {described_class.create(:first_name, :foo, 'Aaron')}
+      context ':choices' do
+        subject {described_class.create(:gender, :foo, 'Male', choices: ['Male', 'Female'])}
 
-      it 'returns a text filter' do
-        subject.should be_an_instance_of(WithFilters::Filter::Text)
+        it 'returns a radio filter' do
+          subject.should be_an_instance_of(WithFilters::Filter::Radio)
+        end
+      end
+
+      context 'no :choices' do
+        subject {described_class.create(:first_name, :foo, 'Aaron')}
+
+        it 'returns a text filter' do
+          subject.should be_an_instance_of(WithFilters::Filter::Text)
+        end
       end
     end
 

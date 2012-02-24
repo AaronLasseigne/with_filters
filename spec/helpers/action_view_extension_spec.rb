@@ -29,6 +29,21 @@ describe WithFilters::ActionViewExtension do
           end
         end
 
+        context ':choices' do
+          it 'outputs all choices' do
+            choices = ['Chemistry', 'Literature', 'Peace', 'Physics', 'Physiology or Medicine']
+            output = helper.filter_form_for(NobelPrize.with_filters.all) do |f|
+              f.input :category, choices: choices
+            end
+
+            output.should have_selector("div[text()='Category']")
+            choices.each do |choice|
+              output.should have_selector("label[text()='#{choice}']")
+              output.should have_selector("input[@value='#{choice}']")
+            end
+          end
+        end
+
         context 'everything else' do
           it 'adds attrs to the input' do
             output = helper.filter_form_for(NobelPrizeWinner.with_filters.all) do |f|
