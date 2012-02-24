@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe WithFilters::ActionViewExtension do
   describe '#filter_form_for(record, &block)' do
-    subject {helper.filter_form_for(NobelPrizeWinner.with_filters.all) {}}
+    it 'creates a form' do
+      output = helper.filter_form_for(NobelPrizeWinner.with_filters.all) {}
 
-    it 'should output a form' do
-      subject.should have_selector('form[@novalidate="novalidate"]')
+      output.should have_selector('form[@novalidate="novalidate"]')
     end
 
     describe '#input' do
@@ -37,6 +37,17 @@ describe WithFilters::ActionViewExtension do
 
             output.should have_selector('input.input_class')
           end
+        end
+      end
+
+      context 'param value is available' do
+        it 'creates an input with a value' do
+          helper.stub(:params).and_return({nobel_prize_winners: {first_name: 'Albert'}})
+          output = helper.filter_form_for(NobelPrizeWinner.with_filters.all) do |f|
+            f.input :first_name
+          end
+
+          output.should have_selector('input[@value="Albert"]')
         end
       end
     end
