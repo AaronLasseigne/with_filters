@@ -4,7 +4,11 @@ module WithFilters
       f = WithFilters::FilterForm.new(records, params[records.with_filters_data[:param_namespace]] || {}, options)
       yield(f)
 
-      self.render(partial: f.to_partial_path, locals: {filter_form: f})
+      render(partial: f.to_partial_path, locals: {filter_form: f})
+    end
+
+    def with_filters_input_tag(filter)
+      render(partial: filter.to_partial_path, locals: {filter: filter})
     end
   end
 end
