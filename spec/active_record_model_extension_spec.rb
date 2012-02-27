@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'WithFilters::ActiveRecordModelExtention' do
   describe '#with_filters(params = nil, options = {})' do
     context 'filters using fields' do
-      context 'field value is a string' do
+      context 'where value is a string' do
         it 'filters based on the string value' do
           npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {first_name: 'Albert'}})
           npw.length.should == 1
@@ -16,7 +16,7 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         end
       end
 
-      context 'field value is an array' do
+      context 'where value is an array' do
         it 'filters based on the array values' do
           npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {first_name: ['Albert', 'Marie']}}).order('first_name ASC')
           npw.length.should == 2
@@ -38,7 +38,7 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         end
       end
 
-      context 'field value is a :start and :stop range' do
+      context 'where value is a :start and :stop range' do
         it 'filters between :start and :stop' do
           np = NobelPrize.with_filters({nobel_prizes: {year: {start: 1900, stop: 1930}}})
           np.length.should == 4
@@ -53,7 +53,7 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         end
       end
 
-      context 'field value is a boolean (and the column on the table is a :boolean)' do
+      context 'where value is a boolean (and the column on the table is a :boolean)' do
         it 'filters when "true" and "false" are passed' do
           np = NobelPrize.with_filters({nobel_prizes: {shared: 'true'}})
           np.length.should == 7
@@ -63,7 +63,7 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         end
       end
 
-      context 'field value is a date' do
+      context 'where value is a date' do
         context 'and the column on the table is a :date' do
           it 'filters on the date value' do
             npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {birthdate: '19140325'}})
@@ -83,7 +83,7 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         end
       end
 
-      context 'field value is a date range' do
+      context 'where value is a date range' do
         context 'and the column on the table is a :date' do
           it 'filters between :start and :stop' do
             start_date = '1914-03-25'
@@ -111,25 +111,49 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         end
       end
 
-      context 'field value is a datetime (and the column on the table is a :datetime or :timestamp)' do
+      context 'where value is a datetime with microseconds (and the column on the table is a :datetime or :timestamp)' do
         it 'filters on the datetime value' do
-          time = '20120101120101'
-          npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {created_at: time}})
-          npw.length.should == 1
-          npw.first.created_at.to_s.should == Time.parse(time).to_s
+          time = '2012-01-01 00:00:01.654321'
+          ddt = DateTimeTester.with_filters({date_time_testers: {test: time}})
+          ddt.length.should == 1
+          ddt.first.test.to_s.should == Time.parse(time).to_s
         end
       end
 
-      context 'field value is a datetime range (and the column on the table is a :datetime or :timestamp)' do
+      context 'where value is a datetime (and the column on the table is a :datetime or :timestamp)' do
+        it 'filters on the datetime value' do
+          time = '2012-01-01 00:00:01'
+          ddt = DateTimeTester.with_filters({date_time_testers: {test: time}}).order('test ASC')
+          ddt.length.should == 4
+          ddt.map(&:test).each do |test|
+            test.to_s.should =~ /^#{time}/
+          end
+        end
+      end
+
+      context 'where value is a datetime range with microseconds (and the column on the table is a :datetime or :timestamp)' do
         it 'filters between :start and :stop' do
-          start_time = '20120101120101'
-          stop_time  = '20120101120104'
-          npw = NobelPrizeWinner.
-            with_filters({nobel_prize_winners: {created_at: {start: start_time, stop: stop_time}}}).
-            order('created_at ASC')
-          npw.length.should == 4
-          npw.first.created_at.to_s.should == Time.parse(start_time).to_s
-          npw.last.created_at.to_s.should == Time.parse(stop_time).to_s
+          start_time = '2012-01-01 00:00:01.123456'
+          stop_time  = '2012-01-01 00:00:01.654300'
+          ddt = DateTimeTester.
+            with_filters({date_time_testers: {test: {start: start_time, stop: stop_time}}}).
+            order('test ASC')
+          ddt.length.should == 2
+          ddt.first.test.to_s.should == Time.parse(start_time).to_s
+          ddt.last.test.to_s.should  == Time.parse(stop_time).to_s
+        end
+      end
+
+      context 'where value is a datetime range (and the column on the table is a :datetime or :timestamp)' do
+        it 'filters between :start and :stop' do
+          start_time = '2012-01-01 00:00:01'
+          stop_time  = '2012-01-01 00:00:02'
+          ddt = DateTimeTester.
+            with_filters({date_time_testers: {test: {start: start_time, stop: stop_time}}}).
+            order('test ASC')
+          ddt.length.should == 5
+          ddt.first.test.to_s.should =~ /^#{start_time}/
+          ddt.last.test.to_s.should  =~ /^#{stop_time}/
         end
       end
 
