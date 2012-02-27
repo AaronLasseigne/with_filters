@@ -75,10 +75,10 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         context 'and the column on the table is a :datetime or :timestamp' do
           it 'filters on the date value' do
             date = '2012-01-01'
-            npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {created_at: date}})
-            npw.length.should == 5
-            npw.first.created_at.to_s.should =~ /^#{date}/
-            npw.last.created_at.to_s.should =~ /^#{date}/
+            ddt = DateTimeTester.with_filters({date_time_testers: {test: date}}).order('test ASC')
+            ddt.length.should == 8
+            ddt.first.test.to_s.should =~ /^#{date}/
+            ddt.last.test.to_s.should =~ /^#{date}/
           end
         end
       end
@@ -86,25 +86,27 @@ describe 'WithFilters::ActiveRecordModelExtention' do
       context 'field value is a date range' do
         context 'and the column on the table is a :date' do
           it 'filters between :start and :stop' do
+            start_date = '1914-03-25'
+            stop_date  = '1928-04-06'
             npw = NobelPrizeWinner.
-              with_filters({nobel_prize_winners: {birthdate: {start: '19140325', stop: '19280406'}}}).
+              with_filters({nobel_prize_winners: {birthdate: {start: start_date, stop: stop_date}}}).
               order('birthdate ASC')
             npw.length.should == 4
-            npw.first.birthdate.should == '19140325'.to_date
-            npw.last.birthdate.should == '19280406'.to_date
+            npw.first.birthdate.should == start_date.to_date
+            npw.last.birthdate.should == stop_date.to_date
           end
         end
 
         context 'and the column on the table is a :datetime or :timestamp' do
           it 'filters between :start and :stop' do
             start_date = '2012-01-01'
-            stop_date  = '2012-01-02'
-            npw = NobelPrizeWinner.
-              with_filters({nobel_prize_winners: {created_at: {start: start_date, stop: stop_date}}}).
-              order('created_at ASC')
-            npw.length.should == 10
-            npw.first.created_at.to_s.should =~ /^#{start_date}/
-            npw.last.created_at.to_s.should =~ /^#{stop_date}/
+            stop_date  = '2012-01-01'
+            ddt = DateTimeTester.
+              with_filters({date_time_testers: {test: {start: start_date, stop: stop_date}}}).
+              order('test ASC')
+            ddt.length.should == 8
+            ddt.first.test.to_s.should =~ /^#{start_date}/
+            ddt.last.test.to_s.should =~ /^#{stop_date}/
           end
         end
       end
