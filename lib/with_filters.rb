@@ -12,7 +12,7 @@ require 'with_filters/models/filter/choice'
 require 'with_filters/models/filter/choices'
 require 'with_filters/models/filter/text'
 require 'with_filters/models/filter/radio'
-require 'with_filters/models/filter'
+require 'with_filters/models/filter/filter'
 require 'with_filters/models/filter_form'
 require 'with_filters/version'
 
