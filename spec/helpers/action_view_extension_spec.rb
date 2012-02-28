@@ -60,7 +60,6 @@ describe WithFilters::ActionViewExtension do
 
         it 'has an input tag for each choice' do
           subject.should have_selector("input[@name='#{filter.field_name}']")
-          filter.attrs.should_not be_empty
           filter.choices.each do |choice|
             subject.should have_selector("input[@value='#{choice.value}']")
             if choice.value == filter.value
@@ -119,6 +118,31 @@ describe WithFilters::ActionViewExtension do
         end
 
         output.should have_selector('input[@value="Albert"]')
+      end
+    end
+  end
+
+  describe '#with_filters_select_tag(filter)' do
+    let(:options) {{
+      class:       'input_class',
+      label_attrs: {class: 'label_class'}
+    }}
+    let(:filter) {WithFilters::Filter::Select.new(:gender, :foo, 'Male', options.merge(choices: [['Male', {class: 'choice_class'}], 'Female']))}
+    subject {helper.with_filters_select_tag(filter)}
+
+    it 'creates a select field' do
+      subject.should have_selector("select[@name='#{filter.field_name}']")
+    end
+
+    it 'has an option for each choice' do
+      filter.choices.each do |choice|
+        subject.should have_selector("option[@value='#{choice.value}']")
+        if choice.value == filter.value
+          subject.should have_selector("option[@selected='selected']")
+        end
+        choice.attrs.each do |k, v|
+          subject.should have_selector("option[@#{k}='#{v}']")
+        end
       end
     end
   end

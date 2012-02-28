@@ -16,7 +16,8 @@ module WithFilters
       search:   Text,
       color:    Text,
       hidden:   Text,
-      radio:    Radio
+      radio:    Radio,
+      select:   Select
     }
 
     def self.create(name, namespace, value, options = {})
