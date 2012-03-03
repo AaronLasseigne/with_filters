@@ -6,8 +6,8 @@ Gem::Specification.new do |s|
   s.name        = 'with_filters'
   s.version     = WithFilters::VERSION
   s.authors     = ['Aaron Lasseigne']
-  s.email       = ['alasseigne@sei-mi.com']
-  s.homepage    = 'https://github.com/sei-mi/with_filters'
+  s.email       = ['aaron.lasseigne@gmail.com']
+  s.homepage    = 'https://github.com/AaronLasseigne/with_filters'
   s.summary     = %q{Add filtering to lists, tables, etc.}
   s.description = %q{Add filtering to lists, tables, etc.}
 
