@@ -21,7 +21,7 @@ module WithFilters
     }
 
     def self.create(name, namespace, value, options = {})
-      as = options.delete(:as) || (options.has_key?(:choices) ? :radio : :text)
+      as = options.delete(:as) || (options.has_key?(:choices) ? :select : :text)
 
       options[:type] = as.to_s
 

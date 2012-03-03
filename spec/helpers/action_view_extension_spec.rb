@@ -91,10 +91,10 @@ describe WithFilters::ActionViewExtension do
             f.input :category, choices: choices
           end
 
-          output.should have_selector("div[text()='Category']")
+          output.should have_selector("label[text()='Category']")
           choices.each do |choice|
-            output.should have_selector("label[text()='#{choice}']")
-            output.should have_selector("input[@value='#{choice}']")
+            output.should have_selector("option[text()='#{choice}']")
+            output.should have_selector("option[@value='#{choice}']")
           end
         end
       end

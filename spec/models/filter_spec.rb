@@ -6,8 +6,8 @@ describe WithFilters::Filter do
       context ':choices' do
         subject {described_class.create(:gender, :foo, 'Male', choices: ['Male', 'Female'])}
 
-        it 'returns a radio filter' do
-          subject.should be_an_instance_of(WithFilters::Filter::Radio)
+        it 'returns a select filter' do
+          subject.should be_an_instance_of(WithFilters::Filter::Select)
         end
       end
 
