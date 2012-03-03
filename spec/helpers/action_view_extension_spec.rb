@@ -59,6 +59,7 @@ describe WithFilters::ActionViewExtension do
         end
 
         it 'has an input tag for each choice' do
+          subject.should have_selector("input[@type='radio']")
           subject.should have_selector("input[@name='#{filter.field_name}']")
           filter.choices.each do |choice|
             subject.should have_selector("input[@value='#{choice.value}']")
@@ -67,6 +68,52 @@ describe WithFilters::ActionViewExtension do
             end
             choice.attrs.each do |k, v|
               subject.should have_selector("input[@#{k}='#{v}']")
+            end
+          end
+        end
+      end
+
+      context 'check_box' do
+        let(:choices) {['Chemistry', 'Literature', 'Peace', 'Physics', 'Physiology or Medicine']}
+
+        context 'without choices' do
+          let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, true)}
+          subject {helper.with_filters_input_tag(filter)}
+
+          it 'has a label tag' do
+            subject.should have_selector("label[text()='#{filter.label}']")
+          end
+
+          it 'has an input tag' do
+            subject.should have_selector("input[@type='checkbox']")
+            subject.should have_selector("input[@name='#{filter.field_name}']")
+            subject.should have_selector("input[@value='#{filter.value}']")
+            subject.should have_selector("input[@checked='checked']")
+          end
+        end
+
+        context 'with choices' do
+          let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, ['Chemistry', 'Peace'], options.merge(choices: choices))}
+          subject {helper.with_filters_input_tag(filter)}
+
+          it 'has a div tag as a label' do
+            subject.should have_selector("div[text()='#{filter.label}']")
+          end
+
+          it 'has a label tag for each choice' do
+            filter.choices.each do |choice|
+              subject.should have_selector("label[text()='#{choice.label}']")
+            end
+          end
+
+          it 'has an input tag for each choice' do
+            subject.should have_selector("input[@type='checkbox']")
+            subject.should have_selector("input[@name='#{filter.field_name}']")
+            filter.choices.each do |choice|
+              subject.should have_selector("input[@value='#{choice.value}']")
+              if filter.value.include?(choice.value)
+                subject.should have_selector("input[@checked='checked']")
+              end
             end
           end
         end
