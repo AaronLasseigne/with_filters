@@ -11,8 +11,7 @@ describe WithFilters::Filter::Base do
       its(:field_name)      {should == 'foo[first_name]'}
       its(:value)           {should == 'Aaron'}
       it 'has no choices' do
-        subject.choices.should be_an_instance_of(WithFilters::Filter::Choices)
-        subject.choices.length.should == 0
+        subject.choices.should be_nil
       end
     end
 
