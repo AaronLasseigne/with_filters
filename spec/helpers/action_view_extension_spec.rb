@@ -192,5 +192,27 @@ describe WithFilters::ActionViewExtension do
         end
       end
     end
+
+    context 'where :choices is a String' do
+      let(:filter) {WithFilters::Filter::Select.new(:gender, :foo, 'Male', choices: '<option>Male</option><option value="1">Female</option>')}
+      subject {helper.with_filters_select_tag(filter)}
+
+      context 'option does not contain a value attribute' do
+        it 'should mark an option as selected' do
+          subject.should have_selector('option[@selected="selected"][text()="Male"]')
+          subject.should have_selector('option[text()="Female"]')
+        end
+      end
+
+      context 'option contains a value attribute' do
+        let(:filter) {WithFilters::Filter::Select.new(:gender, :foo, 1, choices: '<option>Male</option><option value="1">Female</option>')}
+        subject {helper.with_filters_select_tag(filter)}
+
+        it 'should mark an option as selected' do
+          subject.should have_selector('option[text()="Male"]')
+          subject.should have_selector('option[@selected="selected"][text()="Female"]')
+        end
+      end
+    end
   end
 end

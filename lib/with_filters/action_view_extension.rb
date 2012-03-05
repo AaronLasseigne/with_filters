@@ -14,14 +14,17 @@ module WithFilters
     end
 
     def with_filters_select_tag(filter)
-      choices = filter.choices.map do |choice|
-        html_attributes = choice.attrs.length > 0 ? ' ' + choice.attrs.map {|k, v| %(#{k.to_s}="#{v}")}.join(' ') : ''
-        selected_attribute = choice.selected? ? ' selected="selected"' : ''
+      choices = filter.choices
+      unless filter.choices.is_a?(String)
+        choices = filter.choices.map do |choice|
+          html_attributes = choice.attrs.length > 0 ? ' ' + choice.attrs.map {|k, v| %(#{k.to_s}="#{v}")}.join(' ') : ''
+          selected_attribute = choice.selected? ? ' selected="selected"' : ''
 
-        %(<option value="#{ERB::Util.html_escape(choice.value)}"#{selected_attribute}#{html_attributes}>#{ERB::Util.html_escape(choice.label)}</option>)
+          %(<option value="#{ERB::Util.html_escape(choice.value)}"#{selected_attribute}#{html_attributes}>#{ERB::Util.html_escape(choice.label)}</option>)
+        end.join("\n")
       end
 
-      select_tag(filter.field_name, choices.join("\n").html_safe, filter.attrs)
+      select_tag(filter.field_name, choices.html_safe, filter.attrs)
     end
   end
 end
