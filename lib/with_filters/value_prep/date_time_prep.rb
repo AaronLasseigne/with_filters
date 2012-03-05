@@ -13,20 +13,28 @@ module WithFilters
       end
 
       def prepare_start_value(value)
-        prepare_it(value, '000000', 0.0)
+        date_info = Date._parse(value)
+
+        if date_info.has_key?(:sec_fraction)
+          to_s_with_sec_fraction(value, date_info[:sec_fraction])
+        else
+          Time.zone.parse(value).to_s(:db)
+        end
       end
 
       def prepare_stop_value(value)
-        prepare_it(value, '235959', 0.999999)
+        date_info = Date._parse(value)
+
+        if date_info.has_key?(:sec_fraction)
+          to_s_with_sec_fraction(value, date_info[:sec_fraction])
+        elsif date_info.has_key?(:sec)
+          Time.zone.parse(value).advance(seconds: 1).to_s(:db)
+        elsif date_info.has_key?(:mday)
+          Time.zone.parse(value).advance(days: 1).to_s(:db)
+        end
       end
 
       private
-
-      def prepare_it(value, time, sec_fraction)
-        date_info = Date._parse(value)
-
-        to_s_with_sec_fraction(date_info.has_key?(:hour) ? value : ("%<year>d%02<mon>d%02<mday>d#{time}" % date_info), date_info[:sec_fraction] || sec_fraction)
-      end
 
       def to_s_with_sec_fraction(value, sec_decimal)
         Time.zone.parse(value).to_s(:db) + ('%.6f' % sec_decimal)[1..-1]
