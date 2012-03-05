@@ -6,7 +6,7 @@ module WithFilters
         date_info = Date._parse(value)
 
         if date_info.has_key?(:sec_fraction)
-          to_s_with_sec_fraction(value, date_info[:sec_fraction].to_f)
+          to_parsed_s(value, {}, date_info[:sec_fraction].to_f)
         else
           {start: prepare_start_value(value), stop: prepare_stop_value(value)}
         end
@@ -16,9 +16,9 @@ module WithFilters
         date_info = Date._parse(value)
 
         if date_info.has_key?(:sec_fraction)
-          to_s_with_sec_fraction(value, date_info[:sec_fraction])
+          to_parsed_s(value, {}, date_info[:sec_fraction])
         else
-          Time.zone.parse(value).to_s(:db)
+          to_parsed_s(value)
         end
       end
 
@@ -26,18 +26,24 @@ module WithFilters
         date_info = Date._parse(value)
 
         if date_info.has_key?(:sec_fraction)
-          to_s_with_sec_fraction(value, date_info[:sec_fraction])
+          to_parsed_s(value, {}, date_info[:sec_fraction])
         elsif date_info.has_key?(:sec)
-          Time.zone.parse(value).advance(seconds: 1).to_s(:db)
+          to_parsed_s(value, seconds: 1)
+        elsif date_info.has_key?(:min)
+          to_parsed_s(value, minutes: 1)
+        elsif date_info.has_key?(:hour)
+          to_parsed_s(value, hours: 1)
         elsif date_info.has_key?(:mday)
-          Time.zone.parse(value).advance(days: 1).to_s(:db)
+          to_parsed_s(value, days: 1)
         end
       end
 
       private
 
-      def to_s_with_sec_fraction(value, sec_decimal)
-        Time.zone.parse(value).to_s(:db) + ('%.6f' % sec_decimal)[1..-1]
+      def to_parsed_s(value, advance_options = {}, sec_decimal = nil)
+        parsed_s = Time.zone.parse(value).advance(advance_options).to_s(:db)
+        parsed_s += ('%.6f' % sec_decimal)[1..-1] if sec_decimal
+        parsed_s
       end
     end
   end
