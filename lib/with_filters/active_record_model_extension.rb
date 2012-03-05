@@ -7,6 +7,8 @@ module WithFilters
     end
 
     included do
+      extend WithFilters::HashExtraction
+
       # switch from scope to class method because of a bug in Rails 3.2.1 where
       # joins_values aren't available in scopes
       def self.with_filters(params = nil, options = {})
@@ -18,7 +20,7 @@ module WithFilters
           end
         end
         param_namespace = options.delete(:param_namespace) || relation.table_name.to_sym
-        scoped_params = params.try(:[], param_namespace) || {}
+        scoped_params = params ? self.extract_hash_value(params, param_namespace) : {}
         relation.with_filters_data = {param_namespace: param_namespace}
 
         scoped_params.each do |field, value|

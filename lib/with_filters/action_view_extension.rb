@@ -1,7 +1,9 @@
 module WithFilters
   module ActionViewExtension
+    include WithFilters::HashExtraction
+
     def filter_form_for(records, options = {})
-      filter_form = WithFilters::FilterForm.new(records, params[records.with_filters_data[:param_namespace]] || {}, options)
+      filter_form = WithFilters::FilterForm.new(records, self.extract_hash_value(params, records.with_filters_data[:param_namespace]) || {}, options)
       yield(filter_form)
 
       render(partial: filter_form.to_partial_path, locals: {filter_form: filter_form})
