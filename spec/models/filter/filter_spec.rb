@@ -35,4 +35,29 @@ describe WithFilters::Filter do
       end
     end
   end
+
+  describe '#create_range(name, namespace, value, options = {})' do
+    context 'defaults' do
+      subject {described_class.create_range(:year, :foo, {})}
+
+      it 'returns a text range filter' do
+        subject.should be_an_instance_of(WithFilters::Filter::TextRange)
+      end
+    end
+
+    context 'options' do
+      context ':as' do
+        subject {described_class.create_range(:year, :foo, {}, as: :number)}
+
+        it 'sets the input type' do
+          subject.attrs.has_key?(:type).should be_true
+          subject.attrs[:type].should == 'number'
+        end
+
+        it 'returns a filter based on the type' do
+          subject.should be_an_instance_of(WithFilters::Filter::TextRange)
+        end
+      end
+    end
+  end
 end

@@ -15,5 +15,9 @@ module WithFilters
     def input(name, options = {})
       @filters.push(WithFilters::Filter.create(name, self.param_namespace, @values[name], options))
     end
+
+    def input_range(name, options = {})
+      @filters.push(WithFilters::Filter.create_range(name, self.param_namespace, @values[name] || {}, options))
+    end
   end
 end

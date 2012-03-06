@@ -31,4 +31,16 @@ describe WithFilters::FilterForm do
       ff.filters.first.label.should == label
     end
   end
+
+  describe '#input_range(name, options = {})' do
+    it 'adds a ranged filter' do
+      label = 'Awarded'
+      ff = described_class.new(NobelPrizeWinner.with_filters.all)
+      ff.input_range(:year, label: label)
+
+      ff.filters.length.should == 1
+      ff.filters.first.should be_a_kind_of(WithFilters::Filter::TextRange)
+      ff.filters.first.start.label.should == label
+    end
+  end
 end

@@ -10,94 +10,47 @@ describe WithFilters::ActionViewExtension do
   end
 
   describe '#with_filters_input_tag(filter)' do
-    context 'types' do
-      let(:options) {{
-        class:       'input_class',
-        label_attrs: {class: 'label_class'}
-      }}
+    context 'with a single input' do
+      context 'types' do
+        let(:options) {{
+          class:       'input_class',
+          label_attrs: {class: 'label_class'}
+        }}
 
-      context 'text' do
-        let(:filter) {WithFilters::Filter::Text.new(:first_name, :foo, 'Aaron', options)}
-        subject {helper.with_filters_input_tag(filter)}
-
-        it 'has a label tag' do
-          subject.should have_selector("label[text()='#{filter.label}']")
-
-          filter.label_attrs.should_not be_empty
-          filter.label_attrs.each do |k, v|
-            subject.should have_selector("label[@#{k}='#{v}']")
-          end
-        end
-
-        it 'has an input tag' do
-          subject.should have_selector("input[@name='#{filter.field_name}']")
-          subject.should have_selector("input[@value='#{filter.value}']")
-          filter.attrs.should_not be_empty
-          filter.attrs.each do |k, v|
-            subject.should have_selector("input[@#{k}='#{v}']")
-          end
-        end
-      end
-
-      context 'radio' do
-        let(:filter) {WithFilters::Filter::Radio.new(:gender, :foo, 'Male', options.merge(choices: [['Male', {class: 'choice_class'}], 'Female']))}
-        subject {helper.with_filters_input_tag(filter)}
-
-        it 'has a div tag as a label' do
-          subject.should have_selector("div[text()='#{filter.label}']")
-
-          filter.label_attrs.should_not be_empty
-          filter.label_attrs.each do |k, v|
-            subject.should have_selector("div[@#{k}='#{v}']")
-          end
-        end
-
-        it 'has a label tag for each choice' do
-          filter.choices.each do |choice|
-            subject.should have_selector("label[text()='#{choice.label}']")
-          end
-        end
-
-        it 'has an input tag for each choice' do
-          subject.should have_selector("input[@type='radio']")
-          subject.should have_selector("input[@name='#{filter.field_name}']")
-          filter.choices.each do |choice|
-            subject.should have_selector("input[@value='#{choice.value}']")
-            if choice.value == filter.value
-              subject.should have_selector("input[@checked='checked']")
-            end
-            choice.attrs.each do |k, v|
-              subject.should have_selector("input[@#{k}='#{v}']")
-            end
-          end
-        end
-      end
-
-      context 'check_box' do
-        let(:choices) {['Chemistry', 'Literature', 'Peace', 'Physics', 'Physiology or Medicine']}
-
-        context 'without choices' do
-          let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, true)}
+        context 'text' do
+          let(:filter) {WithFilters::Filter::Text.new(:first_name, :foo, 'Aaron', options)}
           subject {helper.with_filters_input_tag(filter)}
 
           it 'has a label tag' do
             subject.should have_selector("label[text()='#{filter.label}']")
+
+            filter.label_attrs.should_not be_empty
+            filter.label_attrs.each do |k, v|
+              subject.should have_selector("label[@#{k}='#{v}']")
+            end
           end
 
           it 'has an input tag' do
-            subject.should have_selector("input[@type='checkbox']")
             subject.should have_selector("input[@name='#{filter.field_name}']")
             subject.should have_selector("input[@value='#{filter.value}']")
-            subject.should have_selector("input[@checked='checked']")
+            filter.attrs.should_not be_empty
+            filter.attrs.each do |k, v|
+              subject.should have_selector("input[@#{k}='#{v}']")
+            end
           end
         end
 
-        context 'with choices' do
-          let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, ['Chemistry', 'Peace'], options.merge(choices: choices))}
+        context 'radio' do
+          let(:filter) {WithFilters::Filter::Radio.new(:gender, :foo, 'Male', options.merge(choices: [['Male', {class: 'choice_class'}], 'Female']))}
           subject {helper.with_filters_input_tag(filter)}
 
           it 'has a div tag as a label' do
             subject.should have_selector("div[text()='#{filter.label}']")
+
+            filter.label_attrs.should_not be_empty
+            filter.label_attrs.each do |k, v|
+              subject.should have_selector("div[@#{k}='#{v}']")
+            end
           end
 
           it 'has a label tag for each choice' do
@@ -107,14 +60,90 @@ describe WithFilters::ActionViewExtension do
           end
 
           it 'has an input tag for each choice' do
-            subject.should have_selector("input[@type='checkbox']")
+            subject.should have_selector("input[@type='radio']")
             subject.should have_selector("input[@name='#{filter.field_name}']")
             filter.choices.each do |choice|
               subject.should have_selector("input[@value='#{choice.value}']")
-              if filter.value.include?(choice.value)
+              if choice.value == filter.value
                 subject.should have_selector("input[@checked='checked']")
               end
+              choice.attrs.each do |k, v|
+                subject.should have_selector("input[@#{k}='#{v}']")
+              end
             end
+          end
+        end
+
+        context 'check_box' do
+          let(:choices) {['Chemistry', 'Literature', 'Peace', 'Physics', 'Physiology or Medicine']}
+
+          context 'without choices' do
+            let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, true)}
+            subject {helper.with_filters_input_tag(filter)}
+
+            it 'has a label tag' do
+              subject.should have_selector("label[text()='#{filter.label}']")
+            end
+
+            it 'has an input tag' do
+              subject.should have_selector("input[@type='checkbox']")
+              subject.should have_selector("input[@name='#{filter.field_name}']")
+              subject.should have_selector("input[@value='#{filter.value}']")
+              subject.should have_selector("input[@checked='checked']")
+            end
+          end
+
+          context 'with choices' do
+            let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, ['Chemistry', 'Peace'], options.merge(choices: choices))}
+            subject {helper.with_filters_input_tag(filter)}
+
+            it 'has a div tag as a label' do
+              subject.should have_selector("div[text()='#{filter.label}']")
+            end
+
+            it 'has a label tag for each choice' do
+              filter.choices.each do |choice|
+                subject.should have_selector("label[text()='#{choice.label}']")
+              end
+            end
+
+            it 'has an input tag for each choice' do
+              subject.should have_selector("input[@type='checkbox']")
+              subject.should have_selector("input[@name='#{filter.field_name}']")
+              filter.choices.each do |choice|
+                subject.should have_selector("input[@value='#{choice.value}']")
+                if filter.value.include?(choice.value)
+                  subject.should have_selector("input[@checked='checked']")
+                end
+              end
+            end
+          end
+        end
+      end
+
+      context 'with ranged inputs' do
+        let(:filter) {WithFilters::Filter::TextRange.new(:year, :foo, {start: 1900, stop: 2000})}
+        subject {helper.with_filters_input_tag(filter)}
+
+        context 'start' do
+          it 'has a label tag' do
+            subject.should have_selector("label[text()='#{filter.start.label}']")
+          end
+
+          it 'has an input tag' do
+            subject.should have_selector("input[@name='#{filter.start.field_name}']")
+            subject.should have_selector("input[@value='#{filter.start.value}']")
+          end
+        end
+
+        context 'stop' do
+          it 'has a label tag' do
+            subject.should have_selector("label[text()='#{filter.stop.label}']")
+          end
+
+          it 'has an input tag' do
+            subject.should have_selector("input[@name='#{filter.stop.field_name}']")
+            subject.should have_selector("input[@value='#{filter.stop.value}']")
           end
         end
       end
