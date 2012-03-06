@@ -1,22 +1,22 @@
 require 'spec_helper'
 
-describe WithFilters::Filter::TextStart do
+describe WithFilters::Filter::BaseStart do
   subject {described_class.new(:year, :foo, '')}
 
   its(:field_name) {should == 'foo[year][start]'}
 end
 
-describe WithFilters::Filter::TextStop do
+describe WithFilters::Filter::BaseStop do
   subject {described_class.new(:year, :foo, '')}
 
   its(:field_name) {should == 'foo[year][stop]'}
 end
 
-describe WithFilters::Filter::TextRange do
+describe WithFilters::Filter::BaseRange do
   subject {described_class.new(:year, :foo, {})}
 
-  its(:start) {should be_an_instance_of(WithFilters::Filter::TextStart)}
-  its(:stop)  {should be_an_instance_of(WithFilters::Filter::TextStop)}
+  its(:start) {should be_an_instance_of(WithFilters::Filter::BaseStart)}
+  its(:stop)  {should be_an_instance_of(WithFilters::Filter::BaseStop)}
 
   context 'options' do
     it 'uses the :start and :stop option hashes for the individual filters and default any values not passed to the range options provided' do
