@@ -122,28 +122,49 @@ describe WithFilters::ActionViewExtension do
       end
 
       context 'with ranged inputs' do
-        let(:filter) {WithFilters::Filter::TextRange.new(:year, :foo, {start: 1900, stop: 2000})}
-        subject {helper.with_filters_input_tag(filter)}
+        context 'types' do
+          context 'text' do
+            let(:filter) {WithFilters::Filter::TextRange.new(:year, :foo, {start: 1900, stop: 2000})}
+            subject {helper.with_filters_input_tag(filter)}
 
-        context 'start' do
-          it 'has a label tag' do
-            subject.should have_selector("label[text()='#{filter.start.label}']")
+            context 'start' do
+              it 'has a label tag' do
+                subject.should have_selector("label[text()='#{filter.start.label}']")
+              end
+
+              it 'has an input tag' do
+                subject.should have_selector("input[@name='#{filter.start.field_name}']")
+                subject.should have_selector("input[@value='#{filter.start.value}']")
+              end
+            end
+
+            context 'stop' do
+              it 'has a label tag' do
+                subject.should have_selector("label[text()='#{filter.stop.label}']")
+              end
+
+              it 'has an input tag' do
+                subject.should have_selector("input[@name='#{filter.stop.field_name}']")
+                subject.should have_selector("input[@value='#{filter.stop.value}']")
+              end
+            end
           end
 
-          it 'has an input tag' do
-            subject.should have_selector("input[@name='#{filter.start.field_name}']")
-            subject.should have_selector("input[@value='#{filter.start.value}']")
-          end
-        end
+          context 'select' do
+            let(:filter) {WithFilters::Filter::SelectRange.new(:year, :foo, {start: 1900, stop: 1905}, choices: 1900..1910)}
+            subject {helper.with_filters_input_tag(filter)}
 
-        context 'stop' do
-          it 'has a label tag' do
-            subject.should have_selector("label[text()='#{filter.stop.label}']")
-          end
+            context 'start' do
+              it 'has a label tag' do
+                subject.should have_selector("label[text()='#{filter.start.label}']")
+              end
+            end
 
-          it 'has an input tag' do
-            subject.should have_selector("input[@name='#{filter.stop.field_name}']")
-            subject.should have_selector("input[@value='#{filter.stop.value}']")
+            context 'stop' do
+              it 'has a label tag' do
+                subject.should have_selector("label[text()='#{filter.stop.label}']")
+              end
+            end
           end
         end
       end

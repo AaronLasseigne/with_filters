@@ -34,7 +34,8 @@ module WithFilters
       time:     TextRange,
       datetime: TextRange,
       search:   TextRange,
-      color:    TextRange
+      color:    TextRange,
+      select:   SelectRange
     }
 
     def self.create(name, namespace, value, options = {})
@@ -46,7 +47,7 @@ module WithFilters
     end
 
     def self.create_range(name, namespace, value, options = {})
-      as = options.delete(:as) || :text
+      as = options.delete(:as) || (options.has_key?(:choices) ? :select : :text)
 
       options[:type] = as.to_s
 

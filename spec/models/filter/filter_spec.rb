@@ -38,10 +38,20 @@ describe WithFilters::Filter do
 
   describe '#create_range(name, namespace, value, options = {})' do
     context 'defaults' do
-      subject {described_class.create_range(:year, :foo, {})}
+      context 'no :choices' do
+        subject {described_class.create_range(:year, :foo, {})}
 
-      it 'returns a text range filter' do
-        subject.should be_an_instance_of(WithFilters::Filter::TextRange)
+        it 'returns a text range filter' do
+          subject.should be_an_instance_of(WithFilters::Filter::TextRange)
+        end
+      end
+
+      context ':choices' do
+        subject {described_class.create_range(:year, :foo, {}, choices: 1900..2000)}
+
+        it 'returns a select range filter' do
+          subject.should be_an_instance_of(WithFilters::Filter::SelectRange)
+        end
       end
     end
 
