@@ -39,7 +39,7 @@ describe WithFilters::FilterForm do
       ff.input_range(:year, label: label)
 
       ff.filters.length.should == 1
-      ff.filters.first.should be_a_kind_of(WithFilters::Filter::TextRange)
+      ff.filters.first.should be_a_kind_of(WithFilters::Filter::BaseRange)
       ff.filters.first.start.label.should == label
     end
   end
