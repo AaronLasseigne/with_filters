@@ -20,9 +20,12 @@ module WithFilters
           end
         end
         param_namespace = options.delete(:param_namespace) || relation.table_name.to_sym
-        scoped_params = params ? self.extract_hash_value(params, param_namespace) : {}
-        relation.with_filters_data = {param_namespace: param_namespace}
+        relation.with_filters_data = {
+          param_namespace: param_namespace,
+          column_types:    find_column_types(relation)
+        }
 
+        scoped_params = params ? self.extract_hash_value(params, param_namespace) : {}
         scoped_params.each do |field, value|
           # skip blank entries
           value.reject!{|v| v.blank?} if value.is_a?(Array)
@@ -44,19 +47,17 @@ module WithFilters
               db_column_table_name = relation.column_names.include?(db_column_name) ? self.table_name : nil
             end
 
-            db_column = find_column(relation, db_column_name)
-
             quoted_field = relation.connection.quote_column_name(db_column_name)
             quoted_field = "#{db_column_table_name}.#{quoted_field}" if db_column_table_name
 
-            value = WithFilters::ValuePrep.prepare(db_column, value, field_options)
+            value = WithFilters::ValuePrep.prepare(relation.with_filters_data[:column_types][field], value, field_options)
 
             # attach filter
             relation = case value.class.name.to_sym
               when :Array
                 relation.where([Array.new(value.size, "#{quoted_field} LIKE ?").join(' OR '), *value])
               when :Hash
-                if ![:datetime, :timestamp].include?(db_column.type) or Date._parse(value[:start]).has_key?(:sec_fraction)
+                if ![:datetime, :timestamp].include?(relation.with_filters_data[:column_types][field]) or Date._parse(value[:start]).has_key?(:sec_fraction)
                   relation.where(["#{quoted_field} BETWEEN :start AND :stop", value])
                 else
                   relation.where(["#{quoted_field} >= :start AND #{quoted_field} < :stop", value])
@@ -74,24 +75,24 @@ module WithFilters
     end
 
     module ClassMethods
-      def find_column(relation, field)
-        field = field.to_s
-        relation.columns.detect{|column| column.name == field} ||
-          (   
-           (relation.respond_to?(:joins_values) ? relation.joins_values : []) +
-           (relation.respond_to?(:includes_values) ? relation.includes_values : []) 
-          ).uniq.map{|join|
-            # convert string joins to table names
-            if join.is_a?(String)
-              join.scan(/\G(?:(?:,|\bjoin\s)\s*(\w+))/i)
-            else
-              join
-            end 
-          }.flatten.map{|table_name|
-            ActiveRecord::Base::connection.columns(table_name.to_s.tableize)
-          }.flatten.detect{|column|
-            column.name == field
-          }   
+      def find_column_types(relation)
+        # primary table column types
+        column_types = Hash[*relation.columns.map{|column| [column.name.to_sym, column.type]}.flatten]
+
+        # non-primary table columns
+        additional_columns = (relation.joins_values + relation.includes_values).uniq.map{|join|
+          # convert string joins to table names
+          if join.is_a?(String)
+            join.scan(/\G(?:(?:,|\bjoin\s)\s*(\w+))/i)
+          else
+            join
+          end 
+        }.flatten.map{|table_name|
+          ActiveRecord::Base::connection.columns(table_name.to_s.tableize)
+        }.flatten
+
+        # merge in non-primary table column types without replacing primary table column types of the same name
+        column_types.reverse_merge(Hash[*additional_columns.map{|column| [column.name.to_sym, column.type]}.flatten])
       end
     end
   end

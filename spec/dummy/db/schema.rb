@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120309202722) do
+ActiveRecord::Schema.define(:version => 20120310195447) do
 
   create_table "date_time_testers", :force => true do |t|
     t.datetime "test"
@@ -27,9 +27,10 @@ ActiveRecord::Schema.define(:version => 20120309202722) do
     t.datetime "timestamp_field"
     t.boolean  "boolean_field"
     t.text     "text_field"
-    t.text     "email_field"
-    t.text     "phone_field"
-    t.text     "url_field"
+    t.string   "email_field"
+    t.string   "phone_field"
+    t.string   "url_field"
+    t.string   "string_field"
   end
 
   create_table "nobel_prize_winners", :force => true do |t|

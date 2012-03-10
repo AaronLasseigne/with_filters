@@ -342,9 +342,58 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         npw.with_filters_data[:param_namespace].should == :nobel_prize_winners
       end
 
+      context 'has :column_types' do
+        let(:column_types) {
+          {
+            id:                    :integer,
+            nobel_prize_winner_id: :integer,
+            category:              :string,
+            year:                  :integer,
+            shared:                :boolean,
+            first_name:            :string,
+            last_name:             :string,
+            birthdate:             :date,
+            created_at:            :datetime,
+            updated_at:            :datetime
+          }
+        }
+
+        it 'joins an association' do
+          npw = NobelPrizeWinner.
+            joins(:nobel_prizes).
+            with_filters({nobel_prize_winners: {first_name: 'Albert'}})
+
+          npw.with_filters_data[:column_types].should == column_types
+        end
+
+        it 'manually joins a table' do
+          npw = NobelPrizeWinner.
+            joins('join nobel_prizes ON nobel_prizes.nobel_prize_winner_id = nobel_prize_winners.id').
+            with_filters({nobel_prize_winners: {first_name: 'Albert'}})
+
+          npw.with_filters_data[:column_types].should == column_types
+        end
+
+        it 'includes an association' do
+          npw = NobelPrizeWinner.
+            includes(:nobel_prizes).
+            with_filters({nobel_prize_winners: {first_name: 'Albert'}})
+
+          npw.with_filters_data[:column_types].should == column_types
+        end
+      end
+
       it 'stays when converted to an array' do
         npw = NobelPrizeWinner.with_filters({nobel_prize_winners: {first_name: 'Albert'}}).to_a
         npw.with_filters_data[:param_namespace].should == :nobel_prize_winners
+        npw.with_filters_data[:column_types].should == {
+          id:         :integer,
+          first_name: :string,
+          last_name:  :string,
+          birthdate:  :date,
+          created_at: :datetime,
+          updated_at: :datetime
+        }
       end
     end
 

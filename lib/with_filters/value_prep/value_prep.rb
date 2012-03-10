@@ -7,8 +7,8 @@ module WithFilters
       timestamp: DateTimePrep
     }
 
-    def self.prepare(column, value, options = {})
-      (TYPE_MAP[column.type].try(:new, column, value, options) || DefaultPrep.new(column, value, options)).value
+    def self.prepare(column_type, value, options = {})
+      (TYPE_MAP[column_type].try(:new, value, options) || DefaultPrep.new(value, options)).value
     end
   end
 end

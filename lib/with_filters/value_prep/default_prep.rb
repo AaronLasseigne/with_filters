@@ -1,8 +1,7 @@
 module WithFilters
   module ValuePrep
     class DefaultPrep
-      def initialize(column, value, options = {})
-        @column  = column
+      def initialize(value, options = {})
         @value   = value
         @options = options
       end
