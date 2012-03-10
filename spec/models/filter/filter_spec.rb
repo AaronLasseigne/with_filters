@@ -2,24 +2,6 @@ require 'spec_helper'
 
 describe WithFilters::Filter do
   describe '#create(name, namespace, value, options = {})' do
-    context 'defaults' do
-      context ':choices' do
-        subject {described_class.create(:gender, :foo, 'Male', choices: ['Male', 'Female'])}
-
-        it 'returns a select filter' do
-          subject.should be_an_instance_of(WithFilters::Filter::Select)
-        end
-      end
-
-      context 'no :choices' do
-        subject {described_class.create(:first_name, :foo, 'Aaron')}
-
-        it 'returns a text filter' do
-          subject.should be_an_instance_of(WithFilters::Filter::Text)
-        end
-      end
-    end
-
     context 'options' do
       context ':as' do
         subject {described_class.create(:email, :foo, '', as: :email)}
@@ -37,24 +19,6 @@ describe WithFilters::Filter do
   end
 
   describe '#create_range(name, namespace, value, options = {})' do
-    context 'defaults' do
-      context 'no :choices' do
-        subject {described_class.create_range(:year, :foo, {})}
-
-        it 'returns a text range filter' do
-          subject.should be_an_instance_of(WithFilters::Filter::TextRange)
-        end
-      end
-
-      context ':choices' do
-        subject {described_class.create_range(:year, :foo, {}, choices: 1900..2000)}
-
-        it 'returns a select range filter' do
-          subject.should be_an_instance_of(WithFilters::Filter::SelectRange)
-        end
-      end
-    end
-
     context 'options' do
       context ':as' do
         subject {described_class.create_range(:year, :foo, {}, as: :number)}

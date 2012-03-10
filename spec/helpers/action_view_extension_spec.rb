@@ -3,7 +3,7 @@ require 'spec_helper'
 describe WithFilters::ActionViewExtension do
   describe '#filter_form_for(record, &block)' do
     it 'creates a form' do
-      output = helper.filter_form_for(NobelPrizeWinner.with_filters.all) {}
+      output = helper.filter_form_for(NobelPrizeWinner.with_filters) {}
 
       output.should have_selector('form[@novalidate="novalidate"]')
     end
@@ -173,7 +173,7 @@ describe WithFilters::ActionViewExtension do
     context 'options' do
       context ':label_attrs' do
         it 'adds attrs to the label_tag' do
-          output = helper.filter_form_for(NobelPrizeWinner.with_filters.all) do |f|
+          output = helper.filter_form_for(NobelPrizeWinner.with_filters) do |f|
             f.input :first_name, label_attrs: {class: 'label_class'}
           end
 
@@ -184,7 +184,7 @@ describe WithFilters::ActionViewExtension do
       context ':choices' do
         it 'outputs all choices' do
           choices = ['Chemistry', 'Literature', 'Peace', 'Physics', 'Physiology or Medicine']
-          output = helper.filter_form_for(NobelPrize.with_filters.all) do |f|
+          output = helper.filter_form_for(NobelPrize.with_filters) do |f|
             f.input :category, choices: choices
           end
 
@@ -198,7 +198,7 @@ describe WithFilters::ActionViewExtension do
 
       context 'everything else' do
         it 'adds attrs to the input' do
-          output = helper.filter_form_for(NobelPrizeWinner.with_filters.all) do |f|
+          output = helper.filter_form_for(NobelPrizeWinner.with_filters) do |f|
             f.input :first_name, class: 'input_class'
           end
 
@@ -210,7 +210,7 @@ describe WithFilters::ActionViewExtension do
     context 'param value is available' do
       it 'creates an input with a value' do
         helper.stub(:params).and_return({nobel_prize_winners: {first_name: 'Albert'}})
-        output = helper.filter_form_for(NobelPrizeWinner.with_filters.all) do |f|
+        output = helper.filter_form_for(NobelPrizeWinner.with_filters) do |f|
           f.input :first_name
         end
 

@@ -11,10 +11,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120227200013) do
+ActiveRecord::Schema.define(:version => 20120309202722) do
 
   create_table "date_time_testers", :force => true do |t|
     t.datetime "test"
+  end
+
+  create_table "field_format_testers", :force => true do |t|
+    t.integer  "integer_field"
+    t.float    "float_field"
+    t.decimal  "decimal_field"
+    t.date     "date_field"
+    t.time     "time_field"
+    t.datetime "datetime_field"
+    t.datetime "timestamp_field"
+    t.boolean  "boolean_field"
+    t.text     "text_field"
+    t.text     "email_field"
+    t.text     "phone_field"
+    t.text     "url_field"
   end
 
   create_table "nobel_prize_winners", :force => true do |t|
@@ -23,7 +38,6 @@ ActiveRecord::Schema.define(:version => 20120227200013) do
     t.date     "birthdate"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.time     "meaningless_time"
   end
 
   create_table "nobel_prizes", :force => true do |t|
@@ -31,8 +45,6 @@ ActiveRecord::Schema.define(:version => 20120227200013) do
     t.string  "category"
     t.integer "year"
     t.boolean "shared"
-    t.decimal "meaningless_decimal"
-    t.float   "meaningless_float"
   end
 
 end

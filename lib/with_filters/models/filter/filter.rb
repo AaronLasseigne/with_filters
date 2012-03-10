@@ -16,6 +16,7 @@ module WithFilters
       search:   Text,
       color:    Text,
       hidden:   Text,
+      checkbox: CheckBox,
       radio:    Radio,
       select:   Select
     }
@@ -39,7 +40,7 @@ module WithFilters
     }
 
     def self.create(name, namespace, value, options = {})
-      as = options.delete(:as) || (options.has_key?(:choices) ? :select : :text)
+      as = options.delete(:as)
 
       options[:type] = as.to_s
 
@@ -47,7 +48,7 @@ module WithFilters
     end
 
     def self.create_range(name, namespace, value, options = {})
-      as = options.delete(:as) || (options.has_key?(:choices) ? :select : :text)
+      as = options.delete(:as)
 
       options[:type] = as.to_s
 
