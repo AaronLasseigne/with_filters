@@ -22,10 +22,10 @@ module WithFilters
         param_namespace = options.delete(:param_namespace) || relation.table_name.to_sym
         relation.with_filters_data = {
           param_namespace: param_namespace,
-          column_types:    find_column_types(relation)
+          column_types:    find_column_types(relation, options[:fields] || {})
         }
 
-        scoped_params = params ? self.extract_hash_value(params, param_namespace) : {}
+        scoped_params = params ? self.extract_hash_value(params, param_namespace) || {} : {}
         scoped_params.each do |field, value|
           # skip blank entries
           value.reject!{|v| v.blank?} if value.is_a?(Array)
@@ -75,24 +75,38 @@ module WithFilters
     end
 
     module ClassMethods
-      def find_column_types(relation)
+      def find_column_types(relation, field_options)
+        field_options = field_options.reject{|k, v| v.is_a?(Proc)}
+
         # primary table column types
-        column_types = Hash[*relation.columns.map{|column| [column.name.to_sym, column.type]}.flatten]
+        column_types = Hash[*relation.columns.map{|column|
+          [
+            field_options.detect{|field, options|
+              [column.name, "#{relation.table_name}.#{column.name}"].include?(options[:column].to_s)
+            }.try(:first) || column.name.to_sym,
+            column.type
+          ]
+        }.flatten]
 
         # non-primary table columns
-        additional_columns = (relation.joins_values + relation.includes_values).uniq.map{|join|
+        (relation.joins_values + relation.includes_values).uniq.map{|join|
           # convert string joins to table names
           if join.is_a?(String)
             join.scan(/\G(?:(?:,|\bjoin\s)\s*(\w+))/i)
           else
             join
           end 
-        }.flatten.map{|table_name|
-          ActiveRecord::Base::connection.columns(table_name.to_s.tableize)
-        }.flatten
+        }.flatten.map do |table_name|
+          ActiveRecord::Base::connection.columns(table_name.to_s.tableize).each do |column|
+            column_name = field_options.detect{|field, options|
+              [column.name, "#{table_name}.#{column.name}"].include?(options[:column].to_s)
+            }.try(:first) || column.name.to_sym
 
-        # merge in non-primary table column types without replacing primary table column types of the same name
-        column_types.reverse_merge(Hash[*additional_columns.map{|column| [column.name.to_sym, column.type]}.flatten])
+            column_types.reverse_merge!(column_name => column.type)
+          end
+        end
+
+        column_types
       end
     end
   end

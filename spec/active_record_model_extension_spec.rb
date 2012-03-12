@@ -367,19 +367,32 @@ describe 'WithFilters::ActiveRecordModelExtention' do
         end
 
         it 'manually joins a table' do
-          npw = NobelPrizeWinner.
-            joins('join nobel_prizes ON nobel_prizes.nobel_prize_winner_id = nobel_prize_winners.id').
-            with_filters({nobel_prize_winners: {first_name: 'Albert'}})
+          npw = NobelPrizeWinner.joins('join nobel_prizes ON nobel_prizes.nobel_prize_winner_id = nobel_prize_winners.id').with_filters
 
           npw.with_filters_data[:column_types].should == column_types
         end
 
         it 'includes an association' do
-          npw = NobelPrizeWinner.
-            includes(:nobel_prizes).
-            with_filters({nobel_prize_winners: {first_name: 'Albert'}})
+          npw = NobelPrizeWinner.includes(:nobel_prizes).with_filters
 
           npw.with_filters_data[:column_types].should == column_types
+        end
+
+        context 'selects the column type when the field is aliased' do
+          it 'is alias to a field name' do
+            npw = NobelPrizeWinner.with_filters({}, fields: {foo: {column: :birthdate}})
+            npw.with_filters_data[:column_types][:foo].should == :date
+          end
+
+          it 'is aliased to a field on the primary table' do
+            npw = NobelPrizeWinner.with_filters({}, fields: {foo: {column: 'nobel_prize_winners.birthdate'}})
+            npw.with_filters_data[:column_types][:foo].should == :date
+          end
+
+          it 'is aliased to a field on a joined table' do
+            npw = NobelPrizeWinner.joins(:nobel_prizes).with_filters({}, fields: {foo: {column: 'nobel_prizes.year'}})
+            npw.with_filters_data[:column_types][:foo].should == :integer
+          end
         end
       end
 
