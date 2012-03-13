@@ -5,7 +5,7 @@ describe WithFilters::Filter::Base do
     context 'defaults' do
       subject {described_class.new(:first_name, :foo, 'Aaron')}
 
-      its(:to_partial_path) {should == 'with_filters/filter/base'}
+      its(:to_partial_path) {should == File.join('with_filters', 'filter', 'base')}
       its(:label)           {should == 'First Name'}
       its(:label_attrs)     {should == {}}
       its(:field_name)      {should == 'foo[first_name]'}
@@ -24,7 +24,7 @@ describe WithFilters::Filter::Base do
       end
 
       context ':label_attrs' do
-        it 'uses the provided label' do
+        it 'uses the provided label attrs' do
           label_attrs = {
             class: 'label_class'
           }
@@ -33,9 +33,30 @@ describe WithFilters::Filter::Base do
       end
 
       context ':choices' do
-        choices = described_class.new(:gender, :foo, 'Male', choices: ['Male', 'Female']).choices
-        choices.first.label.should == 'Male'
-        choices.last.label.should  == 'Female'
+        it 'creates choices from the provided list' do
+          choices = described_class.new(:gender, :foo, 'Male', choices: ['Male', 'Female']).choices
+          choices.should be_a_kind_of(WithFilters::Filter::Choices)
+          choices.first.label.should == 'Male'
+          choices.last.label.should  == 'Female'
+        end
+      end
+
+      context ':theme' do
+        it 'uses the provided theme to create a partial path' do
+          Dir.stub(:glob).and_return([File.join(Rails.root, 'app', 'views', 'with_filters', 'foo', 'filter', '_base.html.erb')])
+
+          filter = described_class.new(:first_name, :foo, 'Aaron', theme: 'foo')
+
+          filter.to_partial_path.should == File.join('with_filters', 'foo', 'filter', 'base')
+        end
+
+        it 'falls back to the original partials if the theme version can not be found' do
+          Dir.stub(:glob).and_return([])
+
+          filter = described_class.new(:first_name, :foo, 'Aaron', theme: 'foo')
+
+          filter.to_partial_path.should == File.join('with_filters', 'filter', 'base')
+        end
       end
 
       context 'everything else' do

@@ -6,7 +6,7 @@ describe WithFilters::FilterForm do
       subject {described_class.new(NobelPrizeWinner.with_filters)}
 
       its(:attrs)           {should == {novalidate: 'novalidate', method: 'get'}}
-      its(:to_partial_path) {should == 'with_filters/filter_form'}
+      its(:to_partial_path) {should == File.join('with_filters', 'filter_form')}
       its(:filters)         {should be_empty}
       its(:param_namespace) {should == :nobel_prize_winners}
     end
@@ -14,7 +14,22 @@ describe WithFilters::FilterForm do
     context 'options' do
       context ':attrs' do
         it 'attrs should override the defaults' do
-          described_class.new(NobelPrizeWinner.with_filters, {}, {method: 'post'}).attrs.should == {novalidate: 'novalidate', method: 'post'}
+          described_class.new(NobelPrizeWinner.with_filters, {}, method: 'post').attrs.should == {novalidate: 'novalidate', method: 'post'}
+        end
+      end
+
+      context ':theme' do
+        it 'passes the theme to the inputs' do
+          path = [Rails.root, 'app', 'views', 'with_filters', 'foo', 'filter']
+          Dir.stub(:glob).and_return([])
+          Dir.should_receive(:glob).
+            with(File.join(*path, '_text.*')).
+            and_return([File.join(*path, 'text')])
+
+          ff = described_class.new(NobelPrizeWinner.with_filters, {}, theme: 'foo')
+          ff.input(:first_name)
+
+          ff.filters.first.to_partial_path.should == File.join('with_filters', 'foo', 'filter', 'text')
         end
       end
     end

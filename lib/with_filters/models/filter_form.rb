@@ -6,6 +6,7 @@ module WithFilters
       @records = records
       @values  = values
 
+      @theme           = options.delete(:theme)
       @attrs           = options.reverse_merge(novalidate: 'novalidate', method: 'get')
       @to_partial_path = self.class.name.underscore
       @filters         = []
@@ -14,12 +15,14 @@ module WithFilters
 
     def input(name, options = {})
       options[:as] = find_as(name, options.has_key?(:choices)) unless options[:as]
+      options.merge!(theme: @theme)
 
       @filters.push(WithFilters::Filter.create(name, self.param_namespace, @values[name], options))
     end
 
     def input_range(name, options = {})
       options[:as] = find_as(name, options.has_key?(:choices)) unless options[:as]
+      options.merge!(theme: @theme)
 
       @filters.push(WithFilters::Filter.create_range(name, self.param_namespace, @values[name] || {}, options))
     end
