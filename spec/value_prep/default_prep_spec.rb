@@ -20,7 +20,7 @@ describe WithFilters::ValuePrep::DefaultPrep do
       described_class.new('a', {match: :begins_with}).add_match('a').should == 'a%'
     end
 
-    it 'returns a :ends_with match' do
+    it 'returns an :ends_with match' do
       described_class.new('a', {match: :ends_with}).add_match('a').should == '%a'
     end
 
