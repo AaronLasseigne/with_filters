@@ -1,27 +1,27 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path('../lib', __FILE__)
-require 'with_filters/version'
+require File.expand_path('../lib/with_filters/version', __FILE__)
 
-Gem::Specification.new do |s|
-  s.name        = 'with_filters'
-  s.version     = WithFilters::VERSION
-  s.authors     = ['Aaron Lasseigne']
-  s.email       = ['aaron.lasseigne@gmail.com']
-  s.homepage    = 'https://github.com/AaronLasseigne/with_filters'
-  s.summary     = %q{Add filtering to lists, tables, etc.}
-  s.description = %q{Add filtering to lists, tables, etc.}
+Gem::Specification.new do |gem|
+  gem.name        = 'with_filters'
+  gem.version     = WithFilters::VERSION
 
-  s.rubyforge_project = 'with_filters'
+  gem.authors     = ['Aaron Lasseigne']
+  gem.email       = ['aaron.lasseigne@gmail.com']
+  gem.summary     = %q{Add filtering to lists, tables, etc.}
+  gem.description = %q{Add filtering to lists, tables, etc.}
+  gem.homepage    = 'https://github.com/AaronLasseigne/with_filters'
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ['lib']
+  gem.rubyforge_project = 'with_filters'
 
-  s.add_dependency 'rails', '>= 3.1'
+  gem.files         = `git ls-files`.split("\n")
+  gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  gem.require_paths = ['lib']
 
-  s.add_development_dependency 'rspec-rails'
-  s.add_development_dependency 'sqlite3'
-  s.add_development_dependency 'genspec'
-  s.add_development_dependency 'capybara'
+  gem.add_dependency 'rails', '>= 3.1'
+
+  gem.add_development_dependency 'rspec-rails'
+  gem.add_development_dependency 'sqlite3'
+  gem.add_development_dependency 'genspec'
+  gem.add_development_dependency 'capybara'
 end
