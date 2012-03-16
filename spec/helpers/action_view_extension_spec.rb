@@ -39,13 +39,8 @@ describe WithFilters::ActionViewExtension do
           let(:filter) {WithFilters::Filter::Radio.new(:gender, :foo, 'Male', options.merge(choices: [['Male', {class: 'choice_class'}], 'Female']))}
           subject {helper.with_filters_input(filter)}
 
-          it 'has a div tag as a label' do
+          it 'has a label for the group' do
             subject.should have_selector("div[text()='#{filter.label}']")
-
-            filter.label_attrs.should_not be_empty
-            filter.label_attrs.each do |k, v|
-              subject.should have_selector("div[@#{k}='#{v}']")
-            end
           end
 
           it 'has a label tag for each choice' do
@@ -92,7 +87,7 @@ describe WithFilters::ActionViewExtension do
             let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, ['Chemistry', 'Peace'], options.merge(choices: choices))}
             subject {helper.with_filters_input(filter)}
 
-            it 'has a div tag as a label' do
+            it 'has a label for the group' do
               subject.should have_selector("div[text()='#{filter.label}']")
             end
 
@@ -230,6 +225,32 @@ describe WithFilters::ActionViewExtension do
       filter.label_attrs.should_not be_empty
       filter.label_attrs.each do |k, v|
         subject.should have_selector("label[@#{k}='#{v}']")
+      end
+    end
+  end
+
+  describe '#with_filters_label(filter)' do
+    context 'a tag with a single label' do
+      let(:filter) {WithFilters::Filter::Text.new(:first_name, :foo, 'Aaron', label_attrs: {class: 'bar'})}
+      subject {helper.with_filters_label(filter)}
+
+      it 'creates a label tag' do
+        subject.should have_selector("label[text()='#{filter.label}']")
+      end
+    end
+
+    context 'a group of tags with individual labels and one form label' do
+      let(:options) {{label_attrs: {class: 'label_class'}}}
+      let(:filter) {WithFilters::Filter::Radio.new(:gender, :foo, 'Male', options.merge(choices: ['Male', 'Female']))}
+      subject {helper.with_filters_label(filter)}
+
+      it 'creates a div to act as a label tag for the group' do
+        subject.should have_selector("div[text()='#{filter.label}']")
+
+        filter.label_attrs.should_not be_empty
+        filter.label_attrs.each do |k, v|
+          subject.should have_selector("div[@#{k}='#{v}']")
+        end
       end
     end
   end

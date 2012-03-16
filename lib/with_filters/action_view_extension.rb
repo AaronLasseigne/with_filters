@@ -17,7 +17,15 @@ module WithFilters
       label_tag(filter.field_name, filter.label, filter.label_attrs)
     end
 
-    def with_filters_select_tag(filter)
+    def with_filters_label(filter)
+      if [WithFilters::Filter::Radio, WithFilters::Filter::CheckBox].include?(filter.class) and filter.choices.any?
+        content_tag(:div, filter.label, filter.label_attrs)
+      else
+        with_filters_label_tag(filter)
+      end
+    end
+
+   def with_filters_select_tag(filter)
       choices = filter.choices
       unless filter.choices.is_a?(String)
         choices = filter.choices.map do |choice|

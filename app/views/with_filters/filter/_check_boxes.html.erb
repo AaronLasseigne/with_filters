@@ -1,4 +1,4 @@
-<%= content_tag(:div, filter.label, filter.label_attrs) %>
+<%= with_filters_label(filter) %>
 <% filter.choices.each do |choice| %>
   <%= label_tag("#{filter.field_name}[#{choice.value}]", choice.label) %>
   <%= check_box_tag(filter.field_name, choice.value, choice.selected?, choice.attrs) %>
