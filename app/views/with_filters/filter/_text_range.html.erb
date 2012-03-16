@@ -1,4 +1,4 @@
-<%= label_tag(filter.start.field_name, filter.start.label, filter.start.label_attrs) %>
+<%= with_filters_label_tag(filter.start) %>
 <%= text_field_tag(filter.start.field_name, filter.start.value, filter.start.attrs) %>
-<%= label_tag(filter.stop.field_name, filter.stop.label, filter.stop.label_attrs) %>
+<%= with_filters_label_tag(filter.stop) %>
 <%= text_field_tag(filter.stop.field_name, filter.stop.value, filter.stop.attrs) %>

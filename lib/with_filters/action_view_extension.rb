@@ -13,6 +13,10 @@ module WithFilters
       render(partial: filter.to_partial_path, locals: {filter: filter})
     end
 
+    def with_filters_label_tag(filter)
+      label_tag(filter.field_name, filter.label, filter.label_attrs)
+    end
+
     def with_filters_select_tag(filter)
       choices = filter.choices
       unless filter.choices.is_a?(String)

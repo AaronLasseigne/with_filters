@@ -1,2 +1,2 @@
-<%= label_tag(filter.field_name, filter.label, filter.label_attrs) %>
+<%= with_filters_label_tag(filter) %>
 <%= check_box_tag(filter.field_name, filter.value, filter.selected?, filter.attrs) %>

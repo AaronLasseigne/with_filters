@@ -22,12 +22,7 @@ describe WithFilters::ActionViewExtension do
           subject {helper.with_filters_input_tag(filter)}
 
           it 'has a label tag' do
-            subject.should have_selector("label[text()='#{filter.label}']")
-
-            filter.label_attrs.should_not be_empty
-            filter.label_attrs.each do |k, v|
-              subject.should have_selector("label[@#{k}='#{v}']")
-            end
+            subject.should have_selector('label')
           end
 
           it 'has an input tag' do
@@ -82,7 +77,7 @@ describe WithFilters::ActionViewExtension do
             subject {helper.with_filters_input_tag(filter)}
 
             it 'has a label tag' do
-              subject.should have_selector("label[text()='#{filter.label}']")
+              subject.should have_selector('label')
             end
 
             it 'has an input tag' do
@@ -215,6 +210,26 @@ describe WithFilters::ActionViewExtension do
         end
 
         output.should have_selector('input[@value="Albert"]')
+      end
+    end
+  end
+
+  describe '#with_filters_label_tag(filter)' do
+    let(:filter) {WithFilters::Filter::Text.new(:first_name, :foo, 'Aaron', label_attrs: {class: 'bar'})}
+    subject {helper.with_filters_label_tag(filter)}
+
+    it 'has the correct label text' do
+      subject.should have_selector("label[text()='#{filter.label}']")
+    end
+
+    it 'has the correct for attribute' do
+      subject.should have_selector(%Q{label[for="#{filter.field_name.match(/^(.*)\[(.*)\]$/).captures.join('_')}"]})
+    end
+
+    it 'has the correct attributes' do
+      filter.label_attrs.should_not be_empty
+      filter.label_attrs.each do |k, v|
+        subject.should have_selector("label[@#{k}='#{v}']")
       end
     end
   end
