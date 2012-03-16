@@ -9,7 +9,7 @@ describe WithFilters::ActionViewExtension do
     end
   end
 
-  describe '#with_filters_input_tag(filter)' do
+  describe '#with_filters_input(filter)' do
     context 'with a single input' do
       context 'types' do
         let(:options) {{
@@ -19,7 +19,7 @@ describe WithFilters::ActionViewExtension do
 
         context 'text' do
           let(:filter) {WithFilters::Filter::Text.new(:first_name, :foo, 'Aaron', options)}
-          subject {helper.with_filters_input_tag(filter)}
+          subject {helper.with_filters_input(filter)}
 
           it 'has a label tag' do
             subject.should have_selector('label')
@@ -37,7 +37,7 @@ describe WithFilters::ActionViewExtension do
 
         context 'radio' do
           let(:filter) {WithFilters::Filter::Radio.new(:gender, :foo, 'Male', options.merge(choices: [['Male', {class: 'choice_class'}], 'Female']))}
-          subject {helper.with_filters_input_tag(filter)}
+          subject {helper.with_filters_input(filter)}
 
           it 'has a div tag as a label' do
             subject.should have_selector("div[text()='#{filter.label}']")
@@ -74,7 +74,7 @@ describe WithFilters::ActionViewExtension do
 
           context 'without choices' do
             let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, true)}
-            subject {helper.with_filters_input_tag(filter)}
+            subject {helper.with_filters_input(filter)}
 
             it 'has a label tag' do
               subject.should have_selector('label')
@@ -90,7 +90,7 @@ describe WithFilters::ActionViewExtension do
 
           context 'with choices' do
             let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, ['Chemistry', 'Peace'], options.merge(choices: choices))}
-            subject {helper.with_filters_input_tag(filter)}
+            subject {helper.with_filters_input(filter)}
 
             it 'has a div tag as a label' do
               subject.should have_selector("div[text()='#{filter.label}']")
@@ -120,7 +120,7 @@ describe WithFilters::ActionViewExtension do
         context 'types' do
           context 'text' do
             let(:filter) {WithFilters::Filter::TextRange.new(:year, :foo, {start: 1900, stop: 2000})}
-            subject {helper.with_filters_input_tag(filter)}
+            subject {helper.with_filters_input(filter)}
 
             context 'start' do
               it 'has a label tag' do
@@ -147,7 +147,7 @@ describe WithFilters::ActionViewExtension do
 
           context 'select' do
             let(:filter) {WithFilters::Filter::SelectRange.new(:year, :foo, {start: 1900, stop: 1905}, choices: 1900..1910)}
-            subject {helper.with_filters_input_tag(filter)}
+            subject {helper.with_filters_input(filter)}
 
             context 'start' do
               it 'has a label tag' do

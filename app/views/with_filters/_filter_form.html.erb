@@ -1,5 +1,5 @@
 <%= form_tag(nil, filter_form.attrs) do %>
   <% filter_form.filters.each do |filter| %>
-    <%= with_filters_input_tag(filter) %>
+    <%= with_filters_input(filter) %>
   <% end %>
 <% end %>

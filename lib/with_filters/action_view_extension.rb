@@ -9,7 +9,7 @@ module WithFilters
       render(partial: filter_form.to_partial_path, locals: {filter_form: filter_form})
     end
 
-    def with_filters_input_tag(filter)
+    def with_filters_input(filter)
       render(partial: filter.to_partial_path, locals: {filter: filter})
     end
 
