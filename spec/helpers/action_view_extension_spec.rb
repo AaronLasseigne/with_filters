@@ -27,11 +27,6 @@ describe WithFilters::ActionViewExtension do
 
           it 'has an input tag' do
             subject.should have_selector("input[@name='#{filter.field_name}']")
-            subject.should have_selector("input[@value='#{filter.value}']")
-            filter.attrs.should_not be_empty
-            filter.attrs.each do |k, v|
-              subject.should have_selector("input[@#{k}='#{v}']")
-            end
           end
         end
 
@@ -251,6 +246,24 @@ describe WithFilters::ActionViewExtension do
         filter.label_attrs.each do |k, v|
           subject.should have_selector("div[@#{k}='#{v}']")
         end
+      end
+    end
+  end
+
+  describe '#with_filters_text_field_tag(filter)' do
+    let(:options) {{
+      class:       'input_class',
+      label_attrs: {class: 'label_class'}
+    }}
+    let(:filter) {WithFilters::Filter::Text.new(:first_name, :foo, 'Aaron', options)}
+    subject {helper.with_filters_text_field_tag(filter)}
+
+    it 'has an input tag' do
+      subject.should have_selector("input[@name='#{filter.field_name}']")
+      subject.should have_selector("input[@value='#{filter.value}']")
+      filter.attrs.should_not be_empty
+      filter.attrs.each do |k, v|
+        subject.should have_selector("input[@#{k}='#{v}']")
       end
     end
   end
