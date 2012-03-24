@@ -4,7 +4,7 @@ module WithFilters
       def initialize(name, namespace, value, options = {})
         super
 
-        @field_name += '[start]'
+        @field_name << '[start]'
       end
     end
 
@@ -12,7 +12,7 @@ module WithFilters
       def initialize(name, namespace, value, options = {})
         super
 
-        @field_name += '[stop]'
+        @field_name << '[stop]'
       end
     end
 

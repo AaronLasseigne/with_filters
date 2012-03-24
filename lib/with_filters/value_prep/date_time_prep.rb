@@ -42,7 +42,7 @@ module WithFilters
 
       def to_parsed_s(value, advance_options = {}, sec_decimal = nil)
         parsed_s = Time.zone.parse(value).advance(advance_options).to_s(:db)
-        parsed_s += ('%.6f' % sec_decimal)[1..-1] if sec_decimal
+        parsed_s << ('%.6f' % sec_decimal)[1..-1] if sec_decimal
         parsed_s
       end
     end
