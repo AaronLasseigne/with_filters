@@ -8,25 +8,27 @@ module WithFilters
 
       def value
         @prepared_value ||= if @value.is_a?(Hash)
-          {start: self.prepare_start_value(@value[:start]), stop: self.prepare_stop_value(@value[:stop])}
+          {start: prepare_start_value(@value[:start]), stop: prepare_stop_value(@value[:stop])}
         else
           temp = Array.wrap(@value).map do |value|
-            self.add_match(self.prepare_value(value))
+            add_match(prepare_value(value))
           end
           temp.length == 1 ? temp.first : temp
         end
       end
+
+      private
 
       def prepare_value(value)
         value.respond_to?(:strip) ? value.strip : value
       end
 
       def prepare_start_value(value)
-        self.prepare_value(value)
+        prepare_value(value)
       end
 
       def prepare_stop_value(value)
-        self.prepare_value(value)
+        prepare_value(value)
       end
 
       def add_match(value)
