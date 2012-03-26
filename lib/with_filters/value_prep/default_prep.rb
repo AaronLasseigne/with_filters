@@ -11,7 +11,7 @@ module WithFilters
           {start: self.prepare_start_value(@value[:start]), stop: self.prepare_stop_value(@value[:stop])}
         else
           temp = Array.wrap(@value).map do |value|
-            self.prepare_value_with_match(value)
+            self.add_match(self.prepare_value(value))
           end
           temp.length == 1 ? temp.first : temp
         end
@@ -19,10 +19,6 @@ module WithFilters
 
       def prepare_value(value)
         value.respond_to?(:strip) ? value.strip : value
-      end
-
-      def prepare_value_with_match(value)
-        self.add_match(self.prepare_value(value))
       end
 
       def prepare_start_value(value)
