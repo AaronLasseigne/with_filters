@@ -1,5 +1,6 @@
 module WithFilters
   module Filter
+    # @private
     class Choice
       attr_reader :label, :value, :attrs
 

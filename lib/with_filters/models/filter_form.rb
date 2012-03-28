@@ -1,7 +1,11 @@
 module WithFilters
+  # @private
   class FilterForm
     attr_reader :attrs, :to_partial_path, :filters, :param_namespace
 
+    # @see ActionViewExtension#filter_form_for
+    #
+    # @since 0.1.0
     def initialize(records, values = {}, options = {})
       @records = records
       @values  = values
@@ -13,6 +17,7 @@ module WithFilters
       @param_namespace = @records.with_filters_data[:param_namespace]
     end
 
+    # @since 0.1.0
     def input(name, options = {})
       options[:as] = find_as(name, options.has_key?(:choices)) unless options[:as]
       options.merge!(theme: @theme)
@@ -20,6 +25,7 @@ module WithFilters
       @filters.push(WithFilters::Filter.create(name, self.param_namespace, @values[name], options))
     end
 
+    # @since 0.1.0
     def input_range(name, options = {})
       options[:as] = find_as(name, options.has_key?(:choices)) unless options[:as]
       options.merge!(theme: @theme)
@@ -29,6 +35,7 @@ module WithFilters
 
     private
 
+    # @since 0.1.0
     def find_as(name, has_choices)
       return :select if has_choices
 

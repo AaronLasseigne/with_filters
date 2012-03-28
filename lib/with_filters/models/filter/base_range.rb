@@ -1,5 +1,6 @@
 module WithFilters
   module Filter
+    # @private
     class BaseStart < Base
       def initialize(name, namespace, value, options = {})
         super
@@ -8,6 +9,7 @@ module WithFilters
       end
     end
 
+    # @private
     class BaseStop < Base
       def initialize(name, namespace, value, options = {})
         super
@@ -16,6 +18,7 @@ module WithFilters
       end
     end
 
+    # @private
     class BaseRange < Base
       attr_reader :start, :stop
 

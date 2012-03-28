@@ -2,15 +2,58 @@ module WithFilters
   module ActiveRecordModelExtension
     extend ActiveSupport::Concern
 
+    # @private
     module AddData
+      # @return [Hash<:column_types, :param_namespace>] Properties relating to the current filters.
+      #
+      # @since 0.1.0
       attr_accessor :with_filters_data
     end
 
+    # Attaches conditions to a scope.
+    #
+    # @scope class
+    # @overload with_filters(params = nil, options = {})
+    #   @param [Hash] params A hash of values to filter on.
+    #   @param [Hash] options
+    #   @option options [Symbol] :param_namespace ('primary table name') The namespace
+    #     of the filters inside `params`.
+    #   @option options [Hash, Proc] :fields When a hash is passed this is a mapping
+    #     of custom fields to field options. When a proc is passed it is sent `value`
+    #     and `scope` and is expected to return the scope.
+    #   @option options [String] :fields[:column] The database column to map the field to.
+    #   @option options [Symbol] :fields[:match] Determines the way the filter is matched.
+    #     Accepts `:exact`, `:contains`, `:begins_with` and `:ends_with`.
+    #
+    #   @example Basic
+    #     with_filters(params)
+    #
+    #   @example With a custom matching and field name.
+    #     with_filters(params, {fields: {
+    #       given_name: {column: 'first_name', match: :contains}
+    #     }})
+    #
+    #   @example With a custom field using a proc.
+    #     with_filters(params, {fields: {
+    #       full_name: ->(value, scope) {
+    #         first_word, second_word = value.strip.split(/\s+/)
+    #
+    #         if second_word
+    #           scope.where(['first_name LIKE ? OR last_name LIKE ?', first_word, first_word])
+    #         else
+    #           scope.where(['first_name LIKE ? AND last_name LIKE ?', first_word, second_word])
+    #         end
+    #       }
+    #     }})
+    #
+    # @return [ActiveRecord::Relation]
+    #
+    # @note Switched from `scope` to class method because of a bug in Rails 3.2.1 where
+    #   `joins_values` aren't available in scopes.
+    #
+    # @since 0.1.0
     included do
       extend WithFilters::HashExtraction
-
-      # switch from scope to class method because of a bug in Rails 3.2.1 where
-      # joins_values aren't available in scopes
       def self.with_filters(params = nil, options = {})
         relation = self.scoped.extend(AddData).extending do
           def to_a
@@ -74,7 +117,14 @@ module WithFilters
       end
     end
 
+    # @private
     module ClassMethods
+      # @param [ActiveRecord::Relation] relation A relation to find the columns of.
+      # @param [Hash] field_options
+      #
+      # @return [Hash<String>] A mapping of fields to their database types.
+      #
+      # @since 0.1.0
       def find_column_types(relation, field_options)
         field_options = field_options.reject{|k, v| v.is_a?(Proc)}
 

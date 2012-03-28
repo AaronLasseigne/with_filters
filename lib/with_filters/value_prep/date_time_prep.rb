@@ -1,5 +1,6 @@
 module WithFilters
   module ValuePrep
+    # @private
     class DateTimePrep < DefaultPrep
       def prepare_value(value)
         value = super

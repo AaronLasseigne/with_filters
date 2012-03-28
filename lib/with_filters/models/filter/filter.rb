@@ -1,4 +1,5 @@
 module WithFilters
+  # @private
   module Filter
     TYPES = {
       :'datetime-local' => Text,

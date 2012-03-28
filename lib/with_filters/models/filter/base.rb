@@ -1,5 +1,6 @@
 module WithFilters
   module Filter
+    # @private
     class Base
       attr_reader :to_partial_path, :label, :label_attrs, :field_name, :value, :attrs, :choices
 

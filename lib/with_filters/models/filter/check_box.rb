@@ -1,5 +1,6 @@
 module WithFilters
   module Filter
+    # @private
     class CheckBox < Base
       def initialize(name, namespace, value, options = {})
         super

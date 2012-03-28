@@ -1,5 +1,6 @@
 module WithFilters
   module Filter
+    # @private
     class Select < Base
       def initialize(name, namespace, value, options = {})
         choices = options.delete(:choices) if options[:choices].is_a?(String)
