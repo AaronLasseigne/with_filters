@@ -6,7 +6,7 @@ module WithFilters
         value = super
         date_info = Date._parse(value)
 
-        if date_info.has_key?(:sec_fraction)
+        if date_info[:sec_fraction]
           to_parsed_s(value, {}, date_info[:sec_fraction].to_f)
         else
           {start: prepare_start_value(value), stop: prepare_stop_value(value)}
@@ -16,7 +16,7 @@ module WithFilters
       def prepare_start_value(value)
         date_info = Date._parse(value)
 
-        if date_info.has_key?(:sec_fraction)
+        if date_info[:sec_fraction]
           to_parsed_s(value, {}, date_info[:sec_fraction])
         else
           to_parsed_s(value)
@@ -26,15 +26,15 @@ module WithFilters
       def prepare_stop_value(value)
         date_info = Date._parse(value)
 
-        if date_info.has_key?(:sec_fraction)
+        if date_info[:sec_fraction]
           to_parsed_s(value, {}, date_info[:sec_fraction])
-        elsif date_info.has_key?(:sec)
+        elsif date_info[:sec]
           to_parsed_s(value, seconds: 1)
-        elsif date_info.has_key?(:min)
+        elsif date_info[:min]
           to_parsed_s(value, minutes: 1)
-        elsif date_info.has_key?(:hour)
+        elsif date_info[:hour]
           to_parsed_s(value, hours: 1)
-        elsif date_info.has_key?(:mday)
+        elsif date_info[:mday]
           to_parsed_s(value, days: 1)
         end
       end

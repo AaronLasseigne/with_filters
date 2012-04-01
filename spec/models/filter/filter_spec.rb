@@ -7,7 +7,6 @@ describe WithFilters::Filter do
         subject {described_class.create(:email, :foo, '', as: :email)}
 
         it 'sets the input type' do
-          subject.attrs.has_key?(:type).should be_true
           subject.attrs[:type].should == 'email'
         end
 
@@ -24,7 +23,6 @@ describe WithFilters::Filter do
         subject {described_class.create_range(:year, :foo, {}, as: :number)}
 
         it 'sets the input type' do
-          subject.attrs.has_key?(:type).should be_true
           subject.attrs[:type].should == 'number'
         end
 

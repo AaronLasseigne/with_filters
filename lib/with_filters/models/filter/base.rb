@@ -10,7 +10,7 @@ module WithFilters
         @theme       = options.delete(:theme)
         @label       = options.delete(:label) || name.to_s.titleize
         @label_attrs = options.delete(:label_attrs) || {}
-        @choices     = options.has_key?(:choices) ? Choices.new(options.delete(:choices) || [], {selected: value}) : nil
+        @choices     = options[:choices] ? Choices.new(options.delete(:choices) || [], {selected: value}) : nil
         @attrs       = options
 
         @field_name      = "#{namespace}[#{name}]"

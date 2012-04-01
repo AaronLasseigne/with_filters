@@ -19,7 +19,7 @@ module WithFilters
 
     # @since 0.1.0
     def input(name, options = {})
-      options[:as] = find_as(name, options.has_key?(:choices)) unless options[:as]
+      options[:as] = find_as(name, options[:choices]) unless options[:as]
       options.merge!(theme: @theme)
 
       @filters.push(WithFilters::Filter.create(name, self.param_namespace, @values[name], options))
@@ -27,7 +27,7 @@ module WithFilters
 
     # @since 0.1.0
     def input_range(name, options = {})
-      options[:as] = find_as(name, options.has_key?(:choices)) unless options[:as]
+      options[:as] = find_as(name, options[:choices]) unless options[:as]
       options.merge!(theme: @theme)
 
       @filters.push(WithFilters::Filter.create_range(name, self.param_namespace, @values[name] || {}, options))

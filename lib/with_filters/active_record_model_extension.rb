@@ -100,7 +100,7 @@ module WithFilters
               when :Array
                 relation.where([Array.new(value.size, "#{quoted_field} LIKE ?").join(' OR '), *value])
               when :Hash
-                if ![:datetime, :timestamp].include?(relation.with_filters_data[:column_types][field]) or Date._parse(value[:start]).has_key?(:sec_fraction)
+                if ![:datetime, :timestamp].include?(relation.with_filters_data[:column_types][field]) or Date._parse(value[:start])[:sec_fraction]
                   relation.where(["#{quoted_field} BETWEEN :start AND :stop", value])
                 else
                   relation.where(["#{quoted_field} >= :start AND #{quoted_field} < :stop", value])
