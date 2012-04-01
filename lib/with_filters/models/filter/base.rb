@@ -11,9 +11,9 @@ module WithFilters
         @label       = options.delete(:label) || name.to_s.titleize
         @label_attrs = options.delete(:label_attrs) || {}
         @choices     = options[:choices] ? Choices.new(options.delete(:choices) || [], {selected: value}) : nil
+        @field_name  = options[:field_name] || "#{namespace}[#{name}]"
         @attrs       = options
 
-        @field_name      = "#{namespace}[#{name}]"
         @to_partial_path = create_partial_path
       end
 

@@ -16,6 +16,12 @@ describe WithFilters::Filter::Base do
     end
 
     context 'options' do
+      context ':field_name' do
+        it 'manually sets the field name' do
+          field_name = 'fname'
+          described_class.new(:first_name, :foo, 'Aaron', field_name: field_name).field_name.should == field_name
+        end
+      end
       context ':label' do
         it 'uses the provided label' do
           label = 'Given Name'
