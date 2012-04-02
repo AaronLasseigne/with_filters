@@ -1,7 +1,6 @@
 module WithFilters
-  # @private
   class FilterForm
-    attr_reader :attrs, :to_partial_path, :filters, :param_namespace
+    attr_reader :attrs, :to_partial_path, :filters, :param_namespace, :hidden_filters
 
     # @see ActionViewExtension#filter_form_for
     #
@@ -12,19 +11,39 @@ module WithFilters
 
       @theme           = options.delete(:theme)
       @attrs           = options.reverse_merge(novalidate: 'novalidate', method: 'get')
+
       @to_partial_path = self.class.name.underscore
+      @hidden_filters  = []
       @filters         = []
       @param_namespace = @records.with_filters_data[:param_namespace]
     end
 
+    # @see input
+    #
+    # @since 0.1.0
+    def hidden(name, options = {})
+      options.merge!(as: :hidden)
+
+      input(name, options)
+    end
+
+    # @param [Symbol] name
+    # @param [Hash] options
+    #
     # @since 0.1.0
     def input(name, options = {})
       options[:as] = find_as(name, options[:choices]) unless options[:as]
       options.merge!(theme: @theme)
+      as = options[:as]
 
-      @filters.push(WithFilters::Filter.create(name, self.param_namespace, @values[name], options))
+      filter = WithFilters::Filter.create(name, self.param_namespace, @values[name], options)
+
+      (as == :hidden ? @hidden_filters : @filters).push(filter)
     end
 
+    # @param [Symbol] name
+    # @param [Hash] options
+    #
     # @since 0.1.0
     def input_range(name, options = {})
       options[:as] = find_as(name, options[:choices]) unless options[:as]
@@ -35,6 +54,12 @@ module WithFilters
 
     private
 
+    # Converts a database column type to an input type.
+    #
+    # @param [Symbol] name
+    # @param [Boolean] has_choices Indicates whether or not there are :choices
+    #   associated with the input data.
+    #
     # @since 0.1.0
     def find_as(name, has_choices)
       return :select if has_choices

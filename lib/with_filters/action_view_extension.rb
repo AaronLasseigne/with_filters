@@ -24,9 +24,20 @@ module WithFilters
       render(partial: filter_form.to_partial_path, locals: {filter_form: filter_form})
     end
 
+    # Create hidden inputs.
+    #
+    # @param [Array<Filter>] hidden_filters
+    #
+    # @since 0.1.0
+    def with_filters_hidden(hidden_filters)
+      hidden_filters.map{|hidden_filter|
+        hidden_field_tag(hidden_filter.field_name, hidden_filter.value, hidden_filter.attrs)
+      }.join("\n")
+    end
+
     # Create an input based on the type of `filter` provided.
     #
-    # @param filter [Filter]
+    # @param [Filter] filter
     #
     # @since 0.1.0
     def with_filters_input(filter)
@@ -35,7 +46,7 @@ module WithFilters
 
     # Create an text like `input` tag based on the `filter`.
     #
-    # @param filter [Filter]
+    # @param [Filter] filter
     #
     # @since 0.1.0
     def with_filters_text_field_tag(filter)
@@ -44,7 +55,7 @@ module WithFilters
 
     # Create a `label` tag based on the `filter`.
     #
-    # @param filter [Filter]
+    # @param [Filter] filter
     #
     # @since 0.1.0
     def with_filters_label_tag(filter)
@@ -54,7 +65,7 @@ module WithFilters
     # Create a `label` tag for individual fields or a `div` tag in its place in
     # the case of fields where the `label` tags are used for individual items.
     #
-    # @param filter [Filter]
+    # @param [Filter] filter
     #
     # @since 0.1.0
     def with_filters_label(filter)
@@ -67,7 +78,7 @@ module WithFilters
 
     # Create a `select` tag based on the `filter`.
     #
-    # @param filter [Filter]
+    # @param [Filter] filter
     #
     # @since 0.1.0
     def with_filters_select_tag(filter)

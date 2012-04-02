@@ -9,6 +9,18 @@ describe WithFilters::ActionViewExtension do
     end
   end
 
+  describe '#with_filters_hidden(hidden_filters)' do
+    it 'outputs hidden input tags' do
+      hidden1 = WithFilters::Filter::Text.new(:hidden1, :foo, 1, {})
+      hidden2 = WithFilters::Filter::Text.new(:hidden2, :foo, 2, {})
+
+      output = helper.with_filters_hidden([hidden1, hidden2])
+
+      output.should have_selector('input[type="hidden"][value="1"]')
+      output.should have_selector('input[type="hidden"][value="2"]')
+    end
+  end
+
   describe '#with_filters_input(filter)' do
     context 'with a single input' do
       context 'types' do

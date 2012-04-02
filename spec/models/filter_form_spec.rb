@@ -8,6 +8,7 @@ describe WithFilters::FilterForm do
       its(:attrs)           {should == {novalidate: 'novalidate', method: 'get'}}
       its(:to_partial_path) {should == File.join('with_filters', 'filter_form')}
       its(:filters)         {should be_empty}
+      its(:hidden_filters)  {should be_empty}
       its(:param_namespace) {should == :nobel_prize_winners}
     end
 
@@ -35,6 +36,17 @@ describe WithFilters::FilterForm do
     end
   end
 
+  describe '#hidden(name, options = {})' do
+    it 'adds a hidden filter' do
+      ff = described_class.new(NobelPrizeWinner.with_filters)
+      ff.hidden(:hidden)
+
+      ff.hidden_filters.length.should == 1
+      ff.hidden_filters.first.should be_a_kind_of(WithFilters::Filter::Text)
+      ff.hidden_filters.first.attrs[:type].should == 'hidden'
+    end
+  end
+
   describe '#input(name, options = {})' do
     it 'adds a filter' do
       label = 'Given Name'
@@ -47,6 +59,16 @@ describe WithFilters::FilterForm do
     end
 
     let(:ff) {described_class.new(FieldFormatTester.with_filters)}
+
+    context 'the type is :hidden' do
+      it 'adds to the hidden_filters list' do
+        ff.input(:foo, as: :hidden)
+
+        ff.filters.should be_empty
+        ff.hidden_filters[0].should be_a_kind_of(WithFilters::Filter::Text)
+        ff.hidden_filters[0].attrs[:type].should == 'hidden'
+      end
+    end
 
     context 'the database field is an integer, float or decimal' do
       it 'uses a number filter' do
@@ -102,7 +124,7 @@ describe WithFilters::FilterForm do
       end
     end
 
-    context 'the database field is a text' do
+    context 'the database field is text' do
       context 'and the name includes "email"' do
         it 'uses an email filter' do
           ff.input(:email_field)
