@@ -9,8 +9,8 @@ module WithFilters
       @records = records
       @values  = values
 
-      @theme           = options.delete(:theme)
-      @attrs           = options.reverse_merge(novalidate: 'novalidate', method: 'get')
+      @theme = options.delete(:theme)
+      @attrs = options.reverse_merge(novalidate: 'novalidate', method: 'get')
 
       @to_partial_path = self.class.name.underscore
       @hidden_filters  = []
