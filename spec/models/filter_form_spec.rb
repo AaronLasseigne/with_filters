@@ -154,7 +154,7 @@ describe WithFilters::FilterForm do
     end
 
     context 'options' do
-      context ':choices' do
+      context ':collection' do
         it 'defaults to a select filter' do
           ff = described_class.new(FieldFormatTester.with_filters)
           ff.input(:text_field)
@@ -164,10 +164,10 @@ describe WithFilters::FilterForm do
         end
       end
 
-      context 'no :choices' do
+      context 'no :collection' do
         it 'defaults to a select filter' do
           ff = described_class.new(FieldFormatTester.with_filters)
-          ff.input(:text_field, choices: 1..10)
+          ff.input(:text_field, collection: 1..10)
 
           ff.filters.first.should be_a_kind_of(WithFilters::Filter::Select)
         end

@@ -43,7 +43,7 @@ describe WithFilters::ActionViewExtension do
         end
 
         context 'radio' do
-          let(:filter) {WithFilters::Filter::Radio.new(:gender, :foo, 'Male', options.merge(choices: [['Male', {class: 'choice_class'}], 'Female']))}
+          let(:filter) {WithFilters::Filter::Radio.new(:gender, :foo, 'Male', options.merge(collection: [['Male', {class: 'choice_class'}], 'Female']))}
           subject {helper.with_filters_input(filter)}
 
           it 'has a label for the group' do
@@ -51,7 +51,7 @@ describe WithFilters::ActionViewExtension do
           end
 
           it 'has a label tag for each choice' do
-            filter.choices.each do |choice|
+            filter.collection.each do |choice|
               subject.should have_selector("label[text()='#{choice.label}']")
             end
           end
@@ -59,7 +59,7 @@ describe WithFilters::ActionViewExtension do
           it 'has an input tag for each choice' do
             subject.should have_selector("input[@type='radio']")
             subject.should have_selector("input[@name='#{filter.field_name}']")
-            filter.choices.each do |choice|
+            filter.collection.each do |choice|
               subject.should have_selector("input[@value='#{choice.value}']")
               if choice.value == filter.value
                 subject.should have_selector("input[@checked='checked']")
@@ -72,9 +72,9 @@ describe WithFilters::ActionViewExtension do
         end
 
         context 'check_box' do
-          let(:choices) {['Chemistry', 'Literature', 'Peace', 'Physics', 'Physiology or Medicine']}
+          let(:collection) {['Chemistry', 'Literature', 'Peace', 'Physics', 'Physiology or Medicine']}
 
-          context 'without choices' do
+          context 'without collection' do
             let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, true)}
             subject {helper.with_filters_input(filter)}
 
@@ -90,8 +90,8 @@ describe WithFilters::ActionViewExtension do
             end
           end
 
-          context 'with choices' do
-            let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, ['Chemistry', 'Peace'], options.merge(choices: choices))}
+          context 'with collection' do
+            let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, ['Chemistry', 'Peace'], options.merge(collection: collection))}
             subject {helper.with_filters_input(filter)}
 
             it 'has a label for the group' do
@@ -99,7 +99,7 @@ describe WithFilters::ActionViewExtension do
             end
 
             it 'has a label tag for each choice' do
-              filter.choices.each do |choice|
+              filter.collection.each do |choice|
                 subject.should have_selector("label[text()='#{choice.label}']")
               end
             end
@@ -107,7 +107,7 @@ describe WithFilters::ActionViewExtension do
             it 'has an input tag for each choice' do
               subject.should have_selector("input[@type='checkbox']")
               subject.should have_selector("input[@name='#{filter.field_name}']")
-              filter.choices.each do |choice|
+              filter.collection.each do |choice|
                 subject.should have_selector("input[@value='#{choice.value}']")
                 if filter.value.include?(choice.value)
                   subject.should have_selector("input[@checked='checked']")
@@ -148,7 +148,7 @@ describe WithFilters::ActionViewExtension do
           end
 
           context 'select' do
-            let(:filter) {WithFilters::Filter::SelectRange.new(:year, :foo, {start: 1900, stop: 1905}, choices: 1900..1910)}
+            let(:filter) {WithFilters::Filter::SelectRange.new(:year, :foo, {start: 1900, stop: 1905}, collection: 1900..1910)}
             subject {helper.with_filters_input(filter)}
 
             context 'start' do
@@ -178,15 +178,15 @@ describe WithFilters::ActionViewExtension do
         end
       end
 
-      context ':choices' do
-        it 'outputs all choices' do
-          choices = ['Chemistry', 'Literature', 'Peace', 'Physics', 'Physiology or Medicine']
+      context ':collection' do
+        it 'outputs all collection' do
+          collection = ['Chemistry', 'Literature', 'Peace', 'Physics', 'Physiology or Medicine']
           output = helper.filter_form_for(NobelPrize.with_filters) do |f|
-            f.input :category, choices: choices
+            f.input :category, collection: collection
           end
 
           output.should have_selector("label[text()='Category']")
-          choices.each do |choice|
+          collection.each do |choice|
             output.should have_selector("option[text()='#{choice}']")
             output.should have_selector("option[@value='#{choice}']")
           end
@@ -248,7 +248,7 @@ describe WithFilters::ActionViewExtension do
 
     context 'a group of tags with individual labels and one form label' do
       let(:options) {{label_attrs: {class: 'label_class'}}}
-      let(:filter) {WithFilters::Filter::Radio.new(:gender, :foo, 'Male', options.merge(choices: ['Male', 'Female']))}
+      let(:filter) {WithFilters::Filter::Radio.new(:gender, :foo, 'Male', options.merge(collection: ['Male', 'Female']))}
       subject {helper.with_filters_label(filter)}
 
       it 'creates a div to act as a label tag for the group' do
@@ -285,7 +285,7 @@ describe WithFilters::ActionViewExtension do
       class:       'input_class',
       label_attrs: {class: 'label_class'}
     }}
-    let(:filter) {WithFilters::Filter::Select.new(:gender, :foo, 'Male', options.merge(choices: [['Male', {class: 'choice_class'}], 'Female']))}
+    let(:filter) {WithFilters::Filter::Select.new(:gender, :foo, 'Male', options.merge(collection: [['Male', {class: 'choice_class'}], 'Female']))}
     subject {helper.with_filters_select_tag(filter)}
 
     it 'creates a select field' do
@@ -293,7 +293,7 @@ describe WithFilters::ActionViewExtension do
     end
 
     it 'has an option for each choice' do
-      filter.choices.each do |choice|
+      filter.collection.each do |choice|
         subject.should have_selector("option[@value='#{choice.value}']")
         if choice.value == filter.value
           subject.should have_selector("option[@selected='selected']")
@@ -304,8 +304,8 @@ describe WithFilters::ActionViewExtension do
       end
     end
 
-    context 'where :choices is a String' do
-      let(:filter) {WithFilters::Filter::Select.new(:gender, :foo, 'Male', choices: '<option>Male</option><option value="1">Female</option>')}
+    context 'where :collection is a String' do
+      let(:filter) {WithFilters::Filter::Select.new(:gender, :foo, 'Male', collection: '<option>Male</option><option value="1">Female</option>')}
       subject {helper.with_filters_select_tag(filter)}
 
       context 'option does not contain a value attribute' do
@@ -316,7 +316,7 @@ describe WithFilters::ActionViewExtension do
       end
 
       context 'option contains a value attribute' do
-        let(:filter) {WithFilters::Filter::Select.new(:gender, :foo, 1, choices: '<option>Male</option><option value="1">Female</option>')}
+        let(:filter) {WithFilters::Filter::Select.new(:gender, :foo, 1, collection: '<option>Male</option><option value="1">Female</option>')}
         subject {helper.with_filters_select_tag(filter)}
 
         it 'should mark an option as selected' do

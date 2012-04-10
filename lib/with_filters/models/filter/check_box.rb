@@ -5,11 +5,11 @@ module WithFilters
       def initialize(name, namespace, value, options = {})
         super
 
-        @to_partial_path << 'es' unless self.choices.nil?
+        @to_partial_path << 'es' unless self.collection.nil?
       end
 
       def selected?
-        if self.choices.nil?
+        if self.collection.nil?
           value.to_s == 'true'
         else
           value.present?

@@ -29,9 +29,9 @@ module WithFilters
         super
 
         start_attrs.reverse_merge!(@attrs)
-        start_attrs.reverse_merge!(label: self.label, label_attrs: self.label_attrs, choices: @choices)
+        start_attrs.reverse_merge!(label: self.label, label_attrs: self.label_attrs, collection: @collection)
         stop_attrs.reverse_merge!(@attrs)
-        stop_attrs.reverse_merge!(label: self.label, label_attrs: self.label_attrs, choices: @choices)
+        stop_attrs.reverse_merge!(label: self.label, label_attrs: self.label_attrs, collection: @collection)
 
         base_class_name = self.class.to_s.match(/^(.*)Range$/).captures.first
         @start = "#{base_class_name}Start".constantize.new(name, namespace, value[:start], start_attrs)

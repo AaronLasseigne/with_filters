@@ -1,5 +1,5 @@
 <%= with_filters_label(filter) %>
-<% filter.choices.each do |choice| %>
+<% filter.collection.each do |choice| %>
   <%= label_tag("#{filter.field_name}[#{choice.value}]", choice.label) %>
   <%= check_box_tag(filter.field_name, choice.value, choice.selected?, choice.attrs) %>
 <% end %>

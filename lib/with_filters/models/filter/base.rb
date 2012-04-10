@@ -2,7 +2,7 @@ module WithFilters
   module Filter
     # @private
     class Base
-      attr_reader :to_partial_path, :label, :label_attrs, :field_name, :value, :attrs, :choices
+      attr_reader :to_partial_path, :label, :label_attrs, :field_name, :value, :attrs, :collection
 
       def initialize(name, namespace, value, options = {})
         @value = value
@@ -10,7 +10,7 @@ module WithFilters
         @theme       = options.delete(:theme)
         @label       = options.delete(:label) || name.to_s.titleize
         @label_attrs = options.delete(:label_attrs) || {}
-        @choices     = options[:choices] ? Choices.new(options.delete(:choices) || [], {selected: value}) : nil
+        @collection  = options[:collection] ? Collection.new(options.delete(:collection) || [], {selected: value}) : nil
         @field_name  = options[:field_name] || "#{namespace}[#{name}]"
         @attrs       = options
 

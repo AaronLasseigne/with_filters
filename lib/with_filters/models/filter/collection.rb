@@ -1,7 +1,7 @@
 module WithFilters
   module Filter
     # @private
-    class Choices < Array
+    class Collection < Array
       def initialize(choices, options = {})
         choices = choices.to_a if choices.is_a?(Range)
 

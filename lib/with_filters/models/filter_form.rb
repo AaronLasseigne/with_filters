@@ -32,7 +32,7 @@ module WithFilters
     #
     # @since 0.1.0
     def input(name, options = {})
-      options[:as] = find_as(name, options[:choices]) unless options[:as]
+      options[:as] = find_as(name, options[:collection]) unless options[:as]
       options.merge!(theme: @theme)
       as = options[:as]
 
@@ -46,7 +46,7 @@ module WithFilters
     #
     # @since 0.1.0
     def input_range(name, options = {})
-      options[:as] = find_as(name, options[:choices]) unless options[:as]
+      options[:as] = find_as(name, options[:collection]) unless options[:as]
       options.merge!(theme: @theme)
 
       @filters.push(WithFilters::Filter.create_range(name, self.param_namespace, @values[name] || {}, options))
@@ -57,12 +57,12 @@ module WithFilters
     # Converts a database column type to an input type.
     #
     # @param [Symbol] name
-    # @param [Boolean] has_choices Indicates whether or not there are :choices
+    # @param [Boolean] has_collection Indicates whether or not there is a collection
     #   associated with the input data.
     #
     # @since 0.1.0
-    def find_as(name, has_choices)
-      return :select if has_choices
+    def find_as(name, has_collection)
+      return :select if has_collection
 
       case @records.with_filters_data[:column_types][name]
       when :integer, :float, :decimal then :number

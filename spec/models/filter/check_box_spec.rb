@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe WithFilters::Filter::CheckBox do
   describe '#initialize(name, namespace, value, options = {})' do
-    context 'without choices' do
+    context 'without collection' do
       subject {described_class.new(:active, :foo, true)}
 
       its(:to_partial_path) {should == 'with_filters/filter/check_box'}
@@ -17,9 +17,9 @@ describe WithFilters::Filter::CheckBox do
       end
     end
 
-    context 'with choices' do
-      let(:choices) {['Chemistry', 'Literature', 'Peace', 'Physics', 'Physiology or Medicine']}
-      subject {described_class.new(:categories, :foo, ['Chemistry', 'Physics'], choices: choices)}
+    context 'with collection' do
+      let(:collection) {['Chemistry', 'Literature', 'Peace', 'Physics', 'Physiology or Medicine']}
+      subject {described_class.new(:categories, :foo, ['Chemistry', 'Physics'], collection: collection)}
 
       its(:to_partial_path) {should == 'with_filters/filter/check_boxes'}
 
@@ -28,7 +28,7 @@ describe WithFilters::Filter::CheckBox do
       end
 
       context 'and there are not values' do
-        subject {described_class.new(:categories, :foo, [], choices: choices)}
+        subject {described_class.new(:categories, :foo, [], collection: collection)}
         its(:selected?) {should be false}
       end
     end

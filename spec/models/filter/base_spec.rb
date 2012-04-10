@@ -10,8 +10,8 @@ describe WithFilters::Filter::Base do
       its(:label_attrs)     {should == {}}
       its(:field_name)      {should == 'foo[first_name]'}
       its(:value)           {should == 'Aaron'}
-      it 'has no choices' do
-        subject.choices.should be_nil
+      it 'has no collection' do
+        subject.collection.should be_nil
       end
     end
 
@@ -39,12 +39,12 @@ describe WithFilters::Filter::Base do
         end
       end
 
-      context ':choices' do
-        it 'creates choices from the provided list' do
-          choices = described_class.new(:gender, :foo, 'Male', choices: ['Male', 'Female']).choices
-          choices.should be_a_kind_of(WithFilters::Filter::Choices)
-          choices.first.label.should == 'Male'
-          choices.last.label.should  == 'Female'
+      context ':collection' do
+        it 'creates collection from the provided list' do
+          collection = described_class.new(:gender, :foo, 'Male', collection: ['Male', 'Female']).collection
+          collection.should be_a_kind_of(WithFilters::Filter::Collection)
+          collection.first.label.should == 'Male'
+          collection.last.label.should  == 'Female'
         end
       end
 

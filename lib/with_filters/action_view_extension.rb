@@ -69,7 +69,7 @@ module WithFilters
     #
     # @since 0.1.0
     def with_filters_label(filter)
-      if [WithFilters::Filter::Radio, WithFilters::Filter::CheckBox].include?(filter.class) and filter.choices.any?
+      if [WithFilters::Filter::Radio, WithFilters::Filter::CheckBox].include?(filter.class) and filter.collection.any?
         content_tag(:div, filter.label, filter.label_attrs)
       else
         with_filters_label_tag(filter)
@@ -82,9 +82,9 @@ module WithFilters
     #
     # @since 0.1.0
     def with_filters_select_tag(filter)
-      choices = filter.choices
-      unless filter.choices.is_a?(String)
-        choices = filter.choices.map do |choice|
+      collection = filter.collection
+      unless filter.collection.is_a?(String)
+        collection = filter.collection.map do |choice|
           html_attributes = choice.attrs.length > 0 ? ' ' + choice.attrs.map {|k, v| %(#{k.to_s}="#{v}")}.join(' ') : ''
           selected_attribute = choice.selected? ? ' selected="selected"' : ''
 
@@ -92,7 +92,7 @@ module WithFilters
         end.join("\n")
       end
 
-      select_tag(filter.field_name, choices.html_safe, filter.attrs)
+      select_tag(filter.field_name, collection.html_safe, filter.attrs)
     end
   end
 end
