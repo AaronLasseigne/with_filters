@@ -326,4 +326,20 @@ describe WithFilters::ActionViewExtension do
       end
     end
   end
+
+  describe '#with_filters_action_tag(action)' do
+    context 'action' do
+      context ':submit' do
+        it 'returns a submit button' do
+          helper.with_filters_action_tag(WithFilters::Action.new(:submit)).should have_selector('input[type="submit"]')
+        end
+      end
+
+      context ':reset' do
+        it 'returns a reset button' do
+          helper.with_filters_action_tag(WithFilters::Action.new(:reset)).should have_selector('button[type="reset"]')
+        end
+      end
+    end
+  end
 end

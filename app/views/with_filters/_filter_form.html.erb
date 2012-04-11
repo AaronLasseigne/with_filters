@@ -4,4 +4,8 @@
   <% filter_form.filters.each do |filter| %>
     <%= with_filters_input(filter) %>
   <% end %>
+
+  <% filter_form.actions.each do |action|  %>
+    <%= with_filters_action_tag(action) %>
+  <% end %>
 <% end %>

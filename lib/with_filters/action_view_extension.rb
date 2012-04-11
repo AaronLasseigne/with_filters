@@ -94,5 +94,17 @@ module WithFilters
 
       select_tag(filter.field_name, collection.html_safe, filter.attrs)
     end
+
+    # @param [WithFilters::Action] action
+    #
+    # @since 0.1.0
+    def with_filters_action_tag(action)
+      case action.type
+      when :submit
+        submit_tag(action.attrs.delete(:value), action.attrs)
+      when :reset
+        button_tag(action.attrs.delete(:value) || 'Reset', action.attrs)
+      end
+    end
   end
 end

@@ -7,9 +7,10 @@ describe WithFilters::FilterForm do
 
       its(:attrs)           {should == {novalidate: 'novalidate', method: 'get'}}
       its(:to_partial_path) {should == File.join('with_filters', 'filter_form')}
+      its(:param_namespace) {should be :nobel_prize_winners}
       its(:filters)         {should be_empty}
       its(:hidden_filters)  {should be_empty}
-      its(:param_namespace) {should == :nobel_prize_winners}
+      its(:actions)         {should be_empty}
     end
 
     context 'options' do
@@ -184,6 +185,28 @@ describe WithFilters::FilterForm do
       ff.filters.length.should == 1
       ff.filters.first.should be_a_kind_of(WithFilters::Filter::BaseRange)
       ff.filters.first.start.label.should == label
+    end
+  end
+
+  describe '#action(type, options = {})' do
+    context 'type' do
+      context ':submit' do
+        it 'adds an action' do
+          ff = described_class.new(NobelPrizeWinner.with_filters)
+          ff.action(:submit)
+
+          ff.actions.first.should be_a_kind_of(WithFilters::Action)
+        end
+      end
+
+      context ':reset' do
+        it 'adds an action' do
+          ff = described_class.new(NobelPrizeWinner.with_filters)
+          ff.action(:reset)
+
+          ff.actions.first.should be_a_kind_of(WithFilters::Action)
+        end
+      end
     end
   end
 end

@@ -1,6 +1,6 @@
 module WithFilters
   class FilterForm
-    attr_reader :attrs, :to_partial_path, :filters, :param_namespace, :hidden_filters
+    attr_reader :attrs, :to_partial_path, :filters, :param_namespace, :hidden_filters, :actions
 
     # @see ActionViewExtension#filter_form_for
     #
@@ -13,9 +13,10 @@ module WithFilters
       @attrs = options.reverse_merge(novalidate: 'novalidate', method: 'get')
 
       @to_partial_path = self.class.name.underscore
+      @param_namespace = @records.with_filters_data[:param_namespace]
       @hidden_filters  = []
       @filters         = []
-      @param_namespace = @records.with_filters_data[:param_namespace]
+      @actions         = []
     end
 
     # @see input
@@ -50,6 +51,14 @@ module WithFilters
       options.merge!(theme: @theme)
 
       @filters.push(WithFilters::Filter.create_range(name, self.param_namespace, @values[name] || {}, options))
+    end
+
+    # @param [Symbol] type
+    # @param [Hash] options
+    #
+    # @since 0.1.0
+    def action(type, options = {})
+      @actions.push(WithFilters::Action.new(type, options))
     end
 
     private
