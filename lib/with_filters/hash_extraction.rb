@@ -16,14 +16,15 @@ module WithFilters
     #
     # @since 0.1.0
     def extract_hash_value(hash, key)
-      return hash[key] if key.is_a?(Symbol)
-
-      first_key, remaining_content = key.to_s.match(/^([^\[]+)(.*)$/).captures
-
-      if remaining_content == ''
-        hash[first_key]
+      key  = key.to_s
+      hash = hash.stringify_keys
+      
+      if hash[key]
+        hash[key]
       else
-        eval "hash[first_key.to_sym]#{remaining_content} rescue nil"
+        first_key, remaining_content = key.to_s.match(/^([^\[]+)(.*)$/).captures
+
+        eval "hash[first_key]#{remaining_content.gsub(/\[/, '["').gsub(/]/, '"]')} rescue nil"
       end
     end
   end
