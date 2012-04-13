@@ -58,8 +58,8 @@ describe WithFilters::ActionViewExtension do
 
           it 'has an input tag for each choice' do
             subject.should have_selector("input[@type='radio']")
-            subject.should have_selector("input[@name='#{filter.field_name}']")
             filter.collection.each do |choice|
+              subject.should have_selector("input[@name='#{choice.field_name}']")
               subject.should have_selector("input[@value='#{choice.value}']")
               if choice.value == filter.value
                 subject.should have_selector("input[@checked='checked']")
@@ -106,8 +106,8 @@ describe WithFilters::ActionViewExtension do
 
             it 'has an input tag for each choice' do
               subject.should have_selector("input[@type='checkbox']")
-              subject.should have_selector("input[@name='#{filter.field_name}']")
               filter.collection.each do |choice|
+                subject.should have_selector("input[@name='#{choice.field_name}']")
                 subject.should have_selector("input[@value='#{choice.value}']")
                 if filter.value.include?(choice.value)
                   subject.should have_selector("input[@checked='checked']")

@@ -10,8 +10,8 @@ module WithFilters
         @theme       = options.delete(:theme)
         @label       = options.delete(:label) || name.to_s.titleize
         @label_attrs = options.delete(:label_attrs) || {}
-        @collection  = options[:collection] ? Collection.new(options.delete(:collection) || [], {selected: value}) : nil
         @field_name  = options[:field_name] || "#{namespace}[#{name}]"
+        @collection  = options[:collection] ? Collection.new(@field_name, options.delete(:collection) || [], {selected: value}) : nil
         @attrs       = options
 
         @to_partial_path = create_partial_path

@@ -2,7 +2,7 @@ module WithFilters
   module Filter
     # @private
     class Collection < Array
-      def initialize(choices, options = {})
+      def initialize(field_name, choices, options = {})
         choices = choices.to_a if choices.is_a?(Range)
 
         selected = Array.wrap(options[:selected]).map(&:to_s)
@@ -20,7 +20,7 @@ module WithFilters
 
           choice_options[:selected] = 'selected' if selected.include?(value.to_s)
 
-          self.push(Choice.new(text, value, choice_options))
+          self.push(Choice.new(field_name, text, value, choice_options))
         end
       end
     end

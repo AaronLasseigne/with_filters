@@ -1,5 +1,5 @@
 <%= with_filters_label(filter) %>
 <% filter.collection.each do |choice| %>
-  <%= label_tag("#{filter.field_name}[#{choice.value}]", choice.label) %>
-  <%= radio_button_tag(filter.field_name, choice.value, choice.selected?, choice.attrs) %>
+  <%= label_tag(choice.attrs[:id], choice.label) %>
+  <%= radio_button_tag(choice.field_name, choice.value, choice.selected?, choice.attrs) %>
 <% end %>
