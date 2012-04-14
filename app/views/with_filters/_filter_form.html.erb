@@ -2,10 +2,13 @@
   <%= with_filters_hidden(filter_form.hidden_filters) %>
 
   <% filter_form.filters.each do |filter| %>
-    <%= with_filters_input(filter) %>
+    <%= with_filters_input(filter) %><br/>
   <% end %>
 
-  <% filter_form.actions.each do |action|  %>
-    <%= with_filters_action_tag(action) %>
+  <% if filter_form.actions.any? %>
+    <br/>
+    <% filter_form.actions.each do |action|  %>
+      <%= with_filters_action_tag(action) %>
+    <% end %>
   <% end %>
 <% end %>
