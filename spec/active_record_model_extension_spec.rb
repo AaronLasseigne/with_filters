@@ -54,11 +54,11 @@ describe 'WithFilters::ActiveRecordModelExtention' do
       end
 
       context 'where value is a boolean (and the column on the table is a :boolean)' do
-        it 'filters when "true" and "false" are passed' do
-          np = NobelPrize.with_filters({nobel_prizes: {shared: 'true'}})
+        it 'filters when "on" or "off" is passed' do
+          np = NobelPrize.with_filters({nobel_prizes: {shared: 'on'}})
           np.length.should == 7
 
-          np = NobelPrize.with_filters({nobel_prizes: {shared: 'false'}})
+          np = NobelPrize.with_filters({nobel_prizes: {shared: 'off'}})
           np.length.should == 9
         end
       end

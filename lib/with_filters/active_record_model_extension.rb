@@ -93,7 +93,7 @@ module WithFilters
             quoted_field = relation.connection.quote_column_name(db_column_name)
             quoted_field = "#{db_column_table_name}.#{quoted_field}" if db_column_table_name
 
-            value = WithFilters::ValuePrep.prepare(relation.with_filters_data[:column_types][field], value, field_options)
+            value = WithFilters::ValuePrep.prepare(relation.with_filters_data[:column_types][field.to_sym], value, field_options)
 
             # attach filter
             relation = case value.class.name.to_sym

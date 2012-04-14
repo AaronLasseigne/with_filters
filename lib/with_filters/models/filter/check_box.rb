@@ -10,7 +10,7 @@ module WithFilters
 
       def selected?
         if self.collection.nil?
-          value.to_s == 'true'
+          value.to_s == 'on'
         else
           value.present?
         end

@@ -3,7 +3,7 @@ module WithFilters
     # @private
     class BooleanPrep < DefaultPrep
       def prepare_value(value)
-        (super == 'true')
+        (super == 'on')
       end
     end
   end

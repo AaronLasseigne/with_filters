@@ -75,7 +75,7 @@ describe WithFilters::ActionViewExtension do
           let(:collection) {['Chemistry', 'Literature', 'Peace', 'Physics', 'Physiology or Medicine']}
 
           context 'without collection' do
-            let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, true)}
+            let(:filter) {WithFilters::Filter::CheckBox.new(:gender, :foo, 'on')}
             subject {helper.with_filters_input(filter)}
 
             it 'has a label tag' do
