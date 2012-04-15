@@ -44,7 +44,7 @@ In your controller:
           scope.where(['first_name LIKE ? AND last_name LIKE ?', first_word, second_word])
         end
       }
-    })
+    }).order('created_at DESC').page(params[:page] || 1)
 
 In your view:
 
