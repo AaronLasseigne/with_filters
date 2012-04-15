@@ -32,7 +32,7 @@ module WithFilters
     def with_filters_hidden(hidden_filters)
       hidden_filters.map{|hidden_filter|
         hidden_field_tag(hidden_filter.field_name, hidden_filter.value, hidden_filter.attrs)
-      }.join("\n")
+      }.join("\n").html_safe
     end
 
     # Create an input based on the type of `filter` provided.
