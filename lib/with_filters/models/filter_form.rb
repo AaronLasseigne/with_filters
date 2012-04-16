@@ -37,7 +37,7 @@ module WithFilters
       options.merge!(theme: @theme)
       as = options[:as]
 
-      filter = WithFilters::Filter.create(name, self.param_namespace, @values[name], options)
+      filter = WithFilters::Filter.create(name, self.param_namespace, @values[name.to_s], options)
 
       (as == :hidden ? @hidden_filters : @filters).push(filter)
     end
@@ -50,7 +50,7 @@ module WithFilters
       options[:as] = find_as(name, options[:collection]) unless options[:as]
       options.merge!(theme: @theme)
 
-      @filters.push(WithFilters::Filter.create_range(name, self.param_namespace, @values[name] || {}, options))
+      @filters.push(WithFilters::Filter.create_range(name, self.param_namespace, @values[name.to_s] || {}, options))
     end
 
     # @param [Symbol] type

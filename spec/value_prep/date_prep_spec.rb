@@ -18,7 +18,7 @@ describe WithFilters::ValuePrep::DatePrep do
 
     context 'value is a Hash' do
       it 'returns a Hash of Date objects' do
-        value = described_class.new({start: '19140325', stop: '19140326'}).value
+        value = described_class.new({'start' => '19140325', 'stop' => '19140326'}).value
 
         value[:start].should be_an_instance_of(Date)
         value[:stop].should be_an_instance_of(Date)

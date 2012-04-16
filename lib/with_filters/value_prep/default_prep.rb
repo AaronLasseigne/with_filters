@@ -20,7 +20,7 @@ module WithFilters
       # @since 0.1.0
       def value
         @prepared_value ||= if @value.is_a?(Hash)
-          {start: prepare_start_value(@value[:start]), stop: prepare_stop_value(@value[:stop])}
+          {start: prepare_start_value(@value['start']), stop: prepare_stop_value(@value['stop'])}
         else
           temp = Array.wrap(@value).map do |value|
             add_match(prepare_value(value))

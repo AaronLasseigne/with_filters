@@ -34,8 +34,8 @@ module WithFilters
         stop_attrs.reverse_merge!(label: self.label, label_attrs: self.label_attrs, collection: @collection)
 
         base_class_name = self.class.to_s.match(/^(.*)Range$/).captures.first
-        @start = "#{base_class_name}Start".constantize.new(name, namespace, value[:start], start_attrs)
-        @stop  = "#{base_class_name}Stop".constantize.new(name, namespace, value[:stop], stop_attrs)
+        @start = "#{base_class_name}Start".constantize.new(name, namespace, value['start'], start_attrs)
+        @stop  = "#{base_class_name}Stop".constantize.new(name, namespace, value['stop'], stop_attrs)
       end
     end
   end

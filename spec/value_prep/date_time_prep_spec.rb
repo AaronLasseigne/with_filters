@@ -54,51 +54,51 @@ describe WithFilters::ValuePrep::DateTimePrep do
     context 'is a Hash representing a datetime range' do
       context 'to a fraction of a second' do
         it 'returns a Hash of values' do
-          datetimes = {start: '1914-03-25 12:34:56.123456', stop: '1914-03-26 12:34:56.654321'}
+          datetimes = {'start' => '1914-03-25 12:34:56.123456', 'stop' => '1914-03-26 12:34:56.654321'}
           value = described_class.new(datetimes).value
 
-          value[:start].should == Time.zone.parse(datetimes[:start]).to_s(:db) + '.123456'
-          value[:stop].should  == Time.zone.parse(datetimes[:stop]).to_s(:db) + '.654321'
+          value[:start].should == Time.zone.parse(datetimes['start']).to_s(:db) + '.123456'
+          value[:stop].should  == Time.zone.parse(datetimes['stop']).to_s(:db) + '.654321'
         end
       end
 
       context 'to a second' do
         it 'returns a Hash of values' do
-          datetimes = {start: '1914-03-25 12:34:56', stop: '1914-03-26 12:34:56'}
+          datetimes = {'start' => '1914-03-25 12:34:56', 'stop' => '1914-03-26 12:34:56'}
           value = described_class.new(datetimes).value
 
-          value[:start].should == Time.zone.parse(datetimes[:start]).to_s(:db)
-          value[:stop].should  == Time.zone.parse(datetimes[:stop]).advance(seconds: 1).to_s(:db)
+          value[:start].should == Time.zone.parse(datetimes['start']).to_s(:db)
+          value[:stop].should  == Time.zone.parse(datetimes['stop']).advance(seconds: 1).to_s(:db)
         end
       end
 
       context 'to a minute' do
         it 'returns a Hash of values' do
-          datetimes = {start: '1914-03-25 12:34', stop: '1914-03-26 12:34'}
+          datetimes = {'start' => '1914-03-25 12:34', 'stop' => '1914-03-26 12:34'}
           value = described_class.new(datetimes).value
 
-          value[:start].should == Time.zone.parse(datetimes[:start]).to_s(:db)
-          value[:stop].should  == Time.zone.parse(datetimes[:stop]).advance(minutes: 1).to_s(:db)
+          value[:start].should == Time.zone.parse(datetimes['start']).to_s(:db)
+          value[:stop].should  == Time.zone.parse(datetimes['stop']).advance(minutes: 1).to_s(:db)
         end
       end
 
       context 'to an hour' do
         it 'returns a Hash of values' do
-          datetimes = {start: '1914-03-25 12', stop: '1914-03-26 12'}
+          datetimes = {'start' => '1914-03-25 12', 'stop' => '1914-03-26 12'}
           value = described_class.new(datetimes).value
 
-          value[:start].should == Time.zone.parse(datetimes[:start]).to_s(:db)
-          value[:stop].should  == Time.zone.parse(datetimes[:stop]).advance(hours: 1).to_s(:db)
+          value[:start].should == Time.zone.parse(datetimes['start']).to_s(:db)
+          value[:stop].should  == Time.zone.parse(datetimes['stop']).advance(hours: 1).to_s(:db)
         end
       end
 
       context 'to a day' do
         it 'returns a Hash of values' do
-          dates = {start: '19140325', stop: '19140326'}
+          dates = {'start' => '19140325', 'stop' => '19140326'}
           date_time_prep = described_class.new(dates)
 
-          date_time_prep.value[:start].should == Time.zone.parse(dates[:start]).to_s(:db)
-          date_time_prep.value[:stop].should  == Time.zone.parse(dates[:stop]).advance(days: 1).to_s(:db)
+          date_time_prep.value[:start].should == Time.zone.parse(dates['start']).to_s(:db)
+          date_time_prep.value[:stop].should  == Time.zone.parse(dates['stop']).advance(days: 1).to_s(:db)
         end
       end
     end

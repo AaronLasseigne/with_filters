@@ -121,7 +121,7 @@ describe WithFilters::ActionViewExtension do
       context 'with ranged inputs' do
         context 'types' do
           context 'text' do
-            let(:filter) {WithFilters::Filter::TextRange.new(:year, :foo, {start: 1900, stop: 2000})}
+            let(:filter) {WithFilters::Filter::TextRange.new(:year, :foo, {'start' =>  1900, 'stop' => 2000})}
             subject {helper.with_filters_input(filter)}
 
             context 'start' do
@@ -148,7 +148,7 @@ describe WithFilters::ActionViewExtension do
           end
 
           context 'select' do
-            let(:filter) {WithFilters::Filter::SelectRange.new(:year, :foo, {start: 1900, stop: 1905}, collection: 1900..1910)}
+            let(:filter) {WithFilters::Filter::SelectRange.new(:year, :foo, {'start' =>  1900, 'stop' =>  1905}, collection: 1900..1910)}
             subject {helper.with_filters_input(filter)}
 
             context 'start' do
@@ -206,7 +206,7 @@ describe WithFilters::ActionViewExtension do
 
     context 'param value is available' do
       it 'creates an input with a value' do
-        helper.stub(:params).and_return({nobel_prize_winners: {first_name: 'Albert'}})
+        helper.stub(:params).and_return({'nobel_prize_winners' => {'first_name' => 'Albert'}})
         output = helper.filter_form_for(NobelPrizeWinner.with_filters) do |f|
           f.input :first_name
         end
