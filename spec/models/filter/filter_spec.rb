@@ -4,14 +4,16 @@ describe WithFilters::Filter do
   describe '#create(name, namespace, value, options = {})' do
     context 'options' do
       context ':as' do
-        subject {described_class.create(:email, :foo, '', as: :email)}
+        subject(:filter) do
+          described_class.create(:email, :foo, '', as: :email)
+        end
 
         it 'sets the input type' do
-          subject.attrs[:type].should == 'email'
+          expect(filter.attrs[:type]).to eq 'email'
         end
 
         it 'returns a filter based on the type' do
-          subject.should be_an_instance_of(WithFilters::Filter::Text)
+          expect(filter).to be_an_instance_of(WithFilters::Filter::Text)
         end
       end
     end
@@ -20,14 +22,16 @@ describe WithFilters::Filter do
   describe '#create_range(name, namespace, value, options = {})' do
     context 'options' do
       context ':as' do
-        subject {described_class.create_range(:year, :foo, {}, as: :number)}
+        subject(:filter) do
+          described_class.create_range(:year, :foo, {}, as: :number)
+        end
 
         it 'sets the input type' do
-          subject.attrs[:type].should == 'number'
+          expect(filter.attrs[:type]).to eq 'number'
         end
 
         it 'returns a filter based on the type' do
-          subject.should be_an_instance_of(WithFilters::Filter::TextRange)
+          expect(filter).t).to be_an_instance_of(WithFilters::Filter::TextRange)
         end
       end
     end

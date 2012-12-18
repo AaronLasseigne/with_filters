@@ -1,22 +1,36 @@
 require 'spec_helper'
 
+shared_examples_for 'a specific text filter' do |input_type, filter_type|
+  it "uses a #{filter_type} filter" do
+    ff.input(input_type)
+    
+    expect(ff.filters.first).to be_a_kind_of(WithFilters::Filter::Text)
+    expect(ff.filters.first.attrs[:type]).to eq filter_type
+  end
+end
+
 describe WithFilters::FilterForm do
   describe '#initialize(records, params = {}, options = {})' do
     context 'defaults' do
-      subject {described_class.new(NobelPrizeWinner.with_filters)}
+      subject { described_class.new(NobelPrizeWinner.with_filters) }
 
-      its(:attrs)           {should == {novalidate: 'novalidate', method: 'get'}}
-      its(:to_partial_path) {should == File.join('with_filters', 'filter_form')}
-      its(:param_namespace) {should be :nobel_prize_winners}
-      its(:filters)         {should be_empty}
-      its(:hidden_filters)  {should be_empty}
-      its(:actions)         {should be_empty}
+      its(:attrs)           { should == {novalidate: 'novalidate', method: 'get'} }
+      its(:to_partial_path) { should == File.join('with_filters', 'filter_form') }
+      its(:param_namespace) { should be :nobel_prize_winners }
+      its(:filters)         { should be_empty }
+      its(:hidden_filters)  { should be_empty }
+      its(:actions)         { should be_empty }
     end
 
     context 'options' do
       context ':attrs' do
         it 'attrs should override the defaults' do
-          described_class.new(NobelPrizeWinner.with_filters, {}, method: 'post').attrs.should == {novalidate: 'novalidate', method: 'post'}
+          expect(
+            described_class.new(NobelPrizeWinner.with_filters, {}, method: 'post').attrs
+          ).to eq({
+            novalidate: 'novalidate',
+            method:     'post'
+          })
         end
       end
 
@@ -31,7 +45,9 @@ describe WithFilters::FilterForm do
           ff = described_class.new(NobelPrizeWinner.with_filters, {}, theme: 'foo')
           ff.input(:first_name)
 
-          ff.filters.first.to_partial_path.should == File.join('with_filters', 'foo', 'filter', 'text')
+          expect(
+            ff.filters.first.to_partial_path
+          ).to eq File.join('with_filters', 'foo', 'filter', 'text')
         end
       end
     end
@@ -42,9 +58,9 @@ describe WithFilters::FilterForm do
       ff = described_class.new(NobelPrizeWinner.with_filters)
       ff.hidden(:hidden)
 
-      ff.hidden_filters.length.should == 1
-      ff.hidden_filters.first.should be_a_kind_of(WithFilters::Filter::Text)
-      ff.hidden_filters.first.attrs[:type].should == 'hidden'
+      expect(ff.hidden_filters).to have(1).filter
+      expect(ff.hidden_filters.first).to be_a_kind_of(WithFilters::Filter::Text)
+      expect(ff.hidden_filters.first.attrs[:type]).to eq 'hidden'
     end
   end
 
@@ -54,105 +70,12 @@ describe WithFilters::FilterForm do
       ff = described_class.new(NobelPrizeWinner.with_filters)
       ff.input(:first_name, label: label)
 
-      ff.filters.length.should == 1
-      ff.filters.first.should be_a_kind_of(WithFilters::Filter::Base)
-      ff.filters.first.label.should == label
+      expect(ff.filters).to have(1).filter
+      expect(ff.filters.first).to be_a_kind_of(WithFilters::Filter::Base)
+      expect(ff.filters.first.label).to eq label
     end
 
-    let(:ff) {described_class.new(FieldFormatTester.with_filters)}
-
-    context 'the type is :hidden' do
-      it 'adds to the hidden_filters list' do
-        ff.input(:foo, as: :hidden)
-
-        ff.filters.should be_empty
-        ff.hidden_filters[0].should be_a_kind_of(WithFilters::Filter::Text)
-        ff.hidden_filters[0].attrs[:type].should == 'hidden'
-      end
-    end
-
-    context 'the database field is an integer, float or decimal' do
-      it 'uses a number filter' do
-        ff.input(:integer_field)
-        ff.input(:float_field)
-        ff.input(:decimal_field)
-
-        ff.filters[0].should be_a_kind_of(WithFilters::Filter::Text)
-        ff.filters[0].attrs[:type].should == 'number'
-        ff.filters[1].should be_a_kind_of(WithFilters::Filter::Text)
-        ff.filters[1].attrs[:type].should == 'number'
-        ff.filters[2].should be_a_kind_of(WithFilters::Filter::Text)
-        ff.filters[2].attrs[:type].should == 'number'
-      end
-    end
-
-    context 'the database field is a date' do
-      it 'uses a date filter' do
-        ff.input(:date_field)
-
-        ff.filters.first.should be_a_kind_of(WithFilters::Filter::Text)
-        ff.filters.first.attrs[:type].should == 'date'
-      end
-    end
-
-    context 'the database field is a time' do
-      it 'uses a time filter' do
-        ff.input(:time_field)
-
-        ff.filters.first.should be_a_kind_of(WithFilters::Filter::Text)
-        ff.filters.first.attrs[:type].should == 'time'
-      end
-    end
-
-    context 'the database field is a datetime or timestamp' do
-      it 'uses a time filter' do
-        ff.input(:datetime_field)
-        ff.input(:timestamp_field)
-
-        ff.filters[0].should be_a_kind_of(WithFilters::Filter::Text)
-        ff.filters[0].attrs[:type].should == 'datetime'
-        ff.filters[1].should be_a_kind_of(WithFilters::Filter::Text)
-        ff.filters[1].attrs[:type].should == 'datetime'
-      end
-    end
-
-    context 'the database field is a boolean' do
-      it 'uses a checkbox filter' do
-        ff.input(:boolean_field)
-
-        ff.filters.first.should be_a_kind_of(WithFilters::Filter::CheckBox)
-        ff.filters.first.attrs[:type].should == 'checkbox'
-      end
-    end
-
-    context 'the database field is text' do
-      context 'and the name includes "email"' do
-        it 'uses an email filter' do
-          ff.input(:email_field)
-
-          ff.filters.first.should be_a_kind_of(WithFilters::Filter::Text)
-          ff.filters.first.attrs[:type].should == 'email'
-        end
-      end
-
-      context 'and the name includes "phone"' do
-        it 'uses a tel filter' do
-          ff.input(:phone_field)
-
-          ff.filters.first.should be_a_kind_of(WithFilters::Filter::Text)
-          ff.filters.first.attrs[:type].should == 'tel'
-        end
-      end
-
-      context 'and the name includes "url"' do
-        it 'uses a url filter' do
-          ff.input(:url_field)
-
-          ff.filters.first.should be_a_kind_of(WithFilters::Filter::Text)
-          ff.filters.first.attrs[:type].should == 'url'
-        end
-      end
-    end
+    let(:ff) { described_class.new(FieldFormatTester.with_filters) }
 
     context 'options' do
       context ':collection' do
@@ -160,8 +83,8 @@ describe WithFilters::FilterForm do
           ff = described_class.new(FieldFormatTester.with_filters)
           ff.input(:text_field)
 
-          ff.filters.first.should be_a_kind_of(WithFilters::Filter::Text)
-          ff.filters.first.attrs[:type].should == 'text'
+          expect(ff.filters.first).to be_a_kind_of(WithFilters::Filter::Text)
+          expect(ff.filters.first.attrs[:type]).to eq 'text'
         end
       end
 
@@ -170,7 +93,70 @@ describe WithFilters::FilterForm do
           ff = described_class.new(FieldFormatTester.with_filters)
           ff.input(:text_field, collection: 1..10)
 
-          ff.filters.first.should be_a_kind_of(WithFilters::Filter::Select)
+          expect(ff.filters.first).to be_a_kind_of(WithFilters::Filter::Select)
+        end
+      end
+
+      context 'the type is :hidden' do
+        it 'adds to the hidden_filters list' do
+          ff.input(:foo, as: :hidden)
+
+          expect(ff.filters).to be_empty
+          expect(ff.hidden_filters.first).to be_a_kind_of(WithFilters::Filter::Text)
+          expect(ff.hidden_filters.first.attrs[:type]).to eq 'hidden'
+        end
+      end
+    end
+
+    context 'the database field' do
+      context 'is an integer' do
+        it_behaves_like 'a specific text filter', :integer_field, 'number'
+      end
+
+      context 'is a float' do
+        it_behaves_like 'a specific text filter', :float_field, 'number'
+      end
+
+      context 'is a decimal' do
+        it_behaves_like 'a specific text filter', :decimal_field, 'number'
+      end
+
+      context 'is a date' do
+        it_behaves_like 'a specific text filter', :date_field, 'date'
+      end
+
+      context 'is a time' do
+        it_behaves_like 'a specific text filter', :time_field, 'time'
+      end
+
+      context 'is a datetime' do
+        it_behaves_like 'a specific text filter', :datetime_field, 'datetime'
+      end
+
+      context 'is a timestamp' do
+        it_behaves_like 'a specific text filter', :timestamp_field, 'datetime'
+      end
+
+      context 'is a boolean' do
+        it 'uses a checkbox filter' do
+          ff.input(:boolean_field)
+
+          expect(ff.filters.first).to be_a_kind_of(WithFilters::Filter::CheckBox)
+          expect(ff.filters.first.attrs[:type]).to eq 'checkbox'
+        end
+      end
+
+      context 'is text' do
+        context 'and the name includes "email"' do
+          it_behaves_like 'a specific text filter', :email_field, 'email'
+        end
+
+        context 'and the name includes "phone"' do
+          it_behaves_like 'a specific text filter', :phone_field, 'tel'
+        end
+
+        context 'and the name includes "url"' do
+          it_behaves_like 'a specific text filter', :url_field, 'url'
         end
       end
     end
@@ -182,9 +168,9 @@ describe WithFilters::FilterForm do
       ff = described_class.new(NobelPrizeWinner.with_filters)
       ff.input_range(:year, label: label)
 
-      ff.filters.length.should == 1
-      ff.filters.first.should be_a_kind_of(WithFilters::Filter::BaseRange)
-      ff.filters.first.start.label.should == label
+      expect(ff.filters).to have(1).filter
+      expect(ff.filters.first).to be_a_kind_of(WithFilters::Filter::BaseRange)
+      expect(ff.filters.first.start.label).to eq label
     end
   end
 
@@ -195,7 +181,7 @@ describe WithFilters::FilterForm do
           ff = described_class.new(NobelPrizeWinner.with_filters)
           ff.action(:submit)
 
-          ff.actions.first.should be_a_kind_of(WithFilters::Action)
+          expect(ff.actions.first).to be_a_kind_of(WithFilters::Action)
         end
       end
 
@@ -204,7 +190,7 @@ describe WithFilters::FilterForm do
           ff = described_class.new(NobelPrizeWinner.with_filters)
           ff.action(:reset)
 
-          ff.actions.first.should be_a_kind_of(WithFilters::Action)
+          expect(ff.actions.first).to be_a_kind_of(WithFilters::Action)
         end
       end
     end
