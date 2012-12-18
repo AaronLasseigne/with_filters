@@ -6,3 +6,4 @@ pkg/*
 spec/dummy/log/*.log
 .yardoc
 doc
+.rbenv-version
