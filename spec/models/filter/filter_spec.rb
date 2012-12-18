@@ -31,7 +31,7 @@ describe WithFilters::Filter do
         end
 
         it 'returns a filter based on the type' do
-          expect(filter).t).to be_an_instance_of(WithFilters::Filter::TextRange)
+          expect(filter).to be_an_instance_of(WithFilters::Filter::TextRange)
         end
       end
     end
