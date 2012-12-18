@@ -1,21 +1,21 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/with_filters/version', __FILE__)
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'with_filters/version'
 
 Gem::Specification.new do |gem|
   gem.name        = 'with_filters'
   gem.version     = WithFilters::VERSION
+  gem.summary     = %q{Add filtering to lists, tables, etc.}
+  gem.description = gem.summary
+  gem.homepage    = 'https://github.com/AaronLasseigne/with_filters'
 
   gem.authors     = ['Aaron Lasseigne']
   gem.email       = ['aaron.lasseigne@gmail.com']
-  gem.summary     = %q{Add filtering to lists, tables, etc.}
-  gem.description = %q{Add filtering to lists, tables, etc.}
-  gem.homepage    = 'https://github.com/AaronLasseigne/with_filters'
 
-  gem.rubyforge_project = 'with_filters'
-
-  gem.files         = `git ls-files`.split("\n")
-  gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  gem.files         = `git ls-files`.split($/)
+  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
 
   gem.add_dependency 'rails', '>= 3.1'
